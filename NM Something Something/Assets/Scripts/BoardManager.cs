@@ -3,30 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour {
-  
+
+  public enum Direction { UP, DOWN, LEFT, RIGHT};
+
   int maxRows = 7;
   int maxCols = 7;
 
-  int playerX = 0;
-  int playerY = 0;
-
+  //The numerical offset between each tile
   [SerializeField]
   float offset;
 
+  //The Prefab used for the floor
   [SerializeField]
   GameObject floor;
 
   [SerializeField]
   GameObject playerPrefab;
-  GameObject playerObj;
+
+  [SerializeField]
+  Player player;
 
   GameObject[,] grid;
 
-	// Use this for initialization
-	void Start () {
+  private void OnEnable()
+  {
+    Player.PlayerMoveEvent += MovePlayer;
+  }
+
+  private void OnDisable()
+  {
+    Player.PlayerMoveEvent -= MovePlayer;
+  }
+
+  // Use this for initialization
+  void Start () {
     grid = new GameObject[maxRows, maxCols];
     GeneratePlatforms();
-    CreatePlayer();
+    PlacePlayer();
 	}
 	
 	void GeneratePlatforms()
@@ -36,7 +49,7 @@ public class BoardManager : MonoBehaviour {
       for (int j = 0; j < maxCols; j++)
       {
         //Instantiate(floor, tilePosition, transform.rotation);
-        GameObject tile = Instantiate(floor, this.transform);
+        GameObject tile = Instantiate(floor, transform);
         Vector3 tilePosition = GetGridPosition(i, j);
         tile.transform.position = tilePosition;
       }
@@ -51,74 +64,69 @@ public class BoardManager : MonoBehaviour {
     return tilePosition;
   }
 
-  void CreatePlayer()
+  void PlacePlayer()
   {
-    playerX = maxRows / 2;
-    playerY = maxCols / 2;
-    playerObj = Instantiate(playerPrefab, transform);
-    playerObj.transform.position = GetGridPosition(playerX, playerY);
-    grid[playerX, playerY] = playerObj;
+    player.x = maxRows / 2;
+    player.y = maxCols / 2;
+    MovePlayerGraphic();
+    //grid[playerX, playerY] = playerObj;
   }
 
   private void MovePlayerGraphic()
   {
-    playerObj.transform.position = GetGridPosition(playerX, playerY);
+    player.gameObject.transform.position = GetGridPosition(player.x, player.y);
   }
 
   private void MovePlayerUp()
   {
-    if (playerX < maxRows - 1)
+    if (player.x < maxRows - 1)
     {
-      playerX += 1;
+      player.x += 1;
     }
   }
 
   private void MovePlayerDown()
   {
-    if (playerX > 0)
+    if (player.x > 0)
     {
-      playerX -= 1;
+      player.x -= 1;
     }
   }
 
   private void MovePlayerLeft()
   {
-    if (playerY > 0)
+    if (player.y > 0)
     {
-      playerY -= 1;
+      player.y -= 1;
     }
   }
 
   private void MovePlayerRight()
   {
-    if (playerY < maxCols - 1)
+    if (player.y < maxCols - 1)
     {
-      playerY += 1;
+      player.y += 1;
     }
-  }
-  
-  public void MovePlayerHori(bool right)
-  {
-    if (right)
-    {
-      MovePlayerRight();
-    }
-    else
-    {
-      MovePlayerLeft();
-    }
-    MovePlayerGraphic();
   }
 
-  public void MovePlayerVert(bool up)
+  private void MovePlayer(Direction dir)
   {
-    if (up)
+    switch (dir)
     {
-      MovePlayerUp();
-    }
-    else
-    {
-      MovePlayerDown();
+      case Direction.UP:
+        MovePlayerUp();
+        break;
+      case Direction.DOWN:
+        MovePlayerDown();
+        break;
+      case Direction.LEFT:
+        MovePlayerLeft();
+        break;
+      case Direction.RIGHT:
+        MovePlayerRight();
+        break;
+      default:
+        break;
     }
     MovePlayerGraphic();
   }
