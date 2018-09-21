@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class MainMenu : MonoBehaviour {
 
+  public delegate void MenuSelect(int option);
+  public static event MenuSelect MenuSelectEvent;
+
   [SerializeField]
   GameObject SplashText;
   [SerializeField]
@@ -49,7 +52,7 @@ public class MainMenu : MonoBehaviour {
     }
     else if (Input.GetKeyDown(KeyCode.Return))
     {
-      MenuSelect();
+      MenuSelectEvent(selectedOption);
     }
   }
 
@@ -59,28 +62,6 @@ public class MainMenu : MonoBehaviour {
     foreach (GameObject option in MenuOptions)
     {
       option.SetActive(true);
-    }
-  }
-
-  private void MenuSelect()
-  {
-    switch (selectedOption)
-    {
-      case 0:
-        StartGame();
-        break;
-      case 1:
-        Instructions();
-        break;
-      case 2:
-        Credits();
-        break;
-      case 3:
-        Quit();
-        break;
-      default:
-        Debug.LogError("Selected Menu Option: " + selectedOption + ", is not a valid option.");
-        break;
     }
   }
 
@@ -98,26 +79,4 @@ public class MainMenu : MonoBehaviour {
     MenuOptions[selectedOption].GetComponent<TMPro.TextMeshProUGUI>().color = Color.red;
   }
 
-  private void StartGame()
-  {
-    Debug.Log("StartGame() not yet implemented");
-    //TODO: Go to Game Scene
-  }
-
-  private void Instructions()
-  {
-    Debug.Log("Instructions() not yet implemented");
-    //TODO: Go to Instructions scene
-  }
-
-  private void Credits()
-  {
-    Debug.Log("Credits() not yet implemented");
-    //TODO: Go to Credits Scene
-  }
-
-  private void Quit()
-  {
-    Application.Quit();
-  }
 }
