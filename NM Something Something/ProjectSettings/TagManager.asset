@@ -47,6 +47,6 @@ TagManager:
   - name: Player
     uniqueID: 373065003
     locked: 0
-  - name: Obstacle
+  - name: Hazard
     uniqueID: 1187317251
     locked: 0

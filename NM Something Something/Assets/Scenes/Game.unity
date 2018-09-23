@@ -152,9 +152,55 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1467791590243528, guid: 51c9e55125746a14fb04dbb9813de1ec, type: 2}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 51c9e55125746a14fb04dbb9813de1ec, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &797406647
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 797406649}
+  - component: {fileID: 797406648}
+  m_Layer: 0
+  m_Name: BoulderObjectPool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &797406648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 797406647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 512e9ee39a0d4d84ab306ca94fbe9a1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BoulderPrefab: {fileID: 1364048146301756, guid: fbeb5488ff7d39d47b67c94edf0db387,
+    type: 2}
+--- !u!4 &797406649
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 797406647}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 100, y: 100, z: 100}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1007713059
 GameObject:
   m_ObjectHideFlags: 0
@@ -244,6 +290,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a391852d40ad7ea439517e82216dc1d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boardManager: {fileID: 1507082875}
+  waveManager: {fileID: 1235651580}
 --- !u!4 &1021914814
 Transform:
   m_ObjectHideFlags: 0
@@ -257,6 +305,47 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1235651578
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1235651579}
+  - component: {fileID: 1235651580}
+  m_Layer: 0
+  m_Name: WaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1235651579
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1235651578}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1790523159}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1235651580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1235651578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 124c6fc34bdb8224eb619206b383b990, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startingNumberOfWaves: 3
 --- !u!1 &1471211568
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,7 +437,7 @@ GameObject:
   - component: {fileID: 1507082874}
   - component: {fileID: 1507082875}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: BoardManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -366,7 +455,7 @@ Transform:
   m_Children:
   - {fileID: 2052492057}
   m_Father: {fileID: 1790523159}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1507082875
 MonoBehaviour:
@@ -384,6 +473,7 @@ MonoBehaviour:
   playerPrefab: {fileID: 1467791590243528, guid: 51c9e55125746a14fb04dbb9813de1ec,
     type: 2}
   player: {fileID: 2052492058}
+  boulderPool: {fileID: 797406648}
 --- !u!1 &1790523158
 GameObject:
   m_ObjectHideFlags: 0
@@ -409,6 +499,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 1235651579}
   - {fileID: 1507082874}
   m_Father: {fileID: 0}
   m_RootOrder: 4

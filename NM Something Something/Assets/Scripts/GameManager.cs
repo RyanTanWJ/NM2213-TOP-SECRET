@@ -1,14 +1,27 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
+  [SerializeField]
+  BoardManager boardManager;
+
+  [SerializeField]
+  WaveManager waveManager;
+
   void OnEnable()
   {
     MainMenu.MenuSelectEvent += OnMenuSelect;
     GoBack.GoBackEvent += GoBackToMainMenu;
+    BoardManager.StartNewWaveEvent += StartNewWave;
+  }
+
+  private void StartNewWave()
+  {
+    boardManager.NewWave(waveManager.NextWave());
   }
 
   void OnDisable()
