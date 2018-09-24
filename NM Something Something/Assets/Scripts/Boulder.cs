@@ -37,11 +37,16 @@ public class Boulder : MonoBehaviour {
 
   public void UpdateLastMove(float timeLapse)
   {
-    secSinceLastMove = timeLapse;
+    secSinceLastMove += timeLapse;
   }
 
   public bool ReadyToMove()
   {
     return secSinceLastMove >= secPerTile;
+  }
+
+  public void ResetMoveTimer()
+  {
+    secSinceLastMove = 0.0f;
   }
 }

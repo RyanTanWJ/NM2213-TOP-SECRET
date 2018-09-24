@@ -21,7 +21,14 @@ public class GameManager : MonoBehaviour {
 
   private void StartNewWave()
   {
-    boardManager.NewWave(waveManager.NextWave());
+    if (waveManager.HasNextWave())
+    {
+      boardManager.NewWave(waveManager.NextWave());
+    }
+    else
+    {
+      Debug.Log("No More Waves");
+    }
   }
 
   void OnDisable()

@@ -76,18 +76,15 @@ public class BoardManager : MonoBehaviour {
           continue;
         }
         Boulder boulder = grid[i, j].GetComponent<Boulder>();
-        if (boulder != null)
+        if (boulder.ReadyToMove())
         {
-          if (boulder.ReadyToMove())
-          {
-            MoveBoulder(boulder, i, j);
-          }
-          else
-          {
-            boulder.UpdateLastMove(Time.deltaTime);
-          }
-          waveOver = false;
+          MoveBoulder(boulder, i, j);
         }
+        else
+        {
+          boulder.UpdateLastMove(Time.deltaTime);
+        }
+        waveOver = false;
       }
     }
     return waveOver;
@@ -217,34 +214,35 @@ public class BoardManager : MonoBehaviour {
     {
       case Direction.DOWN:
         newX = x - 1;
-        //if (newX < 0)
-        //{
-        //  remove = true;
-        //}
+        if (newX < 0)
+        {
+          remove = true;
+        }
         break;
       case Direction.UP:
         newX = x + 1;
-        //if (newX >= maxRows)
-        //{
-        //  remove = true;
-        //}
+        if (newX >= maxRows)
+        {
+          remove = true;
+        }
         break;
       case Direction.LEFT:
         newY = y - 1;
-        //if (newY < 0)
-        //{
-        //  remove = true;
-        //}
+        if (newY < 0)
+        {
+          remove = true;
+        }
         break;
       case Direction.RIGHT:
         newY = y + 1;
-        //if (newY >= maxCols)
-        //{
-        //  remove = true;
-        //}
+        if (newY >= maxCols)
+        {
+          remove = true;
+        }
         break;
     }
     grid[x, y] = null;
+    boulder.ResetMoveTimer();
     if (remove)
     {
       boulderPool.ReturnBoulder(boulder);

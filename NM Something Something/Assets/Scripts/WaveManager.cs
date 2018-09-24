@@ -20,7 +20,7 @@ public class WaveManager : MonoBehaviour {
   {
     for (int i = 0; i < startingNumberOfWaves; i++)
     {
-      waves.Enqueue(new Wave(Hazard.Boulder, Random.Range(1, 3)));
+      waves.Enqueue(new Wave(Hazard.Boulder, 5));
     }
   }
 
@@ -29,5 +29,9 @@ public class WaveManager : MonoBehaviour {
     return waves.Dequeue();
   }
 
+  public bool HasNextWave()
+  {
+    return waves.Count > 0;
+  }
 
 }

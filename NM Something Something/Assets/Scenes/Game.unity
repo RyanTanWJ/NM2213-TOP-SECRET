@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124c6fc34bdb8224eb619206b383b990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingNumberOfWaves: 3
+  startingNumberOfWaves: 1
 --- !u!1 &1471211568
 GameObject:
   m_ObjectHideFlags: 0
