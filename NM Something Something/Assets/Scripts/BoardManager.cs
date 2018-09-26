@@ -10,7 +10,7 @@ public class BoardManager : MonoBehaviour {
 
   public enum Direction { UP, DOWN, LEFT, RIGHT};
 
-  int waveNumber = 0;
+  int waveNumber = 0; //TODO: Count the number of waves cleared
 
   int maxRows = 7;
   int maxCols = 7;
@@ -32,9 +32,7 @@ public class BoardManager : MonoBehaviour {
   [SerializeField]
   BoulderPool boulderPool;
 
-  GameObject[,] grid;
-
-  private bool waveEnded;
+  List<Boulder> hazards = new List<Boulder>();
 
   private void OnEnable()
   {
@@ -48,7 +46,6 @@ public class BoardManager : MonoBehaviour {
 
   // Use this for initialization
   void Start () {
-    grid = new GameObject[maxRows, maxCols];
     GeneratePlatforms();
     PlacePlayer();
     StartNewWaveEvent();
@@ -56,38 +53,36 @@ public class BoardManager : MonoBehaviour {
 
   private void Update()
   {
-    waveEnded = MoveHazards();
-    if (waveEnded)
+    MoveHazards();
+    if (hazards.Count<=0)
     {
       StartNewWaveEvent();
     }
 
-  }
-
-  private bool MoveHazards()
-  {
-    bool waveOver = true;
-    for (int i = 0; i < maxRows; i++)
+    foreach (Boulder hazard in hazards)
     {
-      for (int j = 0; j < maxCols; j++)
+      if (hazard.CheckCollision(player))
       {
-        if (grid[i, j] == null)
-        {
-          continue;
-        }
-        Boulder boulder = grid[i, j].GetComponent<Boulder>();
-        if (boulder.ReadyToMove())
-        {
-          MoveBoulder(boulder, i, j);
-        }
-        else
-        {
-          boulder.UpdateLastMove(Time.deltaTime);
-        }
-        waveOver = false;
+        //TODO: Game Over
       }
     }
-    return waveOver;
+
+  }
+
+  private void MoveHazards()
+  {
+    foreach (Boulder hazard in hazards)
+    {
+      //TODO: Move Boulders
+      if (!hazard.ReadyToMove())
+      {
+        hazard.UpdateLastMove(Time.deltaTime);
+      }
+      else
+      {
+        MoveBoulder(hazard);
+      }
+    }
   }
 
   void GeneratePlatforms()
@@ -193,8 +188,10 @@ public class BoardManager : MonoBehaviour {
           break;
       }
       */
+      Boulder boulder = hazardObject.GetComponent<Boulder>();
+      hazards.Add(boulder);
       hazardObject.GetComponent<Boulder>().SetBoulderDirection(Direction.RIGHT);
-      grid[i + 1, 0] = hazardObject;
+      boulder.x = i + 1;
       MoveBoulderGraphic(hazardObject, i+1, 0);
     }
     //TODO: Place the boulders on a random row that does not already have something on it.
@@ -205,43 +202,43 @@ public class BoardManager : MonoBehaviour {
     boulder.gameObject.transform.position = GetGridPosition(x, y);
   }
 
-  private void MoveBoulder(Boulder boulder, int x, int y)
+  private void MoveBoulder(Boulder boulder)
   {
-    int newX = x;
-    int newY = y;
+    int newX = boulder.x;
+    int newY = boulder.y;
     bool remove = false;
     switch (boulder.GetDirection())
     {
       case Direction.DOWN:
-        newX = x - 1;
+        newX = boulder.x - 1;
         if (newX < 0)
         {
           remove = true;
         }
         break;
       case Direction.UP:
-        newX = x + 1;
+        newX = boulder.x + 1;
         if (newX >= maxRows)
         {
           remove = true;
         }
         break;
       case Direction.LEFT:
-        newY = y - 1;
+        newY = boulder.y - 1;
         if (newY < 0)
         {
           remove = true;
         }
         break;
       case Direction.RIGHT:
-        newY = y + 1;
+        newY = boulder.y + 1;
         if (newY >= maxCols)
         {
           remove = true;
         }
         break;
     }
-    grid[x, y] = null;
+
     boulder.ResetMoveTimer();
     if (remove)
     {
@@ -249,7 +246,8 @@ public class BoardManager : MonoBehaviour {
     }
     else
     {
-      grid[newX, newY] = boulder.gameObject;
+      boulder.x = newX;
+      boulder.y = newY;
       MoveBoulderGraphic(boulder.gameObject, newX, newY);
     }
   }

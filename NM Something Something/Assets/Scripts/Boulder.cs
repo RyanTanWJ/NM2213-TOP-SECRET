@@ -13,6 +13,9 @@ public class Boulder : MonoBehaviour {
   private float secPerTile = 1.0f;
   private float secSinceLastMove = 0.0f;
 
+  public int x;
+  public int y;
+
   // Use this for initialization
   void Start()
   {
@@ -48,5 +51,10 @@ public class Boulder : MonoBehaviour {
   public void ResetMoveTimer()
   {
     secSinceLastMove = 0.0f;
+  }
+
+  public bool CheckCollision(Player player)
+  {
+    return ((x == player.x) && (y == player.y));
   }
 }
