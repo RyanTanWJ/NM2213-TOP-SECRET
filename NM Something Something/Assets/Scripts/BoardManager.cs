@@ -8,6 +8,9 @@ public class BoardManager : MonoBehaviour {
   public delegate void StartNewWave();
   public static event StartNewWave StartNewWaveEvent;
 
+  public delegate void GameOver();
+  public static event GameOver GameOverEvent;
+
   public enum Direction { UP, DOWN, LEFT, RIGHT};
 
   int waveNumber = 0; //TODO: Count the number of waves cleared
@@ -64,6 +67,7 @@ public class BoardManager : MonoBehaviour {
       if (hazard.CheckCollision(player))
       {
         //TODO: Game Over
+        GameOverEvent();
       }
     }
 
