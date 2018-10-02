@@ -22,9 +22,17 @@ public class BoardManager : MonoBehaviour {
   [SerializeField]
   float offset;
 
+  //Parent holder for platforms
+  [SerializeField]
+  GameObject platforms;
+
   //The Prefab used for the floor
   [SerializeField]
   GameObject floor;
+
+  //The Prefab used for the floor player cannot walk on
+  [SerializeField]
+  GameObject badFloor;
 
   [SerializeField]
   GameObject playerPrefab;
@@ -51,7 +59,6 @@ public class BoardManager : MonoBehaviour {
   void Start () {
     GeneratePlatforms();
     PlacePlayer();
-    StartNewWaveEvent();
 	}
 
   private void Update()
@@ -95,8 +102,15 @@ public class BoardManager : MonoBehaviour {
     {
       for (int j = 0; j < maxCols; j++)
       {
-        //Instantiate(floor, tilePosition, transform.rotation);
-        GameObject tile = Instantiate(floor, transform);
+        GameObject tile;
+        if (i == 0 || j == 0 || i == maxRows - 1 || j == maxCols - 1)
+        {
+          tile = Instantiate(badFloor, platforms.transform);
+        }
+        else
+        {
+          tile = Instantiate(floor, platforms.transform);
+        }
         Vector3 tilePosition = GetGridPosition(i, j);
         tile.transform.position = tilePosition;
       }
@@ -126,7 +140,7 @@ public class BoardManager : MonoBehaviour {
 
   private void MovePlayerUp()
   {
-    if (player.x < maxRows - 1)
+    if (player.x < maxRows - 2)
     {
       player.x += 1;
     }
@@ -134,7 +148,7 @@ public class BoardManager : MonoBehaviour {
 
   private void MovePlayerDown()
   {
-    if (player.x > 0)
+    if (player.x > 1)
     {
       player.x -= 1;
     }
@@ -142,7 +156,7 @@ public class BoardManager : MonoBehaviour {
 
   private void MovePlayerLeft()
   {
-    if (player.y > 0)
+    if (player.y > 1)
     {
       player.y -= 1;
     }
@@ -150,7 +164,7 @@ public class BoardManager : MonoBehaviour {
 
   private void MovePlayerRight()
   {
-    if (player.y < maxCols - 1)
+    if (player.y < maxCols - 2)
     {
       player.y += 1;
     }
