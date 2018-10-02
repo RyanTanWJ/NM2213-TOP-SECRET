@@ -1,20 +1,33 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
+  [SerializeField]
+  BoardManager boardManager;
+
+  [SerializeField]
+  WaveManager waveManager;
+
   void OnEnable()
   {
     MainMenu.MenuSelectEvent += OnMenuSelect;
     GoBack.GoBackEvent += GoBackToMainMenu;
+    BoardManager.StartNewWaveEvent += StartNewWave;
+    BoardManager.GameOverEvent += OnGameOver;
+    GameOverMenu.RestartGameEvent += RestartGame;
   }
 
   void OnDisable()
   {
     MainMenu.MenuSelectEvent -= OnMenuSelect;
     GoBack.GoBackEvent -= GoBackToMainMenu;
+    BoardManager.StartNewWaveEvent -= StartNewWave;
+    BoardManager.GameOverEvent -= OnGameOver;
+    GameOverMenu.RestartGameEvent -= RestartGame;
   }
 
   // Use this for initialization
@@ -49,6 +62,19 @@ public class GameManager : MonoBehaviour {
     }
   }
 
+  private void StartNewWave()
+  {
+    if (waveManager.HasNextWave())
+    {
+      boardManager.NewWave(waveManager.NextWave());
+    }
+    else
+    {
+      Debug.Log("No More Waves");
+    }
+  }
+
+
   private void StartGame()
   {
     //TODO: Go to Game Scene
@@ -75,5 +101,16 @@ public class GameManager : MonoBehaviour {
   private void Quit()
   {
     Application.Quit();
+  }
+
+  private void OnGameOver()
+  {
+    //TODO: Game Over Stuff (Animation and whatnot)
+    SceneManager.LoadScene(4);
+  }
+
+  private void RestartGame()
+  {
+    SceneManager.LoadScene(0);
   }
 }
