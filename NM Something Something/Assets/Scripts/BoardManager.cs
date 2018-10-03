@@ -113,42 +113,33 @@ public class BoardManager : MonoBehaviour {
   {
     for (int i = 0; i < maxRows; i++)
     {
-      for (int j = 0; j < maxCols; j++)
-      {
-        if (i == 0)
-        {
-          GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
-          Vector3 tilePosition = GetGridPosition(i, j);
-          indicator.transform.position = tilePosition;
-          BotIndicators.Add(indicator);
-          //indicator.SetActive(false);
-        }
-        else if (j == 0)
-        {
-          GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
-          Vector3 tilePosition = GetGridPosition(i, j);
-          indicator.transform.position = tilePosition;
-          LeftIndicators.Add(indicator);
-          indicator.SetActive(false);
-        }
-        else if (i == maxRows - 1)
-        {
-          GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
-          Vector3 tilePosition = GetGridPosition(i, j);
-          indicator.transform.position = tilePosition;
-          TopIndicators.Add(indicator);
-          indicator.SetActive(false);
-        }
-        else if (j == maxCols - 1)
-        {
+      GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
+      Vector3 tilePosition = GetGridPosition(i, 0);
+      indicator.transform.position = tilePosition;
+      LeftIndicators.Add(indicator);
+      //indicator.SetActive(false);
+      GameObject indicator2 = Instantiate(arrowIndicator, platforms.transform);
+      Vector3 tilePosition2 = GetGridPosition(i, maxCols - 1);
+      indicator2.transform.position = tilePosition2;
+      RightIndicators.Add(indicator2);
+      indicator2.transform.eulerAngles = new Vector3(0, 0, 180);
+      //indicator.SetActive(false);
+    }
+    for (int j = 0; j < maxCols; j++)
+    {
+      GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
+      Vector3 tilePosition = GetGridPosition(0, j);
+      indicator.transform.position = tilePosition;
+      BotIndicators.Add(indicator);
+      indicator.transform.eulerAngles = new Vector3(0, 0, 90);
+      //indicator.SetActive(false);
 
-          GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
-          Vector3 tilePosition = GetGridPosition(i, j);
-          indicator.transform.position = tilePosition;
-          RightIndicators.Add(indicator);
-          indicator.SetActive(false);
-        }
-      }
+      GameObject indicator2 = Instantiate(arrowIndicator, platforms.transform);
+      Vector3 tilePosition2 = GetGridPosition(maxRows - 1, j);
+      indicator2.transform.position = tilePosition2;
+      TopIndicators.Add(indicator2);
+      indicator2.transform.eulerAngles = new Vector3(0, 0, -90);
+      //indicator.SetActive(false);
     }
   }
 
