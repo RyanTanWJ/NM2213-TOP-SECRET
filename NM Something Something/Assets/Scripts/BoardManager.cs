@@ -26,6 +26,11 @@ public class BoardManager : MonoBehaviour {
   [SerializeField]
   GameObject platforms;
 
+  List<GameObject> TopIndicators = new List<GameObject>();
+  List<GameObject> BotIndicators = new List<GameObject>();
+  List<GameObject> LeftIndicators = new List<GameObject>();
+  List<GameObject> RightIndicators = new List<GameObject>();
+
   //The Prefab used for the floor
   [SerializeField]
   GameObject floor;
@@ -33,6 +38,10 @@ public class BoardManager : MonoBehaviour {
   //The Prefab used for the floor player cannot walk on
   [SerializeField]
   GameObject badFloor;
+
+  //The Prefab used for the arrow indicators
+  [SerializeField]
+  GameObject arrowIndicator;
 
   [SerializeField]
   GameObject playerPrefab;
@@ -58,6 +67,7 @@ public class BoardManager : MonoBehaviour {
   // Use this for initialization
   void Start () {
     GeneratePlatforms();
+    GenerateIndicators();
     PlacePlayer();
 	}
 
@@ -113,6 +123,49 @@ public class BoardManager : MonoBehaviour {
         }
         Vector3 tilePosition = GetGridPosition(i, j);
         tile.transform.position = tilePosition;
+      }
+    }
+  }
+
+  void GenerateIndicators()
+  {
+    for (int i = 0; i < maxRows; i++)
+    {
+      for (int j = 0; j < maxCols; j++)
+      {
+        if (i == 0)
+        {
+          GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
+          Vector3 tilePosition = GetGridPosition(i, j);
+          indicator.transform.position = tilePosition;
+          BotIndicators.Add(indicator);
+          //indicator.SetActive(false);
+        }
+        else if (j == 0)
+        {
+          GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
+          Vector3 tilePosition = GetGridPosition(i, j);
+          indicator.transform.position = tilePosition;
+          LeftIndicators.Add(indicator);
+          indicator.SetActive(false);
+        }
+        else if (i == maxRows - 1)
+        {
+          GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
+          Vector3 tilePosition = GetGridPosition(i, j);
+          indicator.transform.position = tilePosition;
+          TopIndicators.Add(indicator);
+          indicator.SetActive(false);
+        }
+        else if (j == maxCols - 1)
+        {
+
+          GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
+          Vector3 tilePosition = GetGridPosition(i, j);
+          indicator.transform.position = tilePosition;
+          RightIndicators.Add(indicator);
+          indicator.SetActive(false);
+        }
       }
     }
   }

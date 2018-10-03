@@ -50,3 +50,6 @@ TagManager:
   - name: Hazard
     uniqueID: 1187317251
     locked: 0
+  - name: Indicator
+    uniqueID: 3442226787
+    locked: 0
