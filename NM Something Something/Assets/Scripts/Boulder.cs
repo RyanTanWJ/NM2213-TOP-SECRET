@@ -10,11 +10,7 @@ public class Boulder : MonoBehaviour {
   private Animator animator;
 
   [SerializeField]
-  private float secPerTile = 1.0f;
-  private float secSinceLastMove = 0.0f;
-
-  public int x;
-  public int y;
+  private float moveTime = 1.0f;
 
   // Use this for initialization
   void Start()
@@ -38,23 +34,8 @@ public class Boulder : MonoBehaviour {
     return boulderDirection;
   }
 
-  public void UpdateLastMove(float timeLapse)
+  public float MoveTime
   {
-    secSinceLastMove += timeLapse;
-  }
-
-  public bool ReadyToMove()
-  {
-    return secSinceLastMove >= secPerTile;
-  }
-
-  public void ResetMoveTimer()
-  {
-    secSinceLastMove = 0.0f;
-  }
-
-  public bool CheckCollision(Player player)
-  {
-    return ((x == player.x) && (y == player.y));
+    get { return moveTime; }
   }
 }

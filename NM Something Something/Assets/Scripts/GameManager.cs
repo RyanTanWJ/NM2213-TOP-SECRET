@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour {
     MainMenu.MenuSelectEvent += OnMenuSelect;
     GoBack.GoBackEvent += GoBackToMainMenu;
     BoardManager.StartNewWaveEvent += StartNewWave;
-    BoardManager.GameOverEvent += OnGameOver;
+    Player.GameOverEvent += OnGameOver;
     GameOverMenu.RestartGameEvent += RestartGame;
   }
 
@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour {
     MainMenu.MenuSelectEvent -= OnMenuSelect;
     GoBack.GoBackEvent -= GoBackToMainMenu;
     BoardManager.StartNewWaveEvent -= StartNewWave;
-    BoardManager.GameOverEvent -= OnGameOver;
+    Player.GameOverEvent -= OnGameOver;
     GameOverMenu.RestartGameEvent -= RestartGame;
   }
 
@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour {
     }
     else
     {
+      //TODO:Spawn More Waves
       Debug.Log("No More Waves");
     }
   }

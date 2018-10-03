@@ -7,6 +7,9 @@ public class Player : MonoBehaviour
   public delegate void PlayerMove(BoardManager.Direction direction);
   public static event PlayerMove PlayerMoveEvent;
 
+  public delegate void GameOver();
+  public static event GameOver GameOverEvent;
+
   public int x;
   public int y;
   
@@ -14,6 +17,21 @@ public class Player : MonoBehaviour
   void Update ()
   {
     CheckForPlayerInput();
+  }
+
+  private void OnCollisionEnter2D(Collision2D collision)
+  {
+    Debug.Log("collided with: " + collision.gameObject.name);
+    switch (collision.gameObject.tag)
+    {
+      case "Hazard":
+        GameOverEvent();
+        break;
+      case "Nuisance":
+        break;
+      default:
+        break;
+    }
   }
 
   private void CheckForPlayerInput()
