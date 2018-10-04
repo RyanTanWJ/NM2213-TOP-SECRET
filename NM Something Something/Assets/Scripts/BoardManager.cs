@@ -54,6 +54,9 @@ public class BoardManager : MonoBehaviour {
   float currentWaveTime = 0;
   float currentWaveTimer = 0;
 
+  float currentWaveDelay = 0;
+  float currentWaveDelayTimer = 0;
+
   private void OnEnable()
   {
     Player.PlayerMoveEvent += MovePlayer;
@@ -79,11 +82,22 @@ public class BoardManager : MonoBehaviour {
     }
     else
     {
-      currentWaveTime += Time.deltaTime;
-      if (currentWaveTime > currentWaveTimer)
+      if (currentWaveDelay > currentWaveDelayTimer)
       {
-        RemoveAllHazardsAndNuisances();
-        currentWaveTime = 0;
+        if (currentWaveTime > currentWaveTimer)
+        {
+          RemoveAllHazardsAndNuisances();
+          currentWaveTime = 0;
+          currentWaveDelay = 0;
+        }
+        else
+        {
+          currentWaveTime += Time.deltaTime;
+        }
+      }
+      else
+      {
+        currentWaveDelay += Time.deltaTime;
       }
     }
   }
@@ -117,13 +131,13 @@ public class BoardManager : MonoBehaviour {
       Vector3 tilePosition = GetGridPosition(i, 0);
       indicator.transform.position = tilePosition;
       LeftIndicators.Add(indicator);
-      //indicator.SetActive(false);
+      indicator.SetActive(false);
       GameObject indicator2 = Instantiate(arrowIndicator, platforms.transform);
       Vector3 tilePosition2 = GetGridPosition(i, maxCols - 1);
       indicator2.transform.position = tilePosition2;
       RightIndicators.Add(indicator2);
       indicator2.transform.eulerAngles = new Vector3(0, 0, 180);
-      //indicator.SetActive(false);
+      indicator2.SetActive(false);
     }
     for (int j = 0; j < maxCols; j++)
     {
@@ -132,14 +146,14 @@ public class BoardManager : MonoBehaviour {
       indicator.transform.position = tilePosition;
       BotIndicators.Add(indicator);
       indicator.transform.eulerAngles = new Vector3(0, 0, 90);
-      //indicator.SetActive(false);
+      indicator.SetActive(false);
 
       GameObject indicator2 = Instantiate(arrowIndicator, platforms.transform);
       Vector3 tilePosition2 = GetGridPosition(maxRows - 1, j);
       indicator2.transform.position = tilePosition2;
       TopIndicators.Add(indicator2);
       indicator2.transform.eulerAngles = new Vector3(0, 0, -90);
-      //indicator.SetActive(false);
+      indicator2.SetActive(false);
     }
   }
 
@@ -222,6 +236,8 @@ public class BoardManager : MonoBehaviour {
   public void NewWave(Wave nextWave)
   {
     currentWaveTimer = nextWave.WaveTimer;
+    currentWaveDelayTimer = nextWave.DelayTimer;
+
     for (int i = 0; i < nextWave.HazardNum; i++)
     {
       GameObject hazardObject = boulderPool.RetrieveBoulder();
@@ -237,8 +253,10 @@ public class BoardManager : MonoBehaviour {
       Boulder boulder = hazardObject.GetComponent<Boulder>();
       hazards.Add(boulder);
       hazardObject.GetComponent<Boulder>().SetBoulderDirection(Direction.RIGHT);
-      int x = i + 1;
+      //int x = i + 1;
+      int x = UnityEngine.Random.Range(1, 5);
       int y = -2;
+      LeftIndicators[x].SetActive(true);
       SetBoulderGraphic(hazardObject, x, y);
       MoveBoulder(boulder, x, y);
     }
@@ -252,6 +270,8 @@ public class BoardManager : MonoBehaviour {
 
   private void MoveBoulder(Boulder boulder, int x, int y)
   {
+    //Debug.Log("(x, y) = (" + x + ", " + y + ")");
+    Debug.Log(GetGridPosition(x, y));
     int newX = x;
     int newY = y;
     switch (boulder.GetDirection())
@@ -269,8 +289,13 @@ public class BoardManager : MonoBehaviour {
         newY = maxCols;
         break;
     }
-
+    //Debug.Log("(newX, newY) = (" + newX + ", " + newY + ")");
+    Debug.Log(GetGridPosition(newX, newY));
     StartCoroutine(HazardSmoothMovement(boulder, GetGridPosition(newX, newY), boulder.MoveTime));
+    //if (currentWaveDelay > currentWaveDelayTimer)
+    //{
+    //  LeftIndicators[x].SetActive(false);
+    //}
   }
 
   //Co-routine for moving units from one space to next, takes a parameter end to specify where to move to.
@@ -287,7 +312,9 @@ public class BoardManager : MonoBehaviour {
     {
       //Find a new position proportionally closer to the end, based on the moveTime
       float inverseMoveTime = 1.0f / moveTime;
-      Vector3 newPostion = Vector3.MoveTowards(gameObj.transform.position, endPos, inverseMoveTime * Time.deltaTime * 10.0f);
+      Vector3 newPostion = Vector3.MoveTowards(gameObj.transform.position, endPos, 0.1f);
+      Debug.Log("currPosition = " + gameObj.transform.position);
+      Debug.Log("newPosition = " + newPostion);
 
       //Set the current transform's position to the new position
       gameObj.transform.position = newPostion;

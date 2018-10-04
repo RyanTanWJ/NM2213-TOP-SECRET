@@ -71,7 +71,8 @@ public class GameManager : MonoBehaviour {
     else
     {
       //TODO:Spawn More Waves
-      Debug.Log("No More Waves");
+      waveManager.GenerateWaves(3);
+      boardManager.NewWave(waveManager.NextWave());
     }
   }
 
