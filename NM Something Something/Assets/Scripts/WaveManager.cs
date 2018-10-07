@@ -16,7 +16,7 @@ public class WaveManager : MonoBehaviour {
     GenerateWaves(startingNumberOfWaves);
   }
 
-  private void GenerateWaves(int newWaves)
+  public void GenerateWaves(int newWaves)
   {
     for (int i = 0; i < startingNumberOfWaves; i++)
     {

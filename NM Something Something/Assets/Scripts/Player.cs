@@ -36,19 +36,19 @@ public class Player : MonoBehaviour
 
   private void CheckForPlayerInput()
   {
-    if (Input.GetKeyDown(KeyCode.UpArrow))
+    if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
     {
       PlayerMoveEvent(BoardManager.Direction.UP);
     }
-    else if (Input.GetKeyDown(KeyCode.DownArrow))
+    else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
     {
       PlayerMoveEvent(BoardManager.Direction.DOWN);
     }
-    else if (Input.GetKeyDown(KeyCode.LeftArrow))
+    else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
     {
       PlayerMoveEvent(BoardManager.Direction.LEFT);
     }
-    else if (Input.GetKeyDown(KeyCode.RightArrow))
+    else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
     {
       PlayerMoveEvent(BoardManager.Direction.RIGHT);
     }
