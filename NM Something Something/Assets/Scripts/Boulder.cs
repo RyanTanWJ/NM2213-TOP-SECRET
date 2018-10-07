@@ -10,7 +10,9 @@ public class Boulder : MonoBehaviour {
   private Animator animator;
 
   [SerializeField]
-  private float moveTime = 1.0f;
+  private float speed = 5.0f;
+
+  public bool ShouldMove = false;
 
   // Use this for initialization
   void Start()
@@ -34,8 +36,8 @@ public class Boulder : MonoBehaviour {
     return boulderDirection;
   }
 
-  public float MoveTime
+  public float Speed
   {
-    get { return moveTime; }
+    get { return speed; }
   }
 }

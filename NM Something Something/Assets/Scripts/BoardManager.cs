@@ -5,12 +5,7 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour {
 
-  public delegate void StartNewWave();
-  public static event StartNewWave StartNewWaveEvent;
-
   public enum Direction { UP, DOWN, LEFT, RIGHT};
-
-  int waveNumber = 0; //TODO: Count the number of waves cleared
 
   int maxRows = 8;
   int maxCols = 8;
@@ -32,7 +27,7 @@ public class BoardManager : MonoBehaviour {
   [SerializeField]
   GameObject floor;
 
-  //The Prefab used for the floor player cannot walk on
+  //The Prefab used to show the floor tiles the player cannot walk on
   [SerializeField]
   GameObject badFloor;
 
@@ -50,12 +45,6 @@ public class BoardManager : MonoBehaviour {
   BoulderPool boulderPool;
 
   List<Boulder> hazards = new List<Boulder>();
-
-  float currentWaveTime = 0;
-  float currentWaveTimer = 0;
-
-  float currentWaveDelay = 0;
-  float currentWaveDelayTimer = 0;
 
   private void OnEnable()
   {
@@ -76,30 +65,6 @@ public class BoardManager : MonoBehaviour {
 
   private void Update()
   {
-    if (hazards.Count<=0)
-    {
-      StartNewWaveEvent();
-    }
-    else
-    {
-      if (currentWaveDelay > currentWaveDelayTimer)
-      {
-        if (currentWaveTime > currentWaveTimer)
-        {
-          RemoveAllHazardsAndNuisances();
-          currentWaveTime = 0;
-          currentWaveDelay = 0;
-        }
-        else
-        {
-          currentWaveTime += Time.deltaTime;
-        }
-      }
-      else
-      {
-        currentWaveDelay += Time.deltaTime;
-      }
-    }
   }
 
   void GeneratePlatforms()
@@ -125,35 +90,38 @@ public class BoardManager : MonoBehaviour {
 
   void GenerateIndicators()
   {
+    GameObject indicator;
+    Vector3 tilePosition;
     for (int i = 0; i < maxRows; i++)
     {
-      GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
-      Vector3 tilePosition = GetGridPosition(i, 0);
+      indicator = Instantiate(arrowIndicator, platforms.transform);
+      tilePosition = GetGridPosition(i, 0);
       indicator.transform.position = tilePosition;
       LeftIndicators.Add(indicator);
-      indicator.SetActive(false);
-      GameObject indicator2 = Instantiate(arrowIndicator, platforms.transform);
-      Vector3 tilePosition2 = GetGridPosition(i, maxCols - 1);
-      indicator2.transform.position = tilePosition2;
-      RightIndicators.Add(indicator2);
-      indicator2.transform.eulerAngles = new Vector3(0, 0, 180);
-      indicator2.SetActive(false);
+      //indicator.SetActive(false);
+
+      indicator = Instantiate(arrowIndicator, platforms.transform);
+      tilePosition = GetGridPosition(i, maxCols - 1);
+      indicator.transform.position = tilePosition;
+      RightIndicators.Add(indicator);
+      indicator.transform.eulerAngles = new Vector3(0, 0, 180);
+      //indicator.SetActive(false);
     }
     for (int j = 0; j < maxCols; j++)
     {
-      GameObject indicator = Instantiate(arrowIndicator, platforms.transform);
-      Vector3 tilePosition = GetGridPosition(0, j);
+      indicator = Instantiate(arrowIndicator, platforms.transform);
+      tilePosition = GetGridPosition(0, j);
       indicator.transform.position = tilePosition;
       BotIndicators.Add(indicator);
       indicator.transform.eulerAngles = new Vector3(0, 0, 90);
-      indicator.SetActive(false);
+      //indicator.SetActive(false);
 
-      GameObject indicator2 = Instantiate(arrowIndicator, platforms.transform);
-      Vector3 tilePosition2 = GetGridPosition(maxRows - 1, j);
-      indicator2.transform.position = tilePosition2;
-      TopIndicators.Add(indicator2);
-      indicator2.transform.eulerAngles = new Vector3(0, 0, -90);
-      indicator2.SetActive(false);
+      indicator = Instantiate(arrowIndicator, platforms.transform);
+      tilePosition = GetGridPosition(maxRows - 1, j);
+      indicator.transform.position = tilePosition;
+      TopIndicators.Add(indicator);
+      indicator.transform.eulerAngles = new Vector3(0, 0, -90);
+      //indicator.SetActive(false);
     }
   }
 
@@ -170,7 +138,6 @@ public class BoardManager : MonoBehaviour {
     player.x = maxRows / 2;
     player.y = maxCols / 2;
     SetPlayerGraphic();
-    //grid[playerX, playerY] = playerObj;
   }
 
   private void SetPlayerGraphic()
@@ -233,76 +200,43 @@ public class BoardManager : MonoBehaviour {
     //PlayerSmoothMovement(player, GetGridPosition(player.x, player.y));
   }
 
-  public void NewWave(Wave nextWave)
-  {
-    currentWaveTimer = nextWave.WaveTimer;
-    currentWaveDelayTimer = nextWave.DelayTimer;
-
-    for (int i = 0; i < nextWave.HazardNum; i++)
-    {
-      GameObject hazardObject = boulderPool.RetrieveBoulder();
-      //TODO: Implement Switch Case for different Hazards
-      /*
-      switch (nextWave.Hazard)
-      {
-        default:
-          hazardObject = boulderPool.RetrieveBoulder();
-          break;
-      }
-      */
-      Boulder boulder = hazardObject.GetComponent<Boulder>();
-      hazards.Add(boulder);
-      hazardObject.GetComponent<Boulder>().SetBoulderDirection(Direction.RIGHT);
-      //int x = i + 1;
-      int x = UnityEngine.Random.Range(1, 5);
-      int y = -2;
-      LeftIndicators[x].SetActive(true);
-      SetBoulderGraphic(hazardObject, x, y);
-      MoveBoulder(boulder, x, y);
-    }
-    //TODO: Place the boulders on a random row that does not already have something on it.
-  }
-
   private void SetBoulderGraphic(GameObject boulder, int x, int y)
   {
     boulder.gameObject.transform.position = GetGridPosition(x, y);
   }
 
-  private void MoveBoulder(Boulder boulder, int x, int y)
+  private void MoveBoulder(Boulder boulder)
   {
-    //Debug.Log("(x, y) = (" + x + ", " + y + ")");
-    Debug.Log(GetGridPosition(x, y));
-    int newX = x;
-    int newY = y;
+    Vector3 direction = new Vector3();
+
     switch (boulder.GetDirection())
     {
-      case Direction.DOWN:
-        newX = -1;
-        break;
       case Direction.UP:
-        newX = maxRows;
+        direction.x = 0.01f;
+        break;
+      case Direction.DOWN:
+        direction.x = -0.01f;
         break;
       case Direction.LEFT:
-        newY = -1;
+        direction.y = 0.01f;
         break;
       case Direction.RIGHT:
-        newY = maxCols;
+        direction.y = -0.01f;
+        break;
+      default:
         break;
     }
-    //Debug.Log("(newX, newY) = (" + newX + ", " + newY + ")");
-    Debug.Log(GetGridPosition(newX, newY));
-    StartCoroutine(HazardSmoothMovement(boulder, GetGridPosition(newX, newY), boulder.MoveTime));
-    //if (currentWaveDelay > currentWaveDelayTimer)
-    //{
-    //  LeftIndicators[x].SetActive(false);
-    //}
+
+    boulder.ShouldMove = true;
+    StartCoroutine(HazardSmoothMovement(boulder, direction, boulder.Speed));
   }
 
   //Co-routine for moving units from one space to next, takes a parameter end to specify where to move to.
-  IEnumerator HazardSmoothMovement(Boulder boulder, Vector3 endPos, float moveTime)
+  IEnumerator HazardSmoothMovement(Boulder boulder, Vector3 direction, float speed)
   {
     GameObject gameObj = boulder.gameObject;
 
+    /*
     //Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter. 
     //Square magnitude is used instead of magnitude because it's computationally cheaper.
     float sqrRemainingDistance = (gameObj.transform.position - endPos).sqrMagnitude;
@@ -325,36 +259,13 @@ public class BoardManager : MonoBehaviour {
       //Return and loop until sqrRemainingDistance is close enough to zero to end the function
       yield return null;
     }
-  }
-
-  /*
-  //Co-routine for moving units from one space to next, takes a parameter end to specify where to move to.
-  IEnumerator PlayerSmoothMovement(Player player, Vector3 endPos, float moveTime=0.1f)
-  {
-    GameObject gameObj = player.gameObject;
-
-    //Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter. 
-    //Square magnitude is used instead of magnitude because it's computationally cheaper.
-    float sqrRemainingDistance = (gameObj.transform.position - endPos).sqrMagnitude;
-
-    //While that distance is greater than a very small amount (Epsilon, almost zero):
-    while (sqrRemainingDistance > float.Epsilon)
+    */
+    while (boulder.ShouldMove)
     {
-      //Find a new position proportionally closer to the end, based on the moveTime
-      float inverseMoveTime = 1.0f / moveTime;
-      Vector3 newPostion = Vector3.MoveTowards(gameObj.transform.position, endPos, inverseMoveTime * Time.deltaTime * 10.0f);
-
-      //Set the current transform's position to the new position
-      gameObj.transform.position = newPostion;
-
-      //Recalculate the remaining distance after moving.
-      sqrRemainingDistance = (gameObj.transform.position - endPos).sqrMagnitude;
-
-      //Return and loop until sqrRemainingDistance is close enough to zero to end the function
+      gameObj.transform.position = gameObj.transform.position + direction * speed;
       yield return null;
     }
   }
-  */
 
   private void RemoveAllHazardsAndNuisances()
   {
