@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PositioningAI : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+/// <summary>
+/// Finds the amount of space that the player can move
+/// Determines the rows or columns that hazards can spawn on the player
+/// </summary>
+public class PositioningAI : MonoBehaviour
+{
+  //Need a way in boardmanager to transform from world space to grid space
+  //Function should take current position of all hazards in grid space
+  //Find connected component that player is in and decide where to spawn from there
 }
