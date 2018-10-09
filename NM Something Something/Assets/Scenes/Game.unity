@@ -423,6 +423,34 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!1 &354330284
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 354330285}
+  m_Layer: 0
+  m_Name: HazardHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &354330285
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 354330284}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1937392388}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &797406647
 GameObject:
   m_ObjectHideFlags: 0
@@ -452,6 +480,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoulderPrefab: {fileID: 1364048146301756, guid: fbeb5488ff7d39d47b67c94edf0db387,
     type: 2}
+  bouldersInUse: []
 --- !u!4 &797406649
 Transform:
   m_ObjectHideFlags: 0
@@ -610,6 +639,7 @@ GameObject:
   - component: {fileID: 1247902661}
   - component: {fileID: 1247902660}
   - component: {fileID: 1247902659}
+  - component: {fileID: 1247902663}
   m_Layer: 0
   m_Name: InvisibleWallLeft
   m_TagString: Untagged
@@ -719,6 +749,17 @@ Transform:
   m_Father: {fileID: 1135432396}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1247902663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1247902658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6fccc98e8cc0f40ad8b5d186efe430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1406597476
 GameObject:
   m_ObjectHideFlags: 0
@@ -948,6 +989,7 @@ Transform:
   m_Children:
   - {fileID: 2052492057}
   - {fileID: 41788005}
+  - {fileID: 1937392388}
   m_Father: {fileID: 1790523159}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -972,6 +1014,7 @@ MonoBehaviour:
     type: 2}
   player: {fileID: 2052492058}
   boulderPool: {fileID: 797406648}
+  hazSpawner: {fileID: 0}
 --- !u!1 &1790523158
 GameObject:
   m_ObjectHideFlags: 0
@@ -1001,6 +1044,47 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1937392387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1937392388}
+  - component: {fileID: 1937392389}
+  m_Layer: 0
+  m_Name: HazardSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1937392388
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1937392387}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 354330285}
+  m_Father: {fileID: 1507082874}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1937392389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1937392387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2095c828e6080047a91d06cc5a5e0ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2013868351
 GameObject:
   m_ObjectHideFlags: 0

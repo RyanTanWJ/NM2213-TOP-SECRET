@@ -44,7 +44,11 @@ public class BoardManager : MonoBehaviour {
   [SerializeField]
   BoulderPool boulderPool;
 
-  List<Boulder> hazards = new List<Boulder>();
+  [SerializeField]
+  HazardSpawner hazSpawner;
+
+  float spawnDelay = 10.0f;
+  float currDelay = 10.0f;
 
   private void OnEnable()
   {
@@ -65,6 +69,16 @@ public class BoardManager : MonoBehaviour {
 
   private void Update()
   {
+    if (currDelay > spawnDelay)
+    {
+      //hazSpawner.GetHazards();
+      SpawnHazard();
+      currDelay = 0;
+    }
+    else
+    {
+      currDelay += Time.deltaTime;
+    }
   }
 
   void GeneratePlatforms()
@@ -197,7 +211,6 @@ public class BoardManager : MonoBehaviour {
         break;
     }
     SetPlayerGraphic();
-    //PlayerSmoothMovement(player, GetGridPosition(player.x, player.y));
   }
 
   private void SetBoulderGraphic(GameObject boulder, int x, int y)
@@ -269,12 +282,14 @@ public class BoardManager : MonoBehaviour {
 
   private void RemoveAllHazardsAndNuisances()
   {
-    foreach (Boulder hazard in hazards)
-    {
-      boulderPool.ReturnBoulder(hazard);
-    }
-    hazards.Clear();
+    boulderPool.ReturnAllBoulders();
     //TODO: Remove Nuisances
   }
-
+  
+  private void SpawnHazard()
+  {
+    GameObject boulder = boulderPool.RetrieveBoulder();
+    SetBoulderGraphic(boulder, 1, 1);
+    MoveBoulder(boulder.GetComponent<Boulder>());
+  }
 }

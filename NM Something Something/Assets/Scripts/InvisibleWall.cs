@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class InvisibleWall : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+  public delegate void DeactivateBoulder(GameObject boulder);
+  public static event DeactivateBoulder DeactivateBoulderEvent;
+
+  public delegate void MakeGameHarder();
+  public static event MakeGameHarder MakeGameHarderEvent;
+
+  private void OnCollisionEnter2D(Collision2D collision)
+  {
+    Debug.Log("collided with: " + collision.gameObject.name);
+    DeactivateBoulderEvent(collision.gameObject);
+    MakeGameHarderEvent();
+  }
 }
