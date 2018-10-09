@@ -10,8 +10,7 @@ public class Player : MonoBehaviour
   public delegate void GameOver();
   public static event GameOver GameOverEvent;
 
-  public int x;
-  public int y;
+  public Vector2Int BoardPosition;
   
   // Update is called once per frame
   void Update ()
@@ -21,7 +20,6 @@ public class Player : MonoBehaviour
 
   private void OnCollisionEnter2D(Collision2D collision)
   {
-    Debug.Log("collided with: " + collision.gameObject.name);
     switch (collision.gameObject.tag)
     {
       case "Hazard":

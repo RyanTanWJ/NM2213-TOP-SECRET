@@ -152,6 +152,7 @@ GameObject:
   - component: {fileID: 117250367}
   - component: {fileID: 117250366}
   - component: {fileID: 117250365}
+  - component: {fileID: 117250368}
   m_Layer: 0
   m_Name: InvisibleWallTop
   m_TagString: Untagged
@@ -261,6 +262,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &117250368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 117250363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6fccc98e8cc0f40ad8b5d186efe430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &244132021
 Prefab:
   m_ObjectHideFlags: 0
@@ -314,6 +326,7 @@ GameObject:
   - component: {fileID: 294971066}
   - component: {fileID: 294971065}
   - component: {fileID: 294971064}
+  - component: {fileID: 294971067}
   m_Layer: 0
   m_Name: InvisibleWallBottom
   m_TagString: Untagged
@@ -423,6 +436,17 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!114 &294971067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 294971062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6fccc98e8cc0f40ad8b5d186efe430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &354330284
 GameObject:
   m_ObjectHideFlags: 0
@@ -771,6 +795,7 @@ GameObject:
   - component: {fileID: 1406597479}
   - component: {fileID: 1406597478}
   - component: {fileID: 1406597477}
+  - component: {fileID: 1406597481}
   m_Layer: 0
   m_Name: InvisibleWallRight
   m_TagString: Untagged
@@ -880,6 +905,17 @@ Transform:
   m_Father: {fileID: 1135432396}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1406597481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1406597476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e6fccc98e8cc0f40ad8b5d186efe430, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1471211568
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,7 +991,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1471211568}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18, y: 17.5, z: -40}
+  m_LocalPosition: {x: 18, y: 17, z: -41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -990,6 +1026,7 @@ Transform:
   - {fileID: 2052492057}
   - {fileID: 41788005}
   - {fileID: 1937392388}
+  - {fileID: 1731254836}
   m_Father: {fileID: 1790523159}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1006,6 +1043,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: 5
   platforms: {fileID: 41788004}
+  indicatorHandler: {fileID: 1731254837}
   floor: {fileID: 1806305495807970, guid: c600e59b78dd4b04181c3987f0748d52, type: 2}
   badFloor: {fileID: 1378249886032178, guid: 67e9fde716631204db858827ff1af233, type: 2}
   arrowIndicator: {fileID: 1337558284444882, guid: 56c05475ae55d1e42834c21498b48dd5,
@@ -1014,7 +1052,47 @@ MonoBehaviour:
     type: 2}
   player: {fileID: 2052492058}
   boulderPool: {fileID: 797406648}
-  hazSpawner: {fileID: 0}
+  hazSpawner: {fileID: 1937392389}
+--- !u!1 &1731254835
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1731254836}
+  - component: {fileID: 1731254837}
+  m_Layer: 0
+  m_Name: IndicatorHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1731254836
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1731254835}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1507082874}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1731254837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1731254835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaa252ba05e1b624bbc89f2d877e158d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1790523158
 GameObject:
   m_ObjectHideFlags: 0
@@ -1053,6 +1131,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1937392388}
   - component: {fileID: 1937392389}
+  - component: {fileID: 1937392391}
+  - component: {fileID: 1937392390}
   m_Layer: 0
   m_Name: HazardSpawner
   m_TagString: Untagged
@@ -1083,6 +1163,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b2095c828e6080047a91d06cc5a5e0ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  diffAI: {fileID: 1937392391}
+  posAI: {fileID: 1937392390}
+--- !u!114 &1937392390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1937392387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa9727bfd94cf5a49a7c305380b192f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1937392391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1937392387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 573b83bae3b47174d9089452b6c5f4f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2013868351

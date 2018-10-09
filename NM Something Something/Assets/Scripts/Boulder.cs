@@ -9,7 +9,7 @@ public class Boulder : MonoBehaviour {
   [SerializeField]
   private Animator animator;
 
-  private float speed = 50.0f;
+  private float speed = 200.0f;
 
   public bool ShouldMove = false;
 

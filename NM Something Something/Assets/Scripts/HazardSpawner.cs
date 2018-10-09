@@ -7,7 +7,9 @@ using UnityEngine;
 /// </summary>
 public class HazardSpawner : MonoBehaviour
 {
+  [SerializeField]
   DifficultyAI diffAI;
+  [SerializeField]
   PositioningAI posAI;
 
   public void GetHazards()

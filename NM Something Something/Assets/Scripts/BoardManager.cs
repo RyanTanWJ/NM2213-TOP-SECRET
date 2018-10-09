@@ -18,10 +18,8 @@ public class BoardManager : MonoBehaviour {
   [SerializeField]
   GameObject platforms;
 
-  List<GameObject> TopIndicators = new List<GameObject>();
-  List<GameObject> BotIndicators = new List<GameObject>();
-  List<GameObject> LeftIndicators = new List<GameObject>();
-  List<GameObject> RightIndicators = new List<GameObject>();
+  [SerializeField]
+  IndicatorHandler indicatorHandler;
 
   //The Prefab used for the floor
   [SerializeField]
@@ -47,17 +45,20 @@ public class BoardManager : MonoBehaviour {
   [SerializeField]
   HazardSpawner hazSpawner;
 
-  float spawnDelay = 10.0f;
-  float currDelay = 10.0f;
+  float spawnDelay = 2.0f;
+  float currDelay = 2.0f;
+
 
   private void OnEnable()
   {
     Player.PlayerMoveEvent += MovePlayer;
+    IndicatorHandler.SpawnHazardsEvent += SpawnHazard;
   }
 
   private void OnDisable()
   {
     Player.PlayerMoveEvent -= MovePlayer;
+    IndicatorHandler.SpawnHazardsEvent -= SpawnHazard;
   }
 
   // Use this for initialization
@@ -69,10 +70,29 @@ public class BoardManager : MonoBehaviour {
 
   private void Update()
   {
-    if (currDelay > spawnDelay)
+    if (currDelay >= spawnDelay)
     {
+      //TODO: Flash Indicators for Indicator Time then spawn the hazard
       //hazSpawner.GetHazards();
-      SpawnHazard();
+
+      switch (UnityEngine.Random.Range(0, 4))
+      {
+        case 0:
+          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.TOP, 1, 1.0f);
+          break;
+        case 1:
+          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.BOT, 3, 1.0f);
+          break;
+        case 2:
+          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.LEFT, 2, 1.0f);
+          break;
+        case 3:
+          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.RIGHT, 4, 1.0f);
+          break;
+        default:
+          Debug.LogError("Random Range exceeded in BoardManager Update()");
+          break;
+      }
       currDelay = 0;
     }
     else
@@ -104,38 +124,36 @@ public class BoardManager : MonoBehaviour {
 
   void GenerateIndicators()
   {
-    GameObject indicator;
+    GameObject indicatorObj;
+    Indicator indicator;
     Vector3 tilePosition;
     for (int i = 0; i < maxRows; i++)
     {
-      indicator = Instantiate(arrowIndicator, platforms.transform);
+      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(i, 0);
-      indicator.transform.position = tilePosition;
-      LeftIndicators.Add(indicator);
-      //indicator.SetActive(false);
+      indicatorObj.transform.position = tilePosition;
+      indicator = indicatorObj.GetComponent<Indicator>();
+      indicatorHandler.AddIndicatorToSet(IndicatorHandler.IndicatorSet.LEFT, indicator);
 
-      indicator = Instantiate(arrowIndicator, platforms.transform);
+      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(i, maxCols - 1);
-      indicator.transform.position = tilePosition;
-      RightIndicators.Add(indicator);
-      indicator.transform.eulerAngles = new Vector3(0, 0, 180);
-      //indicator.SetActive(false);
+      indicatorObj.transform.position = tilePosition;
+      indicator = indicatorObj.GetComponent<Indicator>();
+      indicatorHandler.AddIndicatorToSet(IndicatorHandler.IndicatorSet.RIGHT, indicator);
     }
     for (int j = 0; j < maxCols; j++)
     {
-      indicator = Instantiate(arrowIndicator, platforms.transform);
+      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(0, j);
-      indicator.transform.position = tilePosition;
-      BotIndicators.Add(indicator);
-      indicator.transform.eulerAngles = new Vector3(0, 0, 90);
-      //indicator.SetActive(false);
+      indicatorObj.transform.position = tilePosition;
+      indicator = indicatorObj.GetComponent<Indicator>();
+      indicatorHandler.AddIndicatorToSet(IndicatorHandler.IndicatorSet.BOT, indicator);
 
-      indicator = Instantiate(arrowIndicator, platforms.transform);
+      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(maxRows - 1, j);
-      indicator.transform.position = tilePosition;
-      TopIndicators.Add(indicator);
-      indicator.transform.eulerAngles = new Vector3(0, 0, -90);
-      //indicator.SetActive(false);
+      indicatorObj.transform.position = tilePosition;
+      indicator = indicatorObj.GetComponent<Indicator>();
+      indicatorHandler.AddIndicatorToSet(IndicatorHandler.IndicatorSet.TOP, indicator);
     }
   }
 
@@ -149,45 +167,45 @@ public class BoardManager : MonoBehaviour {
 
   void PlacePlayer()
   {
-    player.x = maxRows / 2;
-    player.y = maxCols / 2;
+    player.BoardPosition.x = maxRows / 2;
+    player.BoardPosition.y = maxCols / 2;
     SetPlayerGraphic();
   }
 
   private void SetPlayerGraphic()
   {
-    player.gameObject.transform.position = GetGridPosition(player.x, player.y);
+    player.gameObject.transform.position = GetGridPosition(player.BoardPosition.x, player.BoardPosition.y);
   }
 
   private void MovePlayerUp()
   {
-    if (player.x < maxRows - 2)
+    if (player.BoardPosition.x < maxRows - 2)
     {
-      player.x += 1;
+      player.BoardPosition.x += 1;
     }
   }
 
   private void MovePlayerDown()
   {
-    if (player.x > 1)
+    if (player.BoardPosition.x > 1)
     {
-      player.x -= 1;
+      player.BoardPosition.x -= 1;
     }
   }
 
   private void MovePlayerLeft()
   {
-    if (player.y > 1)
+    if (player.BoardPosition.y > 1)
     {
-      player.y -= 1;
+      player.BoardPosition.y -= 1;
     }
   }
 
   private void MovePlayerRight()
   {
-    if (player.y < maxCols - 2)
+    if (player.BoardPosition.y < maxCols - 2)
     {
-      player.y += 1;
+      player.BoardPosition.y += 1;
     }
   }
 
@@ -225,16 +243,16 @@ public class BoardManager : MonoBehaviour {
     switch (boulder.GetDirection())
     {
       case Direction.UP:
-        direction.x = 0.01f;
+        direction.y = 0.1f;
         break;
       case Direction.DOWN:
-        direction.x = -0.01f;
-        break;
-      case Direction.LEFT:
-        direction.y = 0.01f;
+        direction.y = -0.1f;
         break;
       case Direction.RIGHT:
-        direction.y = -0.01f;
+        direction.x = 0.1f;
+        break;
+      case Direction.LEFT:
+        direction.x = -0.1f;
         break;
       default:
         break;
@@ -248,34 +266,9 @@ public class BoardManager : MonoBehaviour {
   IEnumerator HazardSmoothMovement(Boulder boulder, Vector3 direction, float speed)
   {
     GameObject gameObj = boulder.gameObject;
-
-    /*
-    //Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter. 
-    //Square magnitude is used instead of magnitude because it's computationally cheaper.
-    float sqrRemainingDistance = (gameObj.transform.position - endPos).sqrMagnitude;
-
-    //While that distance is greater than a very small amount (Epsilon, almost zero):
-    while (sqrRemainingDistance > float.Epsilon)
-    {
-      //Find a new position proportionally closer to the end, based on the moveTime
-      float inverseMoveTime = 1.0f / moveTime;
-      Vector3 newPostion = Vector3.MoveTowards(gameObj.transform.position, endPos, 0.1f);
-      Debug.Log("currPosition = " + gameObj.transform.position);
-      Debug.Log("newPosition = " + newPostion);
-
-      //Set the current transform's position to the new position
-      gameObj.transform.position = newPostion;
-
-      //Recalculate the remaining distance after moving.
-      sqrRemainingDistance = (gameObj.transform.position - endPos).sqrMagnitude;
-
-      //Return and loop until sqrRemainingDistance is close enough to zero to end the function
-      yield return null;
-    }
-    */
     while (boulder.ShouldMove)
     {
-      gameObj.transform.position = gameObj.transform.position + direction * speed;
+      gameObj.transform.position = gameObj.transform.position + direction * speed * Time.deltaTime;
       yield return null;
     }
   }
@@ -286,10 +279,29 @@ public class BoardManager : MonoBehaviour {
     //TODO: Remove Nuisances
   }
   
-  private void SpawnHazard()
+  private void SpawnHazard(Direction direction, Vector2Int spawnPos)
   {
-    GameObject boulder = boulderPool.RetrieveBoulder();
-    SetBoulderGraphic(boulder, 1, 1);
-    MoveBoulder(boulder.GetComponent<Boulder>());
+    GameObject boulderObj = boulderPool.RetrieveBoulder();
+    Boulder boulder = boulderObj.GetComponent<Boulder>();
+    SetBoulderGraphic(boulderObj, spawnPos.x, spawnPos.y);
+    switch (direction)
+    {
+      case Direction.RIGHT:
+        boulder.SetBoulderDirection(Direction.RIGHT);
+        MoveBoulder(boulderObj.GetComponent<Boulder>());
+        break;
+      case Direction.UP:
+        boulder.SetBoulderDirection(Direction.UP);
+        MoveBoulder(boulderObj.GetComponent<Boulder>());
+        break;
+      case Direction.LEFT:
+        boulder.SetBoulderDirection(Direction.LEFT);
+        MoveBoulder(boulderObj.GetComponent<Boulder>());
+        break;
+      default:
+        boulder.SetBoulderDirection(Direction.DOWN);
+        MoveBoulder(boulderObj.GetComponent<Boulder>());
+        break;
+    }
   }
 }

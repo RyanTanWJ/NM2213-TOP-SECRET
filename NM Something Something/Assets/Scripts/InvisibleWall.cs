@@ -12,7 +12,6 @@ public class InvisibleWall : MonoBehaviour {
 
   private void OnCollisionEnter2D(Collision2D collision)
   {
-    Debug.Log("collided with: " + collision.gameObject.name);
     DeactivateBoulderEvent(collision.gameObject);
     MakeGameHarderEvent();
   }

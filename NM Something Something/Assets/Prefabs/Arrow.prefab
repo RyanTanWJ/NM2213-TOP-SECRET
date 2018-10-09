@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4773866593879216}
   - component: {fileID: 212799059136807230}
   - component: {fileID: 95987669079096104}
+  - component: {fileID: 114347247060958530}
   m_Layer: 0
   m_Name: Arrow
   m_TagString: Untagged
@@ -58,6 +59,17 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114347247060958530
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1337558284444882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71a4547bc116ac24ca4c9059c0763e9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212799059136807230
 SpriteRenderer:
   m_ObjectHideFlags: 1
