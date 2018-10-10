@@ -73,8 +73,64 @@ public class BoardManager : MonoBehaviour {
     if (currDelay >= spawnDelay)
     {
       //TODO: Flash Indicators for Indicator Time then spawn the hazard
-      //hazSpawner.GetHazards();
+      int hazards;
+      float delay;
+      List<int> rows;
+      List<int> cols;
+      hazSpawner.GetHazards(out hazards, out delay, out rows, out cols);
 
+      for (int i = 0; i < hazards; i++)
+      {
+        int index = 0;
+        switch (UnityEngine.Random.Range(0, 2))
+        {
+          //Do left or right
+          case 0:
+            switch (UnityEngine.Random.Range(0, 2))
+            {
+              //Do left
+              case 0:
+                index = UnityEngine.Random.Range(1, rows.Count);
+                rows.RemoveAt(index);
+                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.LEFT, index, delay);
+                break;
+              //Do right
+              case 1:
+                index = UnityEngine.Random.Range(1, rows.Count);
+                rows.RemoveAt(index);
+                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.RIGHT, index, delay);
+                break;
+              default:
+                Debug.LogError("Random Range exceeded in BoardManager Update()");
+                break;
+            }
+            break;
+          //Do top or bot
+          case 1:
+            switch (UnityEngine.Random.Range(0, 2))
+            {
+              //Do top
+              case 0:
+                index = UnityEngine.Random.Range(1, cols.Count);
+                cols.RemoveAt(index);
+                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.TOP, index, delay);
+                break;
+              //Do bot
+              case 1:
+                index = UnityEngine.Random.Range(1, cols.Count);
+                cols.RemoveAt(index);
+                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.BOT, index, delay);
+                break;
+              default:
+                Debug.LogError("Random Range exceeded in BoardManager Update()");
+                break;
+            }
+            break;
+          default:
+            Debug.LogError("Random Range exceeded in BoardManager Update()");
+            break;
+        }
+        /*
       switch (UnityEngine.Random.Range(0, 4))
       {
         case 0:
@@ -92,6 +148,8 @@ public class BoardManager : MonoBehaviour {
         default:
           Debug.LogError("Random Range exceeded in BoardManager Update()");
           break;
+      }
+      */
       }
       currDelay = 0;
     }
@@ -288,19 +346,19 @@ public class BoardManager : MonoBehaviour {
     {
       case Direction.RIGHT:
         boulder.SetBoulderDirection(Direction.RIGHT);
-        MoveBoulder(boulderObj.GetComponent<Boulder>());
+        MoveBoulder(boulder);
         break;
       case Direction.UP:
         boulder.SetBoulderDirection(Direction.UP);
-        MoveBoulder(boulderObj.GetComponent<Boulder>());
+        MoveBoulder(boulder);
         break;
       case Direction.LEFT:
         boulder.SetBoulderDirection(Direction.LEFT);
-        MoveBoulder(boulderObj.GetComponent<Boulder>());
+        MoveBoulder(boulder);
         break;
       default:
         boulder.SetBoulderDirection(Direction.DOWN);
-        MoveBoulder(boulderObj.GetComponent<Boulder>());
+        MoveBoulder(boulder);
         break;
     }
   }

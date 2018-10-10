@@ -38,7 +38,7 @@ public class DifficultyAI : MonoBehaviour {
   {
     if (indicatorDelay > minIndicatorDelay)
     {
-      indicatorDelay -= 0.01f;
+      indicatorDelay -= 0.1f;
       return;
     }
     if (numberOfHazards < maxHazards)

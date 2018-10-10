@@ -12,14 +12,11 @@ public class HazardSpawner : MonoBehaviour
   [SerializeField]
   PositioningAI posAI;
 
-  public void GetHazards()
+  public void GetHazards(out int hazards, out float indicatorDelay, out List<int> rows, out List<int> cols)
   {
-    int hazards;
-    float indicatorDelay;
     diffAI.Difficulty(out hazards, out indicatorDelay);
-    List<int> rows;
-    List<int> cols;
+    Debug.Log("number of hazards: " + hazards);
+    Debug.Log("number of indicatorDelay: " + indicatorDelay);
     posAI.Location(out rows, out cols);
-
   }
 }
