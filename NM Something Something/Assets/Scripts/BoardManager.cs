@@ -78,16 +78,16 @@ public class BoardManager : MonoBehaviour {
       switch (UnityEngine.Random.Range(0, 4))
       {
         case 0:
-          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.TOP, 1, 1.0f);
+          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.TOP, UnityEngine.Random.Range(1, maxRows - 1), 1.0f);
           break;
         case 1:
-          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.BOT, 3, 1.0f);
+          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.BOT, UnityEngine.Random.Range(1, maxRows - 1), 1.0f);
           break;
         case 2:
-          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.LEFT, 2, 1.0f);
+          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.LEFT, UnityEngine.Random.Range(1, maxCols - 1), 1.0f);
           break;
         case 3:
-          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.RIGHT, 4, 1.0f);
+          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.RIGHT, UnityEngine.Random.Range(1, maxCols - 1), 1.0f);
           break;
         default:
           Debug.LogError("Random Range exceeded in BoardManager Update()");
