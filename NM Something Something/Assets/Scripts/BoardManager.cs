@@ -34,9 +34,6 @@ public class BoardManager : MonoBehaviour {
   GameObject arrowIndicator;
 
   [SerializeField]
-  GameObject playerPrefab;
-
-  [SerializeField]
   Player player;
 
   [SerializeField]
@@ -45,9 +42,8 @@ public class BoardManager : MonoBehaviour {
   [SerializeField]
   HazardSpawner hazSpawner;
 
-  float spawnDelay = 2.0f;
-  float currDelay = 2.0f;
-
+  float spawnDelay = 2.5f;
+  float currDelay = 0.0f;
 
   private void OnEnable()
   {
@@ -91,14 +87,12 @@ public class BoardManager : MonoBehaviour {
               //Do left
               case 0:
                 index = UnityEngine.Random.Range(1, rows.Count);
-                rows.RemoveAt(index);
-                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.LEFT, index, delay);
+                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.LEFT, rows[index], delay);
                 break;
               //Do right
               case 1:
                 index = UnityEngine.Random.Range(1, rows.Count);
-                rows.RemoveAt(index);
-                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.RIGHT, index, delay);
+                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.RIGHT, rows[index], delay);
                 break;
               default:
                 Debug.LogError("Random Range exceeded in BoardManager Update()");
@@ -112,14 +106,12 @@ public class BoardManager : MonoBehaviour {
               //Do top
               case 0:
                 index = UnityEngine.Random.Range(1, cols.Count);
-                cols.RemoveAt(index);
-                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.TOP, index, delay);
+                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.TOP, cols[index], delay);
                 break;
               //Do bot
               case 1:
                 index = UnityEngine.Random.Range(1, cols.Count);
-                cols.RemoveAt(index);
-                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.BOT, index, delay);
+                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.BOT, cols[index], delay);
                 break;
               default:
                 Debug.LogError("Random Range exceeded in BoardManager Update()");
