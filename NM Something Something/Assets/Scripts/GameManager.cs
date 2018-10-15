@@ -6,17 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
-  [SerializeField]
-  BoardManager boardManager;
-
-  [SerializeField]
-  WaveManager waveManager;
-
   void OnEnable()
   {
     MainMenu.MenuSelectEvent += OnMenuSelect;
     GoBack.GoBackEvent += GoBackToMainMenu;
-    BoardManager.StartNewWaveEvent += StartNewWave;
     Player.GameOverEvent += OnGameOver;
     GameOverMenu.RestartGameEvent += RestartGame;
   }
@@ -25,7 +18,6 @@ public class GameManager : MonoBehaviour {
   {
     MainMenu.MenuSelectEvent -= OnMenuSelect;
     GoBack.GoBackEvent -= GoBackToMainMenu;
-    BoardManager.StartNewWaveEvent -= StartNewWave;
     Player.GameOverEvent -= OnGameOver;
     GameOverMenu.RestartGameEvent -= RestartGame;
   }
@@ -61,21 +53,6 @@ public class GameManager : MonoBehaviour {
         break;
     }
   }
-
-  private void StartNewWave()
-  {
-    if (waveManager.HasNextWave())
-    {
-      boardManager.NewWave(waveManager.NextWave());
-    }
-    else
-    {
-      //TODO:Spawn More Waves
-      waveManager.GenerateWaves(3);
-      boardManager.NewWave(waveManager.NextWave());
-    }
-  }
-
 
   private void StartGame()
   {

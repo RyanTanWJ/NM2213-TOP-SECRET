@@ -5,37 +5,70 @@ using UnityEngine;
 public class BoulderPool : MonoBehaviour {
   [SerializeField]
   private GameObject BoulderPrefab;
-  private Queue<GameObject> boulderPool = new Queue<GameObject>();
+  private List<GameObject> boulderPool = new List<GameObject>();
+  public List<GameObject> bouldersInUse = new List<GameObject>();
 
   private int boulders = 8;
 
-	// Use this for initialization
-	void Start ()
+  private void OnEnable()
+  {
+    InvisibleWall.DeactivateBoulderEvent += ReturnBoulder;
+  }
+
+  private void OnDisable()
+  {
+    InvisibleWall.DeactivateBoulderEvent -= ReturnBoulder;
+  }
+
+  // Use this for initialization
+  void Start ()
   {
     for (int i = 0; i < boulders; i++)
     {
       GameObject boulder = Instantiate(BoulderPrefab, transform);
-      boulderPool.Enqueue(boulder);
+      boulderPool.Add(boulder);
       boulder.SetActive(false);
     }
 	}
 	
   public GameObject RetrieveBoulder()
   {
+    GameObject boulder;
     if (boulderPool.Count == 0)
     {
-      Debug.LogError("No more Boulders!");
-      return null;
+      boulder = Instantiate(BoulderPrefab, transform);
+      bouldersInUse.Add(boulder);
+      return boulder;
     }
-    GameObject boulder = boulderPool.Dequeue();
+    boulder = boulderPool[0];
+    boulderPool.Remove(boulder);
+    bouldersInUse.Add(boulder);
     boulder.SetActive(true);
     return boulder;
   }
 
   public void ReturnBoulder(Boulder boulder)
   {
-    boulder.gameObject.transform.parent = transform;
-    boulderPool.Enqueue(boulder.gameObject);
+    ReturnBoulder(boulder.gameObject);
+  }
+
+  private void ReturnBoulder(GameObject boulder)
+  {
+    boulder.GetComponent<Boulder>().ShouldMove = false;
+    boulder.transform.position = transform.position;
+    bouldersInUse.Remove(boulder);
+    boulderPool.Add(boulder);
     boulder.gameObject.SetActive(false);
+  }
+
+  public void ReturnAllBoulders()
+  {
+    foreach (GameObject boulder in bouldersInUse)
+    {
+      boulder.transform.position = transform.position;
+      boulderPool.Add(boulder.gameObject);
+      boulder.gameObject.SetActive(false);
+    }
+    bouldersInUse.Clear();
   }
 }
