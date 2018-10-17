@@ -12,7 +12,10 @@ public class InvisibleWall : MonoBehaviour {
 
   private void OnCollisionEnter2D(Collision2D collision)
   {
-    DeactivateBoulderEvent(collision.gameObject);
-    MakeGameHarderEvent();
+    if (collision.gameObject.name.Contains("Boulder"))
+    {
+      DeactivateBoulderEvent(collision.gameObject);
+      MakeGameHarderEvent();
+    }
   }
 }

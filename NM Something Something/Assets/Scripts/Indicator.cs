@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class Indicator : MonoBehaviour{
 
-  public delegate void TimerDone(IndicatorHandler.IndicatorSet indicatorSet, Indicator self);
+  public delegate void TimerDone(Indicator self);
   public static event TimerDone TimerDoneEvent;
 
-  private IndicatorHandler.IndicatorSet set;
+  public BoardManager.BorderSet BorderSet;
+
+  public BoardManager.Hazard Hazard;
 
   private List<float> FlashTimers = new List<float>();
 	// Update is called once per frame
@@ -21,7 +23,7 @@ public class Indicator : MonoBehaviour{
       if (FlashTimers[0] <= 0)
       {
         FlashTimers.RemoveAt(0);
-        TimerDoneEvent(set, this);
+        TimerDoneEvent(this);
         return;
       }
       FlashTimers[0] -= Time.deltaTime;
@@ -31,10 +33,5 @@ public class Indicator : MonoBehaviour{
   public void AddTimer(float time)
   {
     FlashTimers.Add(time);
-  }
-
-  public void SetIndicatorSet(IndicatorHandler.IndicatorSet indicatorSet)
-  {
-    set = indicatorSet;
   }
 }

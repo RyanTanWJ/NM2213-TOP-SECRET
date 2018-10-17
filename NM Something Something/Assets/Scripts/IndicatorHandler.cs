@@ -5,14 +5,12 @@ using UnityEngine;
 
 public class IndicatorHandler : MonoBehaviour{
 
-  public enum IndicatorSet { TOP, BOT, LEFT, RIGHT };
-
   private List<Indicator> TopIndicators = new List<Indicator>();
   private List<Indicator> BotIndicators = new List<Indicator>();
   private List<Indicator> LeftIndicators = new List<Indicator>();
   private List<Indicator> RightIndicators = new List<Indicator>();
 
-  public delegate void SpawnHazards(BoardManager.Direction direction, Vector2Int spawnPos);
+  public delegate void SpawnHazards(BoardManager.Hazard hazard, BoardManager.Direction direction, Vector2Int spawnPos);
   public static event SpawnHazards SpawnHazardsEvent;
 
   private void OnEnable()
@@ -25,26 +23,26 @@ public class IndicatorHandler : MonoBehaviour{
     Indicator.TimerDoneEvent -= OnTimerDone;
   }
 
-  public void AddIndicatorToSet(IndicatorSet indicatorSet, Indicator indicator)
+  public void AddIndicatorToSet(BoardManager.BorderSet indicatorSet, Indicator indicator)
   {
     switch (indicatorSet)
     {
-      case IndicatorSet.LEFT:
-        indicator.SetIndicatorSet(IndicatorSet.LEFT);
+      case BoardManager.BorderSet.LEFT:
+        indicator.BorderSet = BoardManager.BorderSet.LEFT;
         LeftIndicators.Add(indicator);
         break;
-      case IndicatorSet.RIGHT:
-        indicator.SetIndicatorSet(IndicatorSet.RIGHT);
+      case BoardManager.BorderSet.RIGHT:
+        indicator.BorderSet = BoardManager.BorderSet.RIGHT;
         RightIndicators.Add(indicator);
         indicator.transform.eulerAngles = new Vector3(0, 0, 180);
         break;
-      case IndicatorSet.BOT:
-        indicator.SetIndicatorSet(IndicatorSet.BOT);
+      case BoardManager.BorderSet.BOT:
+        indicator.BorderSet = BoardManager.BorderSet.BOT;
         BotIndicators.Add(indicator);
         indicator.transform.eulerAngles = new Vector3(0, 0, 90);
         break;
-      case IndicatorSet.TOP:
-        indicator.SetIndicatorSet(IndicatorSet.TOP);
+      case BoardManager.BorderSet.TOP:
+        indicator.BorderSet = BoardManager.BorderSet.TOP;
         TopIndicators.Add(indicator);
         indicator.transform.eulerAngles = new Vector3(0, 0, -90);
         break;
@@ -54,24 +52,28 @@ public class IndicatorHandler : MonoBehaviour{
     }
   }
 
-  public void AcitvateIndicator(IndicatorSet indicatorSet, int index, float time)
+  public void AcitvateIndicator(BoardManager.Hazard hazard, BoardManager.BorderSet indicatorSet, int index, float time)
   {
     switch (indicatorSet)
     {
-      case IndicatorSet.LEFT:
+      case BoardManager.BorderSet.LEFT:
         LeftIndicators[index].gameObject.SetActive(true);
+        LeftIndicators[index].Hazard = hazard;
         LeftIndicators[index].AddTimer(time);
         break;
-      case IndicatorSet.RIGHT:
+      case BoardManager.BorderSet.RIGHT:
         RightIndicators[index].gameObject.SetActive(true);
+        RightIndicators[index].Hazard = hazard;
         RightIndicators[index].AddTimer(time);
         break;
-      case IndicatorSet.BOT:
+      case BoardManager.BorderSet.BOT:
         BotIndicators[index].gameObject.SetActive(true);
+        BotIndicators[index].Hazard = hazard;
         BotIndicators[index].AddTimer(time);
         break;
-      case IndicatorSet.TOP:
+      case BoardManager.BorderSet.TOP:
         TopIndicators[index].gameObject.SetActive(true);
+        TopIndicators[index].Hazard = hazard;
         TopIndicators[index].AddTimer(time);
         break;
       default:
@@ -80,29 +82,29 @@ public class IndicatorHandler : MonoBehaviour{
     }
   }
 
-  private void OnTimerDone(IndicatorSet set, Indicator indicator)
+  private void OnTimerDone(Indicator indicator)
   {
     int row = 0;
     int col = 0;
-    switch (set)
+    switch (indicator.BorderSet)
     {
-      case IndicatorSet.LEFT:
+      case BoardManager.BorderSet.LEFT:
         row = LeftIndicators.IndexOf(indicator);
-        SpawnHazardsEvent(BoardManager.Direction.RIGHT, new Vector2Int(row, col));
+        SpawnHazardsEvent(indicator.Hazard, BoardManager.Direction.RIGHT, new Vector2Int(row, col));
         break;
-      case IndicatorSet.RIGHT:
+      case BoardManager.BorderSet.RIGHT:
         row = RightIndicators.IndexOf(indicator);
         col = RightIndicators.Count - 1;
-        SpawnHazardsEvent(BoardManager.Direction.LEFT, new Vector2Int(row, col));
+        SpawnHazardsEvent(indicator.Hazard, BoardManager.Direction.LEFT, new Vector2Int(row, col));
         break;
-      case IndicatorSet.BOT:
+      case BoardManager.BorderSet.BOT:
         col = BotIndicators.IndexOf(indicator);
-        SpawnHazardsEvent(BoardManager.Direction.UP, new Vector2Int(row, col));
+        SpawnHazardsEvent(indicator.Hazard, BoardManager.Direction.UP, new Vector2Int(row, col));
         break;
-      case IndicatorSet.TOP:
+      case BoardManager.BorderSet.TOP:
         col = TopIndicators.IndexOf(indicator);
         row = TopIndicators.Count - 1;
-        SpawnHazardsEvent(BoardManager.Direction.DOWN, new Vector2Int(row, col));
+        SpawnHazardsEvent(indicator.Hazard, BoardManager.Direction.DOWN, new Vector2Int(row, col));
         break;
       default:
         Debug.LogError("The specified IndicatorSet does not exist!");

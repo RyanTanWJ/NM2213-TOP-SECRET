@@ -5,7 +5,17 @@ using UnityEngine;
 
 public class BoardManager : MonoBehaviour {
 
+  /// <summary>
+  /// Represents a movement Direction
+  /// </summary>
   public enum Direction { UP, DOWN, LEFT, RIGHT};
+
+  public enum Hazard { BOULDER, LASER };
+
+  /// <summary>
+  /// Represents the border on which certain objects such as Laser and Indicators are located.
+  /// </summary>
+  public enum BorderSet { TOP, BOT, LEFT, RIGHT };
 
   int maxRows = 8;
   int maxCols = 8;
@@ -42,6 +52,13 @@ public class BoardManager : MonoBehaviour {
   [SerializeField]
   HazardSpawner hazSpawner;
 
+  //The Prefab used for lasers
+  [SerializeField]
+  GameObject laser;
+
+  [SerializeField]
+  LaserHandler laserHandler;
+
   float spawnDelay = 2.5f;
   float currDelay = 0.0f;
 
@@ -61,6 +78,7 @@ public class BoardManager : MonoBehaviour {
   void Start () {
     GeneratePlatforms();
     GenerateIndicators();
+    GenerateLasers();
     PlacePlayer();
 	}
 
@@ -68,7 +86,7 @@ public class BoardManager : MonoBehaviour {
   {
     if (currDelay >= spawnDelay)
     {
-      //TODO: Flash Indicators for Indicator Time then spawn the hazard
+      //Flash Indicators for Indicator Time (delay) then spawn the hazard
       int hazards;
       float delay;
       List<int> rows;
@@ -87,12 +105,12 @@ public class BoardManager : MonoBehaviour {
               //Do left
               case 0:
                 index = UnityEngine.Random.Range(1, rows.Count);
-                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.LEFT, rows[index], delay);
+                indicatorHandler.AcitvateIndicator(Hazard.BOULDER, BorderSet.LEFT, rows[index], delay);
                 break;
               //Do right
               case 1:
                 index = UnityEngine.Random.Range(1, rows.Count);
-                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.RIGHT, rows[index], delay);
+                indicatorHandler.AcitvateIndicator(Hazard.LASER, BorderSet.RIGHT, rows[index], delay);
                 break;
               default:
                 Debug.LogError("Random Range exceeded in BoardManager Update()");
@@ -106,12 +124,12 @@ public class BoardManager : MonoBehaviour {
               //Do top
               case 0:
                 index = UnityEngine.Random.Range(1, cols.Count);
-                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.TOP, cols[index], delay);
+                indicatorHandler.AcitvateIndicator(Hazard.LASER, BorderSet.TOP, cols[index], delay);
                 break;
               //Do bot
               case 1:
                 index = UnityEngine.Random.Range(1, cols.Count);
-                indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.BOT, cols[index], delay);
+                indicatorHandler.AcitvateIndicator(Hazard.BOULDER, BorderSet.BOT, cols[index], delay);
                 break;
               default:
                 Debug.LogError("Random Range exceeded in BoardManager Update()");
@@ -122,26 +140,6 @@ public class BoardManager : MonoBehaviour {
             Debug.LogError("Random Range exceeded in BoardManager Update()");
             break;
         }
-        /*
-      switch (UnityEngine.Random.Range(0, 4))
-      {
-        case 0:
-          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.TOP, UnityEngine.Random.Range(1, maxRows - 1), 1.0f);
-          break;
-        case 1:
-          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.BOT, UnityEngine.Random.Range(1, maxRows - 1), 1.0f);
-          break;
-        case 2:
-          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.LEFT, UnityEngine.Random.Range(1, maxCols - 1), 1.0f);
-          break;
-        case 3:
-          indicatorHandler.AcitvateIndicator(IndicatorHandler.IndicatorSet.RIGHT, UnityEngine.Random.Range(1, maxCols - 1), 1.0f);
-          break;
-        default:
-          Debug.LogError("Random Range exceeded in BoardManager Update()");
-          break;
-      }
-      */
       }
       currDelay = 0;
     }
@@ -183,13 +181,13 @@ public class BoardManager : MonoBehaviour {
       tilePosition = GetGridPosition(i, 0);
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
-      indicatorHandler.AddIndicatorToSet(IndicatorHandler.IndicatorSet.LEFT, indicator);
+      indicatorHandler.AddIndicatorToSet(BorderSet.LEFT, indicator);
 
       indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(i, maxCols - 1);
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
-      indicatorHandler.AddIndicatorToSet(IndicatorHandler.IndicatorSet.RIGHT, indicator);
+      indicatorHandler.AddIndicatorToSet(BorderSet.RIGHT, indicator);
     }
     for (int j = 0; j < maxCols; j++)
     {
@@ -197,13 +195,48 @@ public class BoardManager : MonoBehaviour {
       tilePosition = GetGridPosition(0, j);
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
-      indicatorHandler.AddIndicatorToSet(IndicatorHandler.IndicatorSet.BOT, indicator);
+      indicatorHandler.AddIndicatorToSet(BorderSet.BOT, indicator);
 
       indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(maxRows - 1, j);
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
-      indicatorHandler.AddIndicatorToSet(IndicatorHandler.IndicatorSet.TOP, indicator);
+      indicatorHandler.AddIndicatorToSet(BorderSet.TOP, indicator);
+    }
+  }
+
+  void GenerateLasers()
+  {
+    GameObject laserObj;
+    Laser laserRef;
+    Vector3 tilePosition;
+    for (int i = 0; i < maxRows; i++)
+    {
+      laserObj = Instantiate(laser, laserHandler.transform);
+      tilePosition = GetGridPosition(i, 0);
+      laserObj.transform.position = tilePosition;
+      laserRef = laserObj.GetComponent<Laser>();
+      laserHandler.AddLaserToSet(BorderSet.LEFT, laserRef);
+
+      laserObj = Instantiate(laser, laserHandler.transform);
+      tilePosition = GetGridPosition(i, maxCols - 1);
+      laserObj.transform.position = tilePosition;
+      laserRef = laserObj.GetComponent<Laser>();
+      laserHandler.AddLaserToSet(BorderSet.RIGHT, laserRef);
+    }
+    for (int j = 0; j < maxCols; j++)
+    {
+      laserObj = Instantiate(laser, laserHandler.transform);
+      tilePosition = GetGridPosition(0, j);
+      laserObj.transform.position = tilePosition;
+      laserRef = laserObj.GetComponent<Laser>();
+      laserHandler.AddLaserToSet(BorderSet.BOT, laserRef);
+
+      laserObj = Instantiate(laser, laserHandler.transform);
+      tilePosition = GetGridPosition(maxRows - 1, j);
+      laserObj.transform.position = tilePosition;
+      laserRef = laserObj.GetComponent<Laser>();
+      laserHandler.AddLaserToSet(BorderSet.TOP, laserRef);
     }
   }
 
@@ -329,7 +362,23 @@ public class BoardManager : MonoBehaviour {
     //TODO: Remove Nuisances
   }
   
-  private void SpawnHazard(Direction direction, Vector2Int spawnPos)
+  private void SpawnHazard(Hazard hazardType, Direction direction, Vector2Int spawnPos)
+  {
+    switch (hazardType)
+    {
+      case Hazard.BOULDER:
+        TriggerBoulderHazard(direction, spawnPos);
+        break;
+      case Hazard.LASER:
+        TriggerLaserHazard(direction, spawnPos);
+        break;
+      default:
+        Debug.LogError("No such Hazard type");
+        break;
+    }
+  }
+
+  private void TriggerBoulderHazard(Direction direction, Vector2Int spawnPos)
   {
     GameObject boulderObj = boulderPool.RetrieveBoulder();
     Boulder boulder = boulderObj.GetComponent<Boulder>();
@@ -351,6 +400,25 @@ public class BoardManager : MonoBehaviour {
       default:
         boulder.SetBoulderDirection(Direction.DOWN);
         MoveBoulder(boulder);
+        break;
+    }
+  }
+
+  private void TriggerLaserHazard(Direction direction, Vector2Int spawnPos)
+  {
+    switch (direction)
+    {
+      case Direction.RIGHT:
+        laserHandler.AcitvateLaser(BorderSet.LEFT, spawnPos.x);
+        break;
+      case Direction.UP:
+        laserHandler.AcitvateLaser(BorderSet.BOT, spawnPos.y);
+        break;
+      case Direction.LEFT:
+        laserHandler.AcitvateLaser(BorderSet.RIGHT, spawnPos.x);
+        break;
+      default:
+        laserHandler.AcitvateLaser(BorderSet.TOP, spawnPos.y);
         break;
     }
   }
