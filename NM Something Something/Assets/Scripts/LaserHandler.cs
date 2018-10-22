@@ -14,21 +14,21 @@ public class LaserHandler : MonoBehaviour
     switch (indicatorSet)
     {
       case BoardManager.BorderSet.LEFT:
-        laser.SetLaserSet(BoardManager.BorderSet.LEFT);
+        //laser.SetLaserSet(BoardManager.BorderSet.LEFT);
         LeftLasers.Add(laser);
         break;
       case BoardManager.BorderSet.RIGHT:
-        laser.SetLaserSet(BoardManager.BorderSet.RIGHT);
+        //laser.SetLaserSet(BoardManager.BorderSet.RIGHT);
         RightLasers.Add(laser);
         laser.transform.eulerAngles = new Vector3(0, 0, 180);
         break;
       case BoardManager.BorderSet.BOT:
-        laser.SetLaserSet(BoardManager.BorderSet.BOT);
+        //laser.SetLaserSet(BoardManager.BorderSet.BOT);
         BotLasers.Add(laser);
         laser.transform.eulerAngles = new Vector3(0, 0, 90);
         break;
       case BoardManager.BorderSet.TOP:
-        laser.SetLaserSet(BoardManager.BorderSet.TOP);
+        //laser.SetLaserSet(BoardManager.BorderSet.TOP);
         TopLasers.Add(laser);
         laser.transform.eulerAngles = new Vector3(0, 0, -90);
         break;

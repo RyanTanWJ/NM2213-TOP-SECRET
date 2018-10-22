@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Laser : MonoBehaviour {
 
-  private BoardManager.BorderSet set;
+  //private BoardManager.BorderSet set;
 
   [SerializeField]
   private Animator laserAnimator;
 
+  /*
   public void SetLaserSet(BoardManager.BorderSet laserSet)
   {
     set = laserSet;
   }
+  */
 
   public void FireLaser()
   {
