@@ -65,6 +65,8 @@ public class BoardManager : MonoBehaviour {
   [SerializeField]
   LaserHandler laserHandler;
 
+  DangerBoard dangerBoard;
+
   float spawnDelay = 2.5f;
   float currDelay = 0.0f;
 
@@ -82,11 +84,12 @@ public class BoardManager : MonoBehaviour {
 
   // Use this for initialization
   void Start () {
+    dangerBoard = new DangerBoard(maxRows, maxCols);
     GeneratePlatforms();
     GenerateIndicators();
     GenerateLasers();
     PlacePlayer();
-	}
+  }
 
   private void Update()
   {
@@ -97,7 +100,7 @@ public class BoardManager : MonoBehaviour {
       float delay;
       List<int> rows;
       List<int> cols;
-      hazSpawner.GetHazards(out hazards, out delay, out rows, out cols);
+      hazSpawner.GetHazards(player.BoardPosition, dangerBoard.GetDangerBoard(), out hazards, out delay, out rows, out cols);
 
       for (int i = 0; i < hazards; i++)
       {
