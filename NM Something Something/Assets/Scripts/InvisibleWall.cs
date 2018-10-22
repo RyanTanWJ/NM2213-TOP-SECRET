@@ -7,6 +7,9 @@ public class InvisibleWall : MonoBehaviour {
   public delegate void DeactivateBoulder(GameObject boulder);
   public static event DeactivateBoulder DeactivateBoulderEvent;
 
+  public delegate void DeactivateClaw(GameObject claw);
+  public static event DeactivateClaw DeactivateClawEvent;
+
   public delegate void MakeGameHarder();
   public static event MakeGameHarder MakeGameHarderEvent;
 

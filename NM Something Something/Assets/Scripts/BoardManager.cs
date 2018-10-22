@@ -50,6 +50,12 @@ public class BoardManager : MonoBehaviour {
   BoulderPool boulderPool;
 
   [SerializeField]
+  ClawPool clawPool;
+
+  [SerializeField]
+  PufferfishPool pufferfishPool;
+
+  [SerializeField]
   HazardSpawner hazSpawner;
 
   //The Prefab used for lasers

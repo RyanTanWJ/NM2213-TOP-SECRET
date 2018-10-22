@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,9 +14,12 @@ public class Pufferfish : MonoBehaviour {
   private List<GameObject> blastShards;
 
   private List<Vector2Int> AOE;
+  
+  public delegate void DeactivatePufferfish(GameObject pufferfish);
+  public static event DeactivatePufferfish DeactivatePufferfishEvent;
 
-	// Use this for initialization
-	void Start () {
+  // Use this for initialization
+  void Start () {
 
 	}
 	
