@@ -100,50 +100,39 @@ public class BoardManager : MonoBehaviour {
       float delay;
       List<int> rows;
       List<int> cols;
+
       hazSpawner.GetHazards(player.BoardPosition, dangerBoard.GetDangerBoard(), out hazards, out delay, out rows, out cols);
+
+      Hazard hazardToSpawn = UnityEngine.Random.Range(0,1f)<0.5 ? Hazard.BOULDER : Hazard.LASER;
 
       for (int i = 0; i < hazards; i++)
       {
         int index = 0;
-        switch (UnityEngine.Random.Range(0, 2))
+        switch (UnityEngine.Random.Range(0, 4))
         {
-          //Do left or right
+          //Do left
           case 0:
-            switch (UnityEngine.Random.Range(0, 2))
-            {
-              //Do left
-              case 0:
-                index = UnityEngine.Random.Range(1, rows.Count);
-                indicatorHandler.AcitvateIndicator(Hazard.BOULDER, BorderSet.LEFT, rows[index], delay);
-                break;
-              //Do right
-              case 1:
-                index = UnityEngine.Random.Range(1, rows.Count);
-                indicatorHandler.AcitvateIndicator(Hazard.LASER, BorderSet.RIGHT, rows[index], delay);
-                break;
-              default:
-                Debug.LogError("Random Range exceeded in BoardManager Update()");
-                break;
-            }
+            index = rows[UnityEngine.Random.Range(0, rows.Count)];
+            Debug.Log("Left: " + index);
+            indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.LEFT, rows[index], delay);
             break;
-          //Do top or bot
+          //Do right
           case 1:
-            switch (UnityEngine.Random.Range(0, 2))
-            {
-              //Do top
-              case 0:
-                index = UnityEngine.Random.Range(1, cols.Count);
-                indicatorHandler.AcitvateIndicator(Hazard.LASER, BorderSet.TOP, cols[index], delay);
-                break;
-              //Do bot
-              case 1:
-                index = UnityEngine.Random.Range(1, cols.Count);
-                indicatorHandler.AcitvateIndicator(Hazard.BOULDER, BorderSet.BOT, cols[index], delay);
-                break;
-              default:
-                Debug.LogError("Random Range exceeded in BoardManager Update()");
-                break;
-            }
+            index = rows[UnityEngine.Random.Range(0, rows.Count)];
+            Debug.Log("Right: " + index);
+            indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.RIGHT, rows[index], delay);
+            break;
+          //Do top
+          case 2:
+            index = cols[UnityEngine.Random.Range(0, cols.Count)];
+            Debug.Log("Top: " + index);
+            indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.TOP, cols[index], delay);
+            break;
+          //Do bot
+          case 3:
+            index = cols[UnityEngine.Random.Range(0, cols.Count)];
+            Debug.Log("Bot: " + index);
+            indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.BOT, cols[index], delay);
             break;
           default:
             Debug.LogError("Random Range exceeded in BoardManager Update()");
