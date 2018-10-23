@@ -70,9 +70,14 @@ public class DangerBoard {
   public void Print()
   {
     Debug.Log("Printing Danger Board:");
-    foreach (List<float> dangerTimer in dangerBoard)
+    for (int i=0; i < dangerBoard.GetLength(0); i++)
     {
-      Debug.Log(dangerTimer);
+      string row = "";
+      for (int j=0; j< dangerBoard.GetLength(1); j++)
+      {
+        row += dangerBoard[i,j].Count;
+      }
+      Debug.Log("Row " + i + ": " + row);
     }
   }
 }

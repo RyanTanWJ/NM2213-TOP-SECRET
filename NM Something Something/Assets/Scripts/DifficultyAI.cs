@@ -14,7 +14,7 @@ public class DifficultyAI : MonoBehaviour {
   private const float OGIndicatorDelay = 1.5f;
 
   //Max Number of Hazards that should be spawned
-  private int numberOfHazards = 3;
+  private int numberOfHazards = 1;
 
   //Delay before indicator switches off and hazard spawns
   private float indicatorDelay = OGIndicatorDelay;
