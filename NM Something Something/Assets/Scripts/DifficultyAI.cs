@@ -24,11 +24,13 @@ public class DifficultyAI : MonoBehaviour {
   private void OnEnable()
   {
     InvisibleWall.MakeGameHarderEvent += MakeGameHarder;
+    Laser.MakeGameHarderEvent += MakeGameHarder;
   }
 
   private void OnDisable()
   {
     InvisibleWall.MakeGameHarderEvent -= MakeGameHarder;
+    Laser.MakeGameHarderEvent -= MakeGameHarder;
   }
 
   /// <summary>

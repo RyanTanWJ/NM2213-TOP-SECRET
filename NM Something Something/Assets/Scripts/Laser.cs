@@ -9,6 +9,9 @@ public class Laser : MonoBehaviour {
   [SerializeField]
   private Animator laserAnimator;
 
+  public delegate void MakeGameHarder();
+  public static event MakeGameHarder MakeGameHarderEvent;
+
   /*
   public void SetLaserSet(BoardManager.BorderSet laserSet)
   {
@@ -29,6 +32,7 @@ public class Laser : MonoBehaviour {
   {
     laserAnimator.Play("LaserFire");
     yield return new WaitForSeconds(laserAnimator.GetCurrentAnimatorStateInfo(0).length);
+    MakeGameHarderEvent();
     gameObject.SetActive(false);
   }
 }
