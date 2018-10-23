@@ -15,8 +15,6 @@ public class HazardSpawner : MonoBehaviour
   public void GetHazards(Vector2Int playerPos, bool[,] boolDangerBoard, out int hazards, out float indicatorDelay, out List<int> rows, out List<int> cols)
   {
     diffAI.Difficulty(out hazards, out indicatorDelay);
-    //Debug.Log("number of hazards: " + hazards);
-    //Debug.Log("number of indicatorDelay: " + indicatorDelay);
     posAI.Location(playerPos, boolDangerBoard, out rows, out cols);
   }
 }
