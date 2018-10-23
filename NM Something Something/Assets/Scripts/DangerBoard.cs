@@ -43,6 +43,11 @@ public class DangerBoard {
     return boolBoard;
   }
 
+  public void AddDangerBoard(Vector2Int dangerPos, float dangerTimer)
+  {
+    dangerBoard[dangerPos.x, dangerPos.y].Add(dangerTimer);
+  }
+
   public void UpdateDangerBoard(float timePerFrame)
   {
     for (int i = 0; i < dangerBoard.GetLength(0); i++)
