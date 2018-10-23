@@ -77,7 +77,7 @@ public class IndicatorHandler : MonoBehaviour{
         TopIndicators[index].AddTimer(time);
         break;
       default:
-        Debug.LogError("The specified IndicatorSet does not exist!");
+        Debug.LogError("The specified BorderSet does not exist!");
         break;
     }
   }
