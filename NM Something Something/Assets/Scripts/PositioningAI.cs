@@ -12,6 +12,8 @@ public class PositioningAI : MonoBehaviour
   private List<int> retRows = new List<int>();
   private List<int> retCols = new List<int>();
 
+  private bool[,] visited;
+
   //public void Location(Vector2Int playerLocations, out List<int> rows, out List<int> cols)
   public void Location(Vector2Int playerPos, bool[,] dangerBoard, out List<int> rows, out List<int> cols)
   {
@@ -22,7 +24,6 @@ public class PositioningAI : MonoBehaviour
 
     rows = retRows;
     cols = retCols;
-
   }
 
   private void UpdateRetRowsAndCols(Vector2Int playerPos, bool[,] dangerBoard)
@@ -30,7 +31,9 @@ public class PositioningAI : MonoBehaviour
     retRows = new List<int>();
     retCols = new List<int>();
 
-    Vector2Int playerClosestEmptySpace = FindClosestEmptySpace(playerPos, dangerBoard);
+    visited = new bool[dangerBoard.GetLength(0), dangerBoard.GetLength(1)];
+
+    Vector2Int playerClosestEmptySpace = FindClosestEmptySpace(playerPos, dangerBoard, visited);
 
     List<Vector2Int> connectedComponent = FindConnectedComponent(playerClosestEmptySpace, dangerBoard);
 
@@ -47,28 +50,32 @@ public class PositioningAI : MonoBehaviour
     }
   }
 
-  private Vector2Int FindClosestEmptySpace(Vector2Int playerPos, bool[,] dangerBoard)
+  private Vector2Int FindClosestEmptySpace(Vector2Int playerPos, bool[,] dangerBoard, bool[,] visited)
   {
     if (!dangerBoard[playerPos.x, playerPos.y])
     {
       return playerPos;
     }
+
+    visited[playerPos.x, playerPos.y] = true;
+
     List<Vector2Int> possiblePositions = new List<Vector2Int>();
-    if (playerPos.y < dangerBoard.GetLength(1) - 1)
+
+    if (playerPos.y < dangerBoard.GetLength(1) - 1 && !visited[playerPos.x, playerPos.y + 1])
     {
-      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(playerPos.x, playerPos.y + 1), dangerBoard));
+      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(playerPos.x, playerPos.y + 1), dangerBoard, visited));
     }
-    if (playerPos.y > 1)
+    if (playerPos.y > 1 && !visited[playerPos.x, playerPos.y - 1])
     {
-      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(playerPos.x, playerPos.y - 1), dangerBoard));
+      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(playerPos.x, playerPos.y - 1), dangerBoard, visited));
     }
-    if (playerPos.x < dangerBoard.GetLength(0) - 1)
+    if (playerPos.x < dangerBoard.GetLength(0) - 1 && !visited[playerPos.x + 1, playerPos.y])
     {
-      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(playerPos.x + 1, playerPos.y), dangerBoard));
+      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(playerPos.x + 1, playerPos.y), dangerBoard, visited));
     }
-    if (playerPos.x > 1)
+    if (playerPos.x > 1 && !visited[playerPos.x - 1, playerPos.y])
     {
-      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(playerPos.x - 1, playerPos.y), dangerBoard));
+      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(playerPos.x - 1, playerPos.y), dangerBoard, visited));
     }
     return possiblePositions[UnityEngine.Random.Range(0, possiblePositions.Count)];
   }

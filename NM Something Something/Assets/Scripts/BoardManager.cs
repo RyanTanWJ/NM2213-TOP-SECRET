@@ -10,7 +10,7 @@ public class BoardManager : MonoBehaviour {
   /// </summary>
   public enum Direction { UP, DOWN, LEFT, RIGHT};
 
-  public enum Hazard { BOULDER, LASER };
+  public enum Hazard { BOULDER, LASER, CLAW, PUFFERFISH };
 
   /// <summary>
   /// Represents the border on which certain objects such as Laser and Indicators are located.
@@ -135,12 +135,15 @@ public class BoardManager : MonoBehaviour {
             break;
         }
       }
+      dangerBoard.Print();
       currDelay = 0;
     }
     else
     {
       currDelay += Time.deltaTime;
     }
+
+    dangerBoard.UpdateDangerBoard(Time.deltaTime);
   }
 
   void GeneratePlatforms()
@@ -380,18 +383,34 @@ public class BoardManager : MonoBehaviour {
     switch (direction)
     {
       case Direction.RIGHT:
+        for (int i=0; i<maxCols; i++)
+        {
+          dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), 1.0f);
+        }
         boulder.SetBoulderDirection(Direction.RIGHT);
         MoveBoulder(boulder);
         break;
       case Direction.UP:
+        for (int i = 0; i < maxRows; i++)
+        {
+          dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), 1.0f);
+        }
         boulder.SetBoulderDirection(Direction.UP);
         MoveBoulder(boulder);
         break;
       case Direction.LEFT:
+        for (int i = 0; i < maxCols; i++)
+        {
+          dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), 1.0f);
+        }
         boulder.SetBoulderDirection(Direction.LEFT);
         MoveBoulder(boulder);
         break;
       default:
+        for (int i = 0; i < maxRows; i++)
+        {
+          dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), 1.0f);
+        }
         boulder.SetBoulderDirection(Direction.DOWN);
         MoveBoulder(boulder);
         break;
@@ -403,15 +422,31 @@ public class BoardManager : MonoBehaviour {
     switch (direction)
     {
       case Direction.RIGHT:
+        for (int i = 0; i < maxCols; i++)
+        {
+          dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), 3.0f);
+        }
         laserHandler.AcitvateLaser(BorderSet.LEFT, spawnPos.x);
         break;
       case Direction.UP:
+        for (int i = 0; i < maxRows; i++)
+        {
+          dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), 3.0f);
+        }
         laserHandler.AcitvateLaser(BorderSet.BOT, spawnPos.y);
         break;
       case Direction.LEFT:
+        for (int i = 0; i < maxCols; i++)
+        {
+          dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), 3.0f);
+        }
         laserHandler.AcitvateLaser(BorderSet.RIGHT, spawnPos.x);
         break;
       default:
+        for (int i = 0; i < maxRows; i++)
+        {
+          dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), 3.0f);
+        }
         laserHandler.AcitvateLaser(BorderSet.TOP, spawnPos.y);
         break;
     }
