@@ -17,6 +17,9 @@ public class PositioningAI : MonoBehaviour
   {
     UpdateRetRowsAndCols(playerPos, dangerBoard);
 
+    retRows.Sort();
+    retCols.Sort();
+
     rows = retRows;
     cols = retCols;
 
@@ -28,8 +31,10 @@ public class PositioningAI : MonoBehaviour
     retCols = new List<int>();
 
     Vector2Int playerClosestEmptySpace = FindClosestEmptySpace(playerPos, dangerBoard);
+
     List<Vector2Int> connectedComponent = FindConnectedComponent(playerClosestEmptySpace, dangerBoard);
-    foreach(Vector2Int connectedTile in connectedComponent)
+
+    foreach (Vector2Int connectedTile in connectedComponent)
     {
       if (!retRows.Contains(connectedTile.x))
       {
@@ -37,7 +42,7 @@ public class PositioningAI : MonoBehaviour
       }
       if (!retCols.Contains(connectedTile.y))
       {
-        retRows.Add(connectedTile.y);
+        retCols.Add(connectedTile.y);
       }
     }
   }
@@ -71,34 +76,33 @@ public class PositioningAI : MonoBehaviour
   private List<Vector2Int> FindConnectedComponent(Vector2Int closestEmptySpace, bool[,] dangerBoard)
   {
     List<Vector2Int> connectedComponent = new List<Vector2Int>();
+
+    dangerBoard[closestEmptySpace.x, closestEmptySpace.y] = true;
+
     connectedComponent.Add(closestEmptySpace);
 
     List<Vector2Int> recurList;
 
-    if (closestEmptySpace.y < dangerBoard.GetLength(1) - 1 && !dangerBoard[closestEmptySpace.x, closestEmptySpace.y + 1])
+    if (closestEmptySpace.y < dangerBoard.GetLength(1) - 2 && !dangerBoard[closestEmptySpace.x, closestEmptySpace.y + 1])
     {
-      dangerBoard[closestEmptySpace.x, closestEmptySpace.y + 1] = true;
       recurList = FindConnectedComponent(new Vector2Int(closestEmptySpace.x, closestEmptySpace.y + 1), dangerBoard);
       connectedComponent.AddRange(recurList);
     }
 
     if (closestEmptySpace.y > 1 && !dangerBoard[closestEmptySpace.x, closestEmptySpace.y - 1])
     {
-      dangerBoard[closestEmptySpace.x, closestEmptySpace.y - 1] = true;
       recurList = FindConnectedComponent(new Vector2Int(closestEmptySpace.x, closestEmptySpace.y - 1), dangerBoard);
       connectedComponent.AddRange(recurList);
     }
 
-    if (closestEmptySpace.x < dangerBoard.GetLength(0) - 1 && !dangerBoard[closestEmptySpace.x + 1, closestEmptySpace.y])
+    if (closestEmptySpace.x < dangerBoard.GetLength(0) - 2 && !dangerBoard[closestEmptySpace.x + 1, closestEmptySpace.y])
     {
-      dangerBoard[closestEmptySpace.x + 1, closestEmptySpace.y] = true;
       recurList = FindConnectedComponent(new Vector2Int(closestEmptySpace.x + 1, closestEmptySpace.y), dangerBoard);
       connectedComponent.AddRange(recurList);
     }
 
     if (closestEmptySpace.x > 1 && !dangerBoard[closestEmptySpace.x - 1, closestEmptySpace.y])
     {
-      dangerBoard[closestEmptySpace.x - 1, closestEmptySpace.y] = true;
       recurList = FindConnectedComponent(new Vector2Int(closestEmptySpace.x - 1, closestEmptySpace.y), dangerBoard);
       connectedComponent.AddRange(recurList);
     }
