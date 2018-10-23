@@ -173,7 +173,7 @@ public class BoardManager : MonoBehaviour {
     GameObject indicatorObj;
     Indicator indicator;
     Vector3 tilePosition;
-    for (int i = 0; i < maxRows; i++)
+    for (int i = 0; i < maxRows-1; i++)
     {
       indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(i, 0);
@@ -187,7 +187,7 @@ public class BoardManager : MonoBehaviour {
       indicator = indicatorObj.GetComponent<Indicator>();
       indicatorHandler.AddIndicatorToSet(BorderSet.RIGHT, indicator);
     }
-    for (int j = 0; j < maxCols; j++)
+    for (int j = 0; j < maxCols-1; j++)
     {
       indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(0, j);
