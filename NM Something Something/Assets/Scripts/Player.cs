@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
   public static event GameOver GameOverEvent;
 
   public Vector2Int BoardPosition;
+
+  [SerializeField]
+  private ClawDebuff clawDebuff;
   
   // Update is called once per frame
   void Update ()
@@ -26,6 +29,8 @@ public class Player : MonoBehaviour
         GameOverEvent();
         break;
       case "Nuisance":
+        Destroy(collision.gameObject);
+        clawDebuff.NewClawDebuff();
         break;
       default:
         break;
@@ -36,18 +41,38 @@ public class Player : MonoBehaviour
   {
     if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
     {
+      if (clawDebuff.DebuffActive)
+      {
+        clawDebuff.AttemptBreakOut(BoardManager.Direction.UP);
+        return;
+      }
       PlayerMoveEvent(BoardManager.Direction.UP);
     }
     else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
     {
+      if (clawDebuff.DebuffActive)
+      {
+        clawDebuff.AttemptBreakOut(BoardManager.Direction.DOWN);
+        return;
+      }
       PlayerMoveEvent(BoardManager.Direction.DOWN);
     }
     else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
     {
+      if (clawDebuff.DebuffActive)
+      {
+        clawDebuff.AttemptBreakOut(BoardManager.Direction.LEFT);
+        return;
+      }
       PlayerMoveEvent(BoardManager.Direction.LEFT);
     }
     else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
     {
+      if (clawDebuff.DebuffActive)
+      {
+        clawDebuff.AttemptBreakOut(BoardManager.Direction.RIGHT);
+        return;
+      }
       PlayerMoveEvent(BoardManager.Direction.RIGHT);
     }
   }

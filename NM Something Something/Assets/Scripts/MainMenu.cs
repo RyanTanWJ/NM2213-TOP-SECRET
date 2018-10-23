@@ -7,15 +7,11 @@ public class MainMenu : MonoBehaviour {
 
   public delegate void MenuSelect(int option);
   public static event MenuSelect MenuSelectEvent;
-
+  
   [SerializeField]
-  GameObject SplashText;
-  [SerializeField]
-  List<GameObject> MenuOptions;
+  List<MenuItem> MenuOptions;
   
   int selectedOption;
-
-  bool splash = true;
 
   // Use this for initialization
   void Start () {
@@ -26,48 +22,28 @@ public class MainMenu : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
   {
-    if (splash)
-    {
-      if (Input.anyKeyDown)
-      {
-        OpenMainMenu();
-        splash = false;
-      }
-    }
-    else
-    {
-      MenuControls();
-    }
+    MenuControls();
   }
 
   private void MenuControls()
   {
-    if (Input.GetKeyDown(KeyCode.UpArrow))
+    if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
     {
       UpdateMainMenu(true);
     }
-    else if (Input.GetKeyDown(KeyCode.DownArrow))
+    else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
     {
       UpdateMainMenu(false);
     }
-    else if (Input.GetKeyDown(KeyCode.Return))
+    else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
     {
       MenuSelectEvent(selectedOption);
     }
   }
 
-  private void OpenMainMenu()
-  {
-    SplashText.SetActive(false);
-    foreach (GameObject option in MenuOptions)
-    {
-      option.SetActive(true);
-    }
-  }
-
   private void UpdateMainMenu(bool up)
   {
-    MenuOptions[selectedOption].GetComponent<TMPro.TextMeshProUGUI>().color = Color.black;
+    MenuOptions[selectedOption].SwitchTextHighlight(false);
     if (up)
     {
       selectedOption = ((selectedOption - 1) + MenuOptions.Count) % MenuOptions.Count;
@@ -76,7 +52,7 @@ public class MainMenu : MonoBehaviour {
     {
       selectedOption = (selectedOption + 1) % MenuOptions.Count;
     }
-    MenuOptions[selectedOption].GetComponent<TMPro.TextMeshProUGUI>().color = Color.red;
+    MenuOptions[selectedOption].SwitchTextHighlight(true);
   }
 
 }
