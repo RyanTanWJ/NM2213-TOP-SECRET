@@ -23,6 +23,7 @@ public class ClawPool : MonoBehaviour
 
   private void ReturnClaw(GameObject claw)
   {
+    claw.GetComponent<Claw>().ShouldMove = false;
     claw.transform.position = transform.position;
     clawsInUse.Remove(claw);
     clawPool.Add(claw);
