@@ -4,21 +4,21 @@ using UnityEngine;
 
 public class DangerBoard {
 
-  List<float>[,] dangerBoard;
+  float[,] dangerBoard;
 
   public DangerBoard(int row, int col)
   {
-    dangerBoard = new List<float>[row, col];
+    dangerBoard = new float[row, col];
     PopulateDangerBoard();
   }
 
-  public void PopulateDangerBoard()
+  private void PopulateDangerBoard()
   {
     for (int i=0; i<dangerBoard.GetLength(0); i++)
     {
       for (int j = 0; j < dangerBoard.GetLength(1); j++)
       {
-        dangerBoard[i, j] = new List<float>();
+        dangerBoard[i, j] = 0;
       }
     }
   }
@@ -30,7 +30,7 @@ public class DangerBoard {
     {
       for (int j = 0; j < dangerBoard.GetLength(1); j++)
       {
-        if (dangerBoard[i, j].Count > 0)
+        if (dangerBoard[i, j] > 0)
         {
           boolBoard[i, j] = true;
         }
@@ -45,7 +45,7 @@ public class DangerBoard {
 
   public void AddDangerBoard(Vector2Int dangerPos, float dangerTimer)
   {
-    dangerBoard[dangerPos.x, dangerPos.y].Add(dangerTimer);
+    dangerBoard[dangerPos.x, dangerPos.y] = Mathf.Max(dangerTimer, dangerBoard[dangerPos.x, dangerPos.y]);
   }
 
   public void UpdateDangerBoard(float timePerFrame)
@@ -54,14 +54,14 @@ public class DangerBoard {
     {
       for (int j = 0; j < dangerBoard.GetLength(1); j++)
       {
-        if (dangerBoard[i, j].Count > 0)
+        if (dangerBoard[i, j] > 0)
         {
-          if (timePerFrame> dangerBoard[i, j][0])
+          if (timePerFrame >= dangerBoard[i, j])
           {
-            dangerBoard[i, j].RemoveAt(0);
+            dangerBoard[i, j] = 0;
             continue;
           }
-          dangerBoard[i, j][0] -= timePerFrame;
+          dangerBoard[i, j] -= timePerFrame;
         }
       }
     }
@@ -75,7 +75,7 @@ public class DangerBoard {
       string row = "";
       for (int j=0; j< dangerBoard.GetLength(1); j++)
       {
-        row += dangerBoard[i,j].Count;
+        row += " " + (dangerBoard[i,j]>0);
       }
       Debug.Log("Row " + i + ": " + row);
     }

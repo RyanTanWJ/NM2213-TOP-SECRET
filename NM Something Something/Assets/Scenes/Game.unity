@@ -451,7 +451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e952d2b2a39e384d9bf310a63987525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ClawPrefab: {fileID: 0}
+  ClawPrefab: {fileID: 1049950088161172, guid: ce775e965609eaa458ba6ee3b5f7eac0, type: 2}
   clawsInUse: []
 --- !u!4 &292274780
 Transform:
@@ -1518,7 +1518,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62546e8f990a76840a77d247822b0ba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PufferfishPrefab: {fileID: 0}
+  PufferfishPrefab: {fileID: 1128907282095038, guid: 483828b7dab5cb84fb7a258d7ca25f80,
+    type: 2}
   pufferfishesInUse: []
 --- !u!4 &2130500519
 Transform:

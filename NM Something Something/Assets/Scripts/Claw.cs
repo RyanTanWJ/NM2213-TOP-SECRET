@@ -16,7 +16,7 @@ public class Claw : MonoBehaviour {
     clawDirection = BoardManager.Direction.RIGHT;
   }
 
-  public void SetBoulderDirection(BoardManager.Direction direction)
+  public void SetClawDirection(BoardManager.Direction direction)
   {
     clawDirection = direction;
   }

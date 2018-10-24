@@ -27,7 +27,6 @@ public class Laser : MonoBehaviour {
   /// <summary>
   /// Plays animation then disables it
   /// </summary>
-  /// <returns></returns>
   IEnumerator LaserTimer()
   {
     laserAnimator.Play("LaserFire");
