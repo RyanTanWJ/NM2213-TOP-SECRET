@@ -12,11 +12,13 @@ public class ClawPool : MonoBehaviour
   private void OnEnable()
   {
     InvisibleWall.DeactivateClawEvent += ReturnClaw;
+    Player.DebuffEvent += ReturnClaw;
   }
 
   private void OnDisable()
   {
     InvisibleWall.DeactivateClawEvent -= ReturnClaw;
+    Player.DebuffEvent -= ReturnClaw;
   }
 
   private void ReturnClaw(GameObject claw)
