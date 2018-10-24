@@ -323,6 +323,7 @@ public class BoardManager : MonoBehaviour
   private void SetHazardPosition(GameObject boulder, int x, int y)
   {
     boulder.gameObject.transform.position = GetGridPosition(x, y);
+    boulder.transform.rotation = Quaternion.identity;
   }
 
   private void MoveBoulder(Boulder boulder)
@@ -359,15 +360,19 @@ public class BoardManager : MonoBehaviour
     {
       case Direction.UP:
         direction.y = 0.1f;
+        direction.x = 0;
         break;
       case Direction.DOWN:
         direction.y = -0.1f;
+        direction.x = 0;
         break;
       case Direction.RIGHT:
         direction.x = 0.1f;
+        direction.y = 0;
         break;
       case Direction.LEFT:
         direction.x = -0.1f;
+        direction.y = 0;
         break;
       default:
         break;

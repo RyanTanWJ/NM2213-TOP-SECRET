@@ -52,6 +52,12 @@ TagManager:
   - name: Hazard
     uniqueID: 1187317251
     locked: 0
+  - name: Table
+    uniqueID: 1649482513
+    locked: 0
+  - name: Customer
+    uniqueID: 238779803
+    locked: 0
   - name: Indicator
     uniqueID: 3442226787
     locked: 0

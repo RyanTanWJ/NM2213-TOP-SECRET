@@ -5,8 +5,12 @@ using UnityEngine;
 
 public class Pufferfish : MonoBehaviour {
   private const float hardCodedAnimationTime = 1.5f;
+
   [SerializeField]
   Animator animator;
+
+  [SerializeField]
+  List<GameObject> shards;
 
   public delegate void MakeGameHarder();
   public static event MakeGameHarder MakeGameHarderEvent;
@@ -33,11 +37,22 @@ public class Pufferfish : MonoBehaviour {
   /// </summary>
   IEnumerator BombAnimation(float indicatorTime)
   {
-    //animator.Play("Indicator");
+    //animator.Play("Pufferfish", 0, 0f);
     yield return new WaitForSeconds(indicatorTime);
     animator.SetBool("IndicatorOff", true);
     yield return new WaitForSeconds(hardCodedAnimationTime);
+    animator.SetBool("IndicatorOff", false);
     MakeGameHarderEvent();
+    ResetShards();
     DeactivatePufferfishEvent(gameObject);
+  }
+
+  private void ResetShards()
+  {
+    foreach (GameObject shard in shards)
+    {
+      shard.gameObject.transform.localPosition = new Vector3(0, 0, 0);
+      shard.gameObject.SetActive(false);
+    }
   }
 }
