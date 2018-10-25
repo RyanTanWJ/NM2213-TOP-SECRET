@@ -23,7 +23,7 @@ public class DifficultyAI : MonoBehaviour {
   //Delay before indicator switches off and hazard spawns
   private float indicatorDelay = OGIndicatorDelay;
 
-  //TODO: Way to decide between different hazards
+  //Decides what hazards are available
   HazardDifficultyMask hazardDifficulty = new HazardDifficultyMask();
 
   private void OnEnable()
@@ -67,6 +67,12 @@ public class DifficultyAI : MonoBehaviour {
   /// </summary>
   public void MakeGameHarder()
   {
+    //Increase Hazard Types
+    if (!hazardDifficulty.AllHazards())
+    {
+      hazardDifficulty.IncreaseDifficulty();
+      return;
+    }
     //Decrease delay
     if (indicatorDelay > minIndicatorDelay)
     {
@@ -79,21 +85,13 @@ public class DifficultyAI : MonoBehaviour {
     {
       numberOfHazards++;
       indicatorDelay = OGIndicatorDelay;
-      return;
-    }
-    //Increase Hazard Types
-    if (!hazardDifficulty.AllHazards())
-    {
-      hazardDifficulty.IncreaseDifficulty();
-      indicatorDelay = OGIndicatorDelay;
-      numberOfHazards = OGHazards;
     }
   }
 
-  public void Difficulty(out List<BoardManager.Hazard> hazards, out int hazardNum, out float delay)
+  public void Difficulty(out List<BoardManager.Hazard> hazards, out int hazardNum, out float indDelay)
   {
     hazards = GetListOfHazards();
     hazardNum = numberOfHazards;
-    delay = indicatorDelay;
+    indDelay = indicatorDelay;
   }
 }

@@ -67,7 +67,7 @@ public class BoardManager : MonoBehaviour
 
   DangerBoard dangerBoard;
 
-  float spawnDelay = 2.5f;
+  float spawnDelay = 5.0f;
   float currDelay = 0.0f;
 
   private void OnEnable()
@@ -98,18 +98,18 @@ public class BoardManager : MonoBehaviour
     {
       List<Hazard> hazardTypes;
       int hazards;
-      float delay;
+      float indicatorDelay;
       List<int> rows;
       List<int> cols;
 
-      hazSpawner.GetHazards(player.BoardPosition, dangerBoard.GetDangerBoard(), out hazardTypes, out hazards, out delay, out rows, out cols);
+      hazSpawner.GetHazards(player.BoardPosition, dangerBoard.GetDangerBoard(), out hazardTypes, out hazards, out indicatorDelay, out rows, out cols);
 
       Hazard hazardToSpawn = hazardTypes[UnityEngine.Random.Range(0, hazardTypes.Count)];
 
       switch (hazardToSpawn)
       {
         case Hazard.PUFFERFISH:
-          TriggerPufferfishHazard(delay, new Vector2Int(rows[UnityEngine.Random.Range(0, rows.Count)], cols[UnityEngine.Random.Range(0, cols.Count)]));
+          TriggerPufferfishHazard(indicatorDelay, new Vector2Int(rows[UnityEngine.Random.Range(0, rows.Count)], cols[UnityEngine.Random.Range(0, cols.Count)]));
           break;
         default:
           for (int i = 0; i < hazards; i++)
@@ -120,22 +120,22 @@ public class BoardManager : MonoBehaviour
               //Do left
               case 0:
                 rowColIndex = rows[UnityEngine.Random.Range(0, rows.Count)];
-                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.LEFT, rowColIndex, delay);
+                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.LEFT, rowColIndex, indicatorDelay);
                 break;
               //Do right
               case 1:
                 rowColIndex = rows[UnityEngine.Random.Range(0, rows.Count)];
-                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.RIGHT, rowColIndex, delay);
+                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.RIGHT, rowColIndex, indicatorDelay);
                 break;
               //Do top
               case 2:
                 rowColIndex = cols[UnityEngine.Random.Range(0, cols.Count)];
-                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.TOP, rowColIndex, delay);
+                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.TOP, rowColIndex, indicatorDelay);
                 break;
               //Do bot
               case 3:
                 rowColIndex = cols[UnityEngine.Random.Range(0, cols.Count)];
-                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.BOT, rowColIndex, delay);
+                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.BOT, rowColIndex, indicatorDelay);
                 break;
               default:
                 Debug.LogError("Random Range exceeded in BoardManager Update()");
