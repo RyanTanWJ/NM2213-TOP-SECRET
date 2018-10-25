@@ -144,7 +144,6 @@ public class BoardManager : MonoBehaviour
           }
           break;
       }
-      //dangerBoard.Print();
       currDelay = 0;
     }
     else
