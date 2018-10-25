@@ -67,7 +67,7 @@ public class BoardManager : MonoBehaviour
 
   DangerBoard dangerBoard;
 
-  float spawnDelay = 5.0f;
+  float spawnDelay = 2.0f;
   float currDelay = 0.0f;
 
   private void OnEnable()

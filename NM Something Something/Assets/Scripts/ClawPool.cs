@@ -9,6 +9,9 @@ public class ClawPool : MonoBehaviour
   private List<GameObject> clawPool = new List<GameObject>();
   public List<GameObject> clawsInUse = new List<GameObject>();
 
+  public delegate void MakeGameHarder();
+  public static event MakeGameHarder MakeGameHarderEvent;
+
   private void OnEnable()
   {
     InvisibleWall.DeactivateClawEvent += ReturnClaw;
@@ -23,6 +26,7 @@ public class ClawPool : MonoBehaviour
 
   private void ReturnClaw(GameObject claw)
   {
+    MakeGameHarderEvent();
     claw.GetComponent<Claw>().ShouldMove = false;
     claw.transform.position = transform.position;
     clawsInUse.Remove(claw);

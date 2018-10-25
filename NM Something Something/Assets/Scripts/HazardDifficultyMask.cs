@@ -21,7 +21,7 @@ public class HazardDifficultyMask {
   /// <summary>
   /// Introduce new Obstacle only after this many dodged obstacles
   /// </summary>
-  private const int collisionCountMax = 5;
+  private const int collisionCountMax = 3;
 
   public void IncreaseDifficulty()
   {
@@ -45,23 +45,33 @@ public class HazardDifficultyMask {
     if (collisionCount < collisionCountMax)
     {
       collisionCount++;
+      Debug.Log("collisionCount: " + collisionCount);
       return;
     }
     else
     {
-      if (ContainsLaser())
+      if (ContainsPufferfish())
       {
-        difficulty += Pufferfish;
+        difficulty = MaxDifficulty;
+        Debug.Log("MaxDifficulty");
       }
-      if (ContainsClaw())
+      else if (ContainsLaser())
       {
-        difficulty += Laser;
+        difficulty = Pufferfish;
         collisionCount = 0;
+        Debug.Log("Pufferfish");
       }
-      if (ContainsBoulder())
+      else if (ContainsClaw())
       {
-        difficulty += Claw;
+        difficulty = Laser;
         collisionCount = 0;
+        Debug.Log("Laser");
+      }
+      else if (ContainsBoulder())
+      {
+        difficulty = Claw;
+        collisionCount = 0;
+        Debug.Log("Claw");
       }
     }
   }

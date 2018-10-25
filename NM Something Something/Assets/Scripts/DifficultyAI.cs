@@ -31,6 +31,7 @@ public class DifficultyAI : MonoBehaviour {
     InvisibleWall.MakeGameHarderEvent += MakeGameHarder;
     Laser.MakeGameHarderEvent += MakeGameHarder;
     Pufferfish.MakeGameHarderEvent += MakeGameHarder;
+    ClawPool.MakeGameHarderEvent += MakeGameHarder;
   }
 
   private void OnDisable()
@@ -38,6 +39,7 @@ public class DifficultyAI : MonoBehaviour {
     InvisibleWall.MakeGameHarderEvent -= MakeGameHarder;
     Laser.MakeGameHarderEvent -= MakeGameHarder;
     Pufferfish.MakeGameHarderEvent -= MakeGameHarder;
+    ClawPool.MakeGameHarderEvent += MakeGameHarder;
   }
 
   private List<BoardManager.Hazard> GetListOfHazards()

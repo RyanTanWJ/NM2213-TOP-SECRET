@@ -23,7 +23,6 @@ public class InvisibleWall : MonoBehaviour
     else if (collision.gameObject.CompareTag("Nuisance"))
     {
       DeactivateClawEvent(collision.gameObject);
-      MakeGameHarderEvent();
     }
     else
     {
