@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
   public delegate void GameOver();
   public static event GameOver GameOverEvent;
 
+  public delegate void Debuff(GameObject gameObject);
+  public static event Debuff DebuffEvent;
+
   public Vector2Int BoardPosition;
 
   [SerializeField]
@@ -29,7 +32,7 @@ public class Player : MonoBehaviour
         GameOverEvent();
         break;
       case "Nuisance":
-        Destroy(collision.gameObject);
+        DebuffEvent(collision.gameObject);
         clawDebuff.NewClawDebuff();
         break;
       default:

@@ -21,11 +21,11 @@ GameObject:
   - component: {fileID: 4673846235262326}
   - component: {fileID: 212567264910023394}
   - component: {fileID: 95878067646188978}
-  - component: {fileID: 114840837324952938}
   - component: {fileID: 58312542059649070}
+  - component: {fileID: 114880257777284772}
   m_Layer: 0
   m_Name: Crab Claw
-  m_TagString: Hazard
+  m_TagString: Nuisance
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,7 +75,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114840837324952938
+--- !u!114 &114880257777284772
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -83,10 +83,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1049950088161172}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52c449fe6101d504f89bfa6f8d30d638, type: 3}
+  m_Script: {fileID: 11500000, guid: af29f498f25d3024a978f2bce4296d77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 95878067646188978}
   ShouldMove: 0
 --- !u!212 &212567264910023394
 SpriteRenderer:

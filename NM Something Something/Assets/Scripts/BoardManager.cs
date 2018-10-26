@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardManager : MonoBehaviour {
-
+public class BoardManager : MonoBehaviour
+{
   /// <summary>
   /// Represents a movement Direction
   /// </summary>
-  public enum Direction { UP, DOWN, LEFT, RIGHT};
+  public enum Direction { UP, DOWN, LEFT, RIGHT };
 
-  public enum Hazard { BOULDER, LASER };
+  public enum Hazard { BOULDER, LASER, CLAW, PUFFERFISH };
 
   /// <summary>
   /// Represents the border on which certain objects such as Laser and Indicators are located.
@@ -67,7 +67,7 @@ public class BoardManager : MonoBehaviour {
 
   DangerBoard dangerBoard;
 
-  float spawnDelay = 2.5f;
+  float spawnDelay = 3.0f;
   float currDelay = 0.0f;
 
   private void OnEnable()
@@ -83,7 +83,8 @@ public class BoardManager : MonoBehaviour {
   }
 
   // Use this for initialization
-  void Start () {
+  void Start()
+  {
     dangerBoard = new DangerBoard(maxRows, maxCols);
     GeneratePlatforms();
     GenerateIndicators();
@@ -95,56 +96,26 @@ public class BoardManager : MonoBehaviour {
   {
     if (currDelay >= spawnDelay)
     {
-      //Flash Indicators for Indicator Time (delay) then spawn the hazard
-      int hazards;
-      float delay;
-      List<int> rows;
-      List<int> cols;
-
-      hazSpawner.GetHazards(player.BoardPosition, dangerBoard.GetDangerBoard(), out hazards, out delay, out rows, out cols);
-
-      Hazard hazardToSpawn = UnityEngine.Random.Range(0,1f)<0.5 ? Hazard.BOULDER : Hazard.LASER;
-
-      for (int i = 0; i < hazards; i++)
+      List<HazardContainer> hazContainers = hazSpawner.GetHazards(player.BoardPosition, dangerBoard.GetDangerBoard());
+      //Debug.Log("__________hazContainers.Count = " + hazContainers.Count);
+      if (hazContainers.Count > 0)
       {
-        int index = 0;
-        switch (UnityEngine.Random.Range(0, 4))
+        //Debug.Log("Spawning Hazards:");
+        foreach (HazardContainer hazardContainer in hazContainers)
         {
-          //Do left
-          case 0:
-            index = rows[UnityEngine.Random.Range(0, rows.Count)];
-            Debug.Log("Left: " + index);
-            indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.LEFT, rows[index], delay);
-            break;
-          //Do right
-          case 1:
-            index = rows[UnityEngine.Random.Range(0, rows.Count)];
-            Debug.Log("Right: " + index);
-            indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.RIGHT, rows[index], delay);
-            break;
-          //Do top
-          case 2:
-            index = cols[UnityEngine.Random.Range(0, cols.Count)];
-            Debug.Log("Top: " + index);
-            indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.TOP, cols[index], delay);
-            break;
-          //Do bot
-          case 3:
-            index = cols[UnityEngine.Random.Range(0, cols.Count)];
-            Debug.Log("Bot: " + index);
-            indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.BOT, cols[index], delay);
-            break;
-          default:
-            Debug.LogError("Random Range exceeded in BoardManager Update()");
-            break;
+          //hazardContainer.PrintContents();
+          StartCoroutine(SpawnHazard(hazardContainer));
         }
       }
+      dangerBoard.Print();
       currDelay = 0;
     }
     else
     {
       currDelay += Time.deltaTime;
     }
+
+    dangerBoard.UpdateDangerBoard(Time.deltaTime);
   }
 
   void GeneratePlatforms()
@@ -173,7 +144,7 @@ public class BoardManager : MonoBehaviour {
     GameObject indicatorObj;
     Indicator indicator;
     Vector3 tilePosition;
-    for (int i = 0; i < maxRows-1; i++)
+    for (int i = 0; i < maxRows - 1; i++)
     {
       indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(i, 0);
@@ -187,7 +158,7 @@ public class BoardManager : MonoBehaviour {
       indicator = indicatorObj.GetComponent<Indicator>();
       indicatorHandler.AddIndicatorToSet(BorderSet.RIGHT, indicator);
     }
-    for (int j = 0; j < maxCols-1; j++)
+    for (int j = 0; j < maxCols - 1; j++)
     {
       indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(0, j);
@@ -312,9 +283,10 @@ public class BoardManager : MonoBehaviour {
     SetPlayerGraphic();
   }
 
-  private void SetBoulderGraphic(GameObject boulder, int x, int y)
+  private void SetHazardPosition(GameObject boulder, int x, int y)
   {
     boulder.gameObject.transform.position = GetGridPosition(x, y);
+    boulder.transform.rotation = Quaternion.identity;
   }
 
   private void MoveBoulder(Boulder boulder)
@@ -343,6 +315,36 @@ public class BoardManager : MonoBehaviour {
     StartCoroutine(HazardSmoothMovement(boulder, direction, boulder.Speed));
   }
 
+  private void MoveClaw(Claw claw)
+  {
+    Vector3 direction = new Vector3();
+
+    switch (claw.GetDirection())
+    {
+      case Direction.UP:
+        direction.y = 0.1f;
+        direction.x = 0;
+        break;
+      case Direction.DOWN:
+        direction.y = -0.1f;
+        direction.x = 0;
+        break;
+      case Direction.RIGHT:
+        direction.x = 0.1f;
+        direction.y = 0;
+        break;
+      case Direction.LEFT:
+        direction.x = -0.1f;
+        direction.y = 0;
+        break;
+      default:
+        break;
+    }
+
+    claw.ShouldMove = true;
+    StartCoroutine(HazardSmoothMovement(claw, direction, claw.Speed));
+  }
+
   //Co-routine for moving units from one space to next, takes a parameter end to specify where to move to.
   IEnumerator HazardSmoothMovement(Boulder boulder, Vector3 direction, float speed)
   {
@@ -354,12 +356,23 @@ public class BoardManager : MonoBehaviour {
     }
   }
 
+  //Co-routine for moving units from one space to next, takes a parameter end to specify where to move to.
+  IEnumerator HazardSmoothMovement(Claw claw, Vector3 direction, float speed)
+  {
+    GameObject gameObj = claw.gameObject;
+    while (claw.ShouldMove)
+    {
+      gameObj.transform.position = gameObj.transform.position + direction * speed * Time.deltaTime;
+      yield return null;
+    }
+  }
+
   private void RemoveAllHazardsAndNuisances()
   {
     boulderPool.ReturnAllBoulders();
     //TODO: Remove Nuisances
   }
-  
+
   private void SpawnHazard(Hazard hazardType, Direction direction, Vector2Int spawnPos)
   {
     switch (hazardType)
@@ -370,8 +383,11 @@ public class BoardManager : MonoBehaviour {
       case Hazard.LASER:
         TriggerLaserHazard(direction, spawnPos);
         break;
+      case Hazard.CLAW:
+        TriggerClawHazard(direction, spawnPos);
+        break;
       default:
-        Debug.LogError("No such Hazard type");
+        Debug.LogError("Hazard type: " + hazardType + " not handled in SpawnHazard method.");
         break;
     }
   }
@@ -380,7 +396,7 @@ public class BoardManager : MonoBehaviour {
   {
     GameObject boulderObj = boulderPool.RetrieveBoulder();
     Boulder boulder = boulderObj.GetComponent<Boulder>();
-    SetBoulderGraphic(boulderObj, spawnPos.x, spawnPos.y);
+    SetHazardPosition(boulderObj, spawnPos.x, spawnPos.y);
     switch (direction)
     {
       case Direction.RIGHT:
@@ -418,6 +434,130 @@ public class BoardManager : MonoBehaviour {
       default:
         laserHandler.AcitvateLaser(BorderSet.TOP, spawnPos.y);
         break;
+    }
+  }
+
+  private void TriggerClawHazard(Direction direction, Vector2Int spawnPos)
+  {
+    GameObject clawObj = clawPool.RetrieveClaw();
+    Claw claw = clawObj.GetComponent<Claw>();
+    SetHazardPosition(clawObj, spawnPos.x, spawnPos.y);
+    switch (direction)
+    {
+      case Direction.RIGHT:
+        claw.SetClawDirection(Direction.RIGHT);
+        MoveClaw(claw);
+        break;
+      case Direction.UP:
+        claw.SetClawDirection(Direction.UP);
+        MoveClaw(claw);
+        break;
+      case Direction.LEFT:
+        claw.SetClawDirection(Direction.LEFT);
+        MoveClaw(claw);
+        break;
+      default:
+        for (int i = 0; i < maxRows; i++)
+        claw.SetClawDirection(Direction.DOWN);
+        MoveClaw(claw);
+        break;
+    }
+  }
+
+  private void TriggerPufferfishHazard(float indicatorTime, Vector2Int spawnPos)
+  {
+    GameObject pufferfishObj = pufferfishPool.RetrievePufferfish();
+    Pufferfish pufferfish = pufferfishObj.GetComponent<Pufferfish>();
+    SetHazardPosition(pufferfishObj, spawnPos.x, spawnPos.y);
+    pufferfish.TimeBomb(indicatorTime);
+  }
+
+  private void AddPufferfishDangerTimer(Vector2Int spawnPos, float extraDelay)
+  {
+    const float pufferfishDangerTimer = 2.5f;
+
+    //Middle
+    dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, spawnPos.y), pufferfishDangerTimer);
+    //Right
+    dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x + 1, spawnPos.y), pufferfishDangerTimer);
+    //Left
+    dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x - 1, spawnPos.y), pufferfishDangerTimer);
+    //Up
+    dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, spawnPos.y + 1), pufferfishDangerTimer);
+    //Down
+    dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, spawnPos.y - 1), pufferfishDangerTimer);
+    //Top Right
+    dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x + 1, spawnPos.y + 1), pufferfishDangerTimer);
+    //Top Left
+    dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x - 1, spawnPos.y + 1), pufferfishDangerTimer);
+    //Bot Right
+    dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x + 1, spawnPos.y - 1), pufferfishDangerTimer);
+    //Bot Left
+    dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x - 1, spawnPos.y - 1), pufferfishDangerTimer);
+  }
+
+  private void AddHorizontalDangerBoard(Vector2Int spawnPos, float boulderDangerTimer)
+  {
+    for (int i = 0; i < maxCols; i++)
+    {
+      dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), boulderDangerTimer);
+    }
+  }
+
+  private void AddVerticalDangerBoard(Vector2Int spawnPos, float boulderDangerTimer)
+  {
+    for (int i = 0; i < maxRows; i++)
+    {
+      dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), boulderDangerTimer);
+    }
+  }
+
+  IEnumerator SpawnHazard(HazardContainer hazardContainer)
+  {
+    //Debug.Log("___Entered SpawnHazard Coroutine___");
+    if (hazardContainer.HazardToSpawn == Hazard.PUFFERFISH)
+    {
+      AddPufferfishDangerTimer(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay);
+      yield return new WaitForSeconds(hazardContainer.PreIndicatorDelay);
+      TriggerPufferfishHazard(hazardContainer.IndicatorDelay, hazardContainer.HazardSpawnPoint);
+    }
+    else
+    {
+      const float boulderTime = 1.0f;
+      const float clawTime = 0.5f;
+      const float laserTime = 3.2f;
+      if (hazardContainer.BorderSet == BorderSet.BOT || hazardContainer.BorderSet == BorderSet.TOP)
+      {
+        switch (hazardContainer.HazardToSpawn)
+        {
+          case Hazard.BOULDER:
+            AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + boulderTime);
+            break;
+          case Hazard.CLAW:
+            AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + clawTime);
+            break;
+          case Hazard.LASER:
+            AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + laserTime);
+            break;
+        }
+      }
+      else
+      {
+        switch (hazardContainer.HazardToSpawn)
+        {
+          case Hazard.BOULDER:
+            AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + boulderTime);
+            break;
+          case Hazard.CLAW:
+            AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + clawTime);
+            break;
+          case Hazard.LASER:
+            AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + laserTime);
+            break;
+        }
+      }
+      yield return new WaitForSeconds(hazardContainer.PreIndicatorDelay);
+      indicatorHandler.AcitvateIndicator(hazardContainer.HazardToSpawn, hazardContainer.BorderSet, hazardContainer.HazardSpawnPoint.x, hazardContainer.IndicatorDelay);
     }
   }
 }

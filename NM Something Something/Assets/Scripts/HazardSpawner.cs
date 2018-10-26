@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Determines when to spawn Hazards
+/// Determines when and where to spawn Hazards
 /// </summary>
 public class HazardSpawner : MonoBehaviour
 {
@@ -11,12 +11,28 @@ public class HazardSpawner : MonoBehaviour
   DifficultyAI diffAI;
   [SerializeField]
   PositioningAI posAI;
+  [SerializeField]
+  DeciderAI deciderAI;
 
-  public void GetHazards(Vector2Int playerPos, bool[,] boolDangerBoard, out int hazards, out float indicatorDelay, out List<int> rows, out List<int> cols)
+  private const float minSpawnDelay = 0;
+  private const float maxSpawnDelay = 0.2f;
+
+  public List<HazardContainer> GetHazards(Vector2Int playerPos, bool[,] boolDangerBoard)
   {
-    diffAI.Difficulty(out hazards, out indicatorDelay);
-    //Debug.Log("number of hazards: " + hazards);
-    //Debug.Log("number of indicatorDelay: " + indicatorDelay);
-    posAI.Location(playerPos, boolDangerBoard, out rows, out cols);
+    List<BoardManager.Hazard> hazardTypes;
+    int hazards;
+    float indicatorDelay;
+    List<Vector2Int> connectedComponent;
+    List<int> rows;
+    List<int> cols;
+
+    diffAI.Difficulty(out hazardTypes, out hazards, out indicatorDelay);
+    posAI.Location(playerPos, boolDangerBoard, out connectedComponent, out rows, out cols);
+
+    List<HazardContainer> hazardContainers = deciderAI.Decide(hazardTypes, hazards, indicatorDelay, connectedComponent, rows, cols);
+    return hazardContainers;
   }
 }
+
+
+

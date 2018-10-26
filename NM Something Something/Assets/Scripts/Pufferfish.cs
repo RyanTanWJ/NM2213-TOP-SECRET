@@ -4,70 +4,55 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Pufferfish : MonoBehaviour {
-
-  private Vector2Int bombCenter;
+  private const float hardCodedAnimationTime = 1.5f;
 
   [SerializeField]
   Animator animator;
 
   [SerializeField]
-  private List<GameObject> blastShards;
+  List<GameObject> shards;
 
-  private List<Vector2Int> AOE;
-  
+  public delegate void MakeGameHarder();
+  public static event MakeGameHarder MakeGameHarderEvent;
+
   public delegate void DeactivatePufferfish(GameObject pufferfish);
   public static event DeactivatePufferfish DeactivatePufferfishEvent;
 
-  // Use this for initialization
-  void Start () {
+  /// <summary>
+  /// Activates the bomb indicator for the given time before activating the actual bomb
+  /// </summary>
+  /// <param name="time">The amount of time the indicator should play</param>
+  public void TimeBomb(float time)
+  {
+    explode(time);
+  }
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+  private void explode(float indicatorTime)
+  {
+    StartCoroutine(BombAnimation(indicatorTime));
+  }
 
   /// <summary>
-  /// Drops the bomb at aoe[0], and tells the bomb where to scatter pieces to.
+  /// Plays animation then disables it
   /// </summary>
-  /// <param name="aoe">A list of tiles the bomb will explode on, with the first </param>
-  public void DropBomb(List<Vector2Int> aoe)
+  IEnumerator BombAnimation(float indicatorTime)
   {
-    AOE = aoe;
-    //TODO: Bomb falling from the sky
-    explode();
+    //animator.Play("Pufferfish", 0, 0f);
+    yield return new WaitForSeconds(indicatorTime);
+    animator.SetBool("IndicatorOff", true);
+    yield return new WaitForSeconds(hardCodedAnimationTime);
+    animator.SetBool("IndicatorOff", false);
+    MakeGameHarderEvent();
+    ResetShards();
+    DeactivatePufferfishEvent(gameObject);
   }
 
-  private void explode()
+  private void ResetShards()
   {
-    for (int i=0; i<AOE.Count; i++)
+    foreach (GameObject shard in shards)
     {
-      GameObject blastShard = blastShards[i];
-      blastShard.SetActive(true);
-      //TODO: Use Coroutine to move a blast shard to the AOE
-      
+      shard.gameObject.transform.localPosition = new Vector3(0, 0, 0);
+      shard.gameObject.SetActive(false);
     }
-  }
-
-  IEnumerator ShardExplosionMove(GameObject shard, Vector3 direction, float moveTime)
-  {
-    float speed = direction.magnitude / moveTime;
-    while (moveTime>0)
-    {
-      shard.transform.position = shard.transform.position + direction * speed * Time.deltaTime;
-      moveTime -= Time.deltaTime;
-      yield return FadeOut(1.0f);
-    }
-  }
-
-  IEnumerator FadeOut(float fadeTime)
-  {
-    while (fadeTime > 0)
-    {
-      fadeTime -= Time.deltaTime;
-      yield return null;
-    }
-    //TODO: Return to PufferfishPool
   }
 }

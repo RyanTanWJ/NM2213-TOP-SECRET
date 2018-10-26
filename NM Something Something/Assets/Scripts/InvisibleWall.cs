@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InvisibleWall : MonoBehaviour {
-
+public class InvisibleWall : MonoBehaviour
+{
   public delegate void DeactivateBoulder(GameObject boulder);
   public static event DeactivateBoulder DeactivateBoulderEvent;
 
@@ -19,6 +19,14 @@ public class InvisibleWall : MonoBehaviour {
     {
       DeactivateBoulderEvent(collision.gameObject);
       MakeGameHarderEvent();
+    }
+    else if (collision.gameObject.CompareTag("Nuisance"))
+    {
+      DeactivateClawEvent(collision.gameObject);
+    }
+    else
+    {
+      Debug.LogError(collision.gameObject.name + " not handled by Invisible Wall");
     }
   }
 }
