@@ -45,7 +45,7 @@ public class HazardDifficultyMask {
     if (collisionCount < collisionCountMax)
     {
       collisionCount++;
-      Debug.Log("collisionCount: " + collisionCount);
+      //Debug.Log("collisionCount: " + collisionCount);
       return;
     }
     else
@@ -53,25 +53,25 @@ public class HazardDifficultyMask {
       if (ContainsPufferfish())
       {
         difficulty = MaxDifficulty;
-        Debug.Log("MaxDifficulty");
+        //Debug.Log("MaxDifficulty");
       }
       else if (ContainsLaser())
       {
         difficulty = Pufferfish;
         collisionCount = 0;
-        Debug.Log("Pufferfish");
+        //Debug.Log("Pufferfish");
       }
       else if (ContainsClaw())
       {
         difficulty = Laser;
         collisionCount = 0;
-        Debug.Log("Laser");
+        //Debug.Log("Laser");
       }
       else if (ContainsBoulder())
       {
         difficulty = Claw;
         collisionCount = 0;
-        Debug.Log("Claw");
+        //Debug.Log("Claw");
       }
     }
   }

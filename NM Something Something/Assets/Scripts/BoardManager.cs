@@ -67,7 +67,7 @@ public class BoardManager : MonoBehaviour
 
   DangerBoard dangerBoard;
 
-  float spawnDelay = 2.0f;
+  float spawnDelay = 3.0f;
   float currDelay = 0.0f;
 
   private void OnEnable()
@@ -96,54 +96,18 @@ public class BoardManager : MonoBehaviour
   {
     if (currDelay >= spawnDelay)
     {
-      List<Hazard> hazardTypes;
-      int hazards;
-      float indicatorDelay;
-      List<int> rows;
-      List<int> cols;
-
-      hazSpawner.GetHazards(player.BoardPosition, dangerBoard.GetDangerBoard(), out hazardTypes, out hazards, out indicatorDelay, out rows, out cols);
-
-      Hazard hazardToSpawn = hazardTypes[UnityEngine.Random.Range(0, hazardTypes.Count)];
-
-      switch (hazardToSpawn)
+      List<HazardContainer> hazContainers = hazSpawner.GetHazards(player.BoardPosition, dangerBoard.GetDangerBoard());
+      //Debug.Log("__________hazContainers.Count = " + hazContainers.Count);
+      if (hazContainers.Count > 0)
       {
-        case Hazard.PUFFERFISH:
-          TriggerPufferfishHazard(indicatorDelay, new Vector2Int(rows[UnityEngine.Random.Range(0, rows.Count)], cols[UnityEngine.Random.Range(0, cols.Count)]));
-          break;
-        default:
-          for (int i = 0; i < hazards; i++)
-          {
-            int rowColIndex = 0;
-            switch (UnityEngine.Random.Range(0, 4))
-            {
-              //Do left
-              case 0:
-                rowColIndex = rows[UnityEngine.Random.Range(0, rows.Count)];
-                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.LEFT, rowColIndex, indicatorDelay);
-                break;
-              //Do right
-              case 1:
-                rowColIndex = rows[UnityEngine.Random.Range(0, rows.Count)];
-                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.RIGHT, rowColIndex, indicatorDelay);
-                break;
-              //Do top
-              case 2:
-                rowColIndex = cols[UnityEngine.Random.Range(0, cols.Count)];
-                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.TOP, rowColIndex, indicatorDelay);
-                break;
-              //Do bot
-              case 3:
-                rowColIndex = cols[UnityEngine.Random.Range(0, cols.Count)];
-                indicatorHandler.AcitvateIndicator(hazardToSpawn, BorderSet.BOT, rowColIndex, indicatorDelay);
-                break;
-              default:
-                Debug.LogError("Random Range exceeded in BoardManager Update()");
-                break;
-            }
-          }
-          break;
+        //Debug.Log("Spawning Hazards:");
+        foreach (HazardContainer hazardContainer in hazContainers)
+        {
+          //hazardContainer.PrintContents();
+          StartCoroutine(SpawnHazard(hazardContainer));
+        }
       }
+      dangerBoard.Print();
       currDelay = 0;
     }
     else
@@ -433,38 +397,21 @@ public class BoardManager : MonoBehaviour
     GameObject boulderObj = boulderPool.RetrieveBoulder();
     Boulder boulder = boulderObj.GetComponent<Boulder>();
     SetHazardPosition(boulderObj, spawnPos.x, spawnPos.y);
-    const float boulderDangerTimer = 1.0f;
     switch (direction)
     {
       case Direction.RIGHT:
-        for (int i = 0; i < maxCols; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), boulderDangerTimer);
-        }
         boulder.SetBoulderDirection(Direction.RIGHT);
         MoveBoulder(boulder);
         break;
       case Direction.UP:
-        for (int i = 0; i < maxRows; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), boulderDangerTimer);
-        }
         boulder.SetBoulderDirection(Direction.UP);
         MoveBoulder(boulder);
         break;
       case Direction.LEFT:
-        for (int i = 0; i < maxCols; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), boulderDangerTimer);
-        }
         boulder.SetBoulderDirection(Direction.LEFT);
         MoveBoulder(boulder);
         break;
       default:
-        for (int i = 0; i < maxRows; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), boulderDangerTimer);
-        }
         boulder.SetBoulderDirection(Direction.DOWN);
         MoveBoulder(boulder);
         break;
@@ -473,35 +420,18 @@ public class BoardManager : MonoBehaviour
 
   private void TriggerLaserHazard(Direction direction, Vector2Int spawnPos)
   {
-    const float laserDangerTimer = 3.0f;
     switch (direction)
     {
       case Direction.RIGHT:
-        for (int i = 0; i < maxCols; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), laserDangerTimer);
-        }
         laserHandler.AcitvateLaser(BorderSet.LEFT, spawnPos.x);
         break;
       case Direction.UP:
-        for (int i = 0; i < maxRows; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), laserDangerTimer);
-        }
         laserHandler.AcitvateLaser(BorderSet.BOT, spawnPos.y);
         break;
       case Direction.LEFT:
-        for (int i = 0; i < maxCols; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), laserDangerTimer);
-        }
         laserHandler.AcitvateLaser(BorderSet.RIGHT, spawnPos.x);
         break;
       default:
-        for (int i = 0; i < maxRows; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), laserDangerTimer);
-        }
         laserHandler.AcitvateLaser(BorderSet.TOP, spawnPos.y);
         break;
     }
@@ -512,38 +442,22 @@ public class BoardManager : MonoBehaviour
     GameObject clawObj = clawPool.RetrieveClaw();
     Claw claw = clawObj.GetComponent<Claw>();
     SetHazardPosition(clawObj, spawnPos.x, spawnPos.y);
-    const float clawDangerTimer = 2.0f;
     switch (direction)
     {
       case Direction.RIGHT:
-        for (int i = 0; i < maxCols; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), clawDangerTimer);
-        }
         claw.SetClawDirection(Direction.RIGHT);
         MoveClaw(claw);
         break;
       case Direction.UP:
-        for (int i = 0; i < maxRows; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), clawDangerTimer);
-        }
         claw.SetClawDirection(Direction.UP);
         MoveClaw(claw);
         break;
       case Direction.LEFT:
-        for (int i = 0; i < maxCols; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), clawDangerTimer);
-        }
         claw.SetClawDirection(Direction.LEFT);
         MoveClaw(claw);
         break;
       default:
         for (int i = 0; i < maxRows; i++)
-        {
-          dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), clawDangerTimer);
-        }
         claw.SetClawDirection(Direction.DOWN);
         MoveClaw(claw);
         break;
@@ -556,6 +470,10 @@ public class BoardManager : MonoBehaviour
     Pufferfish pufferfish = pufferfishObj.GetComponent<Pufferfish>();
     SetHazardPosition(pufferfishObj, spawnPos.x, spawnPos.y);
     pufferfish.TimeBomb(indicatorTime);
+  }
+
+  private void AddPufferfishDangerTimer(Vector2Int spawnPos, float extraDelay)
+  {
     const float pufferfishDangerTimer = 2.5f;
 
     //Middle
@@ -576,5 +494,70 @@ public class BoardManager : MonoBehaviour
     dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x + 1, spawnPos.y - 1), pufferfishDangerTimer);
     //Bot Left
     dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x - 1, spawnPos.y - 1), pufferfishDangerTimer);
+  }
+
+  private void AddHorizontalDangerBoard(Vector2Int spawnPos, float boulderDangerTimer)
+  {
+    for (int i = 0; i < maxCols; i++)
+    {
+      dangerBoard.AddDangerBoard(new Vector2Int(spawnPos.x, i), boulderDangerTimer);
+    }
+  }
+
+  private void AddVerticalDangerBoard(Vector2Int spawnPos, float boulderDangerTimer)
+  {
+    for (int i = 0; i < maxRows; i++)
+    {
+      dangerBoard.AddDangerBoard(new Vector2Int(i, spawnPos.y), boulderDangerTimer);
+    }
+  }
+
+  IEnumerator SpawnHazard(HazardContainer hazardContainer)
+  {
+    //Debug.Log("___Entered SpawnHazard Coroutine___");
+    if (hazardContainer.HazardToSpawn == Hazard.PUFFERFISH)
+    {
+      AddPufferfishDangerTimer(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay);
+      yield return new WaitForSeconds(hazardContainer.PreIndicatorDelay);
+      TriggerPufferfishHazard(hazardContainer.IndicatorDelay, hazardContainer.HazardSpawnPoint);
+    }
+    else
+    {
+      const float boulderTime = 1.0f;
+      const float clawTime = 0.5f;
+      const float laserTime = 3.2f;
+      if (hazardContainer.BorderSet == BorderSet.BOT || hazardContainer.BorderSet == BorderSet.TOP)
+      {
+        switch (hazardContainer.HazardToSpawn)
+        {
+          case Hazard.BOULDER:
+            AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + boulderTime);
+            break;
+          case Hazard.CLAW:
+            AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + clawTime);
+            break;
+          case Hazard.LASER:
+            AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + laserTime);
+            break;
+        }
+      }
+      else
+      {
+        switch (hazardContainer.HazardToSpawn)
+        {
+          case Hazard.BOULDER:
+            AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + boulderTime);
+            break;
+          case Hazard.CLAW:
+            AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + clawTime);
+            break;
+          case Hazard.LASER:
+            AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + laserTime);
+            break;
+        }
+      }
+      yield return new WaitForSeconds(hazardContainer.PreIndicatorDelay);
+      indicatorHandler.AcitvateIndicator(hazardContainer.HazardToSpawn, hazardContainer.BorderSet, hazardContainer.HazardSpawnPoint.x, hazardContainer.IndicatorDelay);
+    }
   }
 }

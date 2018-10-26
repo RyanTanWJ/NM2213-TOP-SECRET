@@ -11,11 +11,11 @@ public class PositioningAI : MonoBehaviour
 {
   private List<int> retRows = new List<int>();
   private List<int> retCols = new List<int>();
+  List<Vector2Int> retConnectedComponent = new List<Vector2Int>();
 
   private bool[,] visited;
-
-  //public void Location(Vector2Int playerLocations, out List<int> rows, out List<int> cols)
-  public void Location(Vector2Int playerPos, bool[,] dangerBoard, out List<int> rows, out List<int> cols)
+  
+  public void Location(Vector2Int playerPos, bool[,] dangerBoard, out List<Vector2Int> connectedComponent, out List<int> rows, out List<int> cols)
   {
     UpdateRetRowsAndCols(playerPos, dangerBoard);
 
@@ -24,6 +24,7 @@ public class PositioningAI : MonoBehaviour
 
     rows = retRows;
     cols = retCols;
+    connectedComponent = retConnectedComponent;
   }
 
   private void UpdateRetRowsAndCols(Vector2Int playerPos, bool[,] dangerBoard)
@@ -35,9 +36,9 @@ public class PositioningAI : MonoBehaviour
 
     Vector2Int playerClosestEmptySpace = FindClosestEmptySpace(playerPos, dangerBoard, visited);
 
-    List<Vector2Int> connectedComponent = FindConnectedComponent(playerClosestEmptySpace, dangerBoard);
+    retConnectedComponent = FindConnectedComponent(playerClosestEmptySpace, dangerBoard);
 
-    foreach (Vector2Int connectedTile in connectedComponent)
+    foreach (Vector2Int connectedTile in retConnectedComponent)
     {
       if (!retRows.Contains(connectedTile.x))
       {

@@ -1433,6 +1433,7 @@ GameObject:
   - component: {fileID: 1937392389}
   - component: {fileID: 1937392391}
   - component: {fileID: 1937392390}
+  - component: {fileID: 1937392392}
   m_Layer: 0
   m_Name: HazardSpawner
   m_TagString: Untagged
@@ -1467,6 +1468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   diffAI: {fileID: 1937392391}
   posAI: {fileID: 1937392390}
+  deciderAI: {fileID: 1937392392}
 --- !u!114 &1937392390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1487,6 +1489,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 573b83bae3b47174d9089452b6c5f4f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1937392392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1937392387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6cae3b42428439459f1ea294b6ee84f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &2001267864 stripped
