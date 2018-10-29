@@ -85,11 +85,19 @@ public class DeciderAI : MonoBehaviour
       //Get the player's "best position"
       hazardSpawnPoint = new Vector2Int(rows[UnityEngine.Random.Range(0, rows.Count)], cols[UnityEngine.Random.Range(0, cols.Count)]);
 
+      //Fairness Check
+      List<Vector2Int> testTheWater;
+
       //Assign the border set
       if (hazardToSpawn == BoardManager.Hazard.PUFFERFISH)
       {
         borderSet = BoardManager.BorderSet.TOP; //This can be anything it doesn't matter for pufferfish
-        connectedComponent = SpaceLeftToMove(connectedComponent, hazardSpawnPoint);
+        testTheWater = SpaceLeftToMove(connectedComponent, hazardSpawnPoint);
+        if (testTheWater.Count <= 0)
+        {
+          continue;
+        }
+        connectedComponent = testTheWater;
       }
       else
       {
@@ -107,9 +115,6 @@ public class DeciderAI : MonoBehaviour
         {
           borderSet = borderSetList[UnityEngine.Random.Range(0, borderSetList.Length)];
         }
-
-        //Fairness Check
-        List<Vector2Int> testTheWater;
 
         if (borderSet == BoardManager.BorderSet.TOP || borderSet == BoardManager.BorderSet.BOT)
         {
