@@ -45,7 +45,14 @@ public class DangerBoard {
 
   public void AddDangerBoard(Vector2Int dangerPos, float dangerTimer)
   {
+    try { 
     dangerBoard[dangerPos.x, dangerPos.y] = Mathf.Max(dangerTimer, dangerBoard[dangerPos.x, dangerPos.y]);
+    }
+    catch (System.IndexOutOfRangeException e)
+    {
+      Debug.Log(e.Message);
+      Debug.Log("x: " + dangerPos.x + ", y: " + dangerPos.y);
+    }
   }
 
   public void UpdateDangerBoard(float timePerFrame)
