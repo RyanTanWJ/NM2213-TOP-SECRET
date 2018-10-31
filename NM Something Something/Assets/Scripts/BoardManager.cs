@@ -67,7 +67,7 @@ public class BoardManager : MonoBehaviour
 
   DangerBoard dangerBoard;
 
-  float spawnDelay = 3.0f;
+  float spawnDelay = 1.0f;
   float currDelay = 0.0f;
 
   private void OnEnable()
@@ -107,7 +107,7 @@ public class BoardManager : MonoBehaviour
           StartCoroutine(SpawnHazard(hazardContainer));
         }
       }
-      dangerBoard.Print();
+      //dangerBoard.Print();
       currDelay = 0;
     }
     else
