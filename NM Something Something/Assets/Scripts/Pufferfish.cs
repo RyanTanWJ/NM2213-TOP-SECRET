@@ -29,21 +29,24 @@ public class Pufferfish : MonoBehaviour {
 
   private void explode(float indicatorTime)
   {
-    StartCoroutine(BombAnimation(indicatorTime));
+    StartCoroutine(PufferfishAnimation(indicatorTime));
   }
 
   /// <summary>
   /// Plays animation then disables it
   /// </summary>
-  IEnumerator BombAnimation(float indicatorTime)
+  IEnumerator PufferfishAnimation(float indicatorTime)
   {
-    //animator.Play("Pufferfish", 0, 0f);
     yield return new WaitForSeconds(indicatorTime);
     animator.SetBool("IndicatorOff", true);
+    Debug.Log("Indicator On");
     yield return new WaitForSeconds(hardCodedAnimationTime);
     animator.SetBool("IndicatorOff", false);
+    Debug.Log("Indicator Off");
     MakeGameHarderEvent();
+    Debug.Log("Game is Harder");
     ResetShards();
+    Debug.Log("Reset Shards");
     DeactivatePufferfishEvent(gameObject);
   }
 

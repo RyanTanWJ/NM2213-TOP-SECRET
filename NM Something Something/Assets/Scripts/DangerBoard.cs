@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DangerBoard {
+public class DangerBoard
+{
 
   float[,] dangerBoard;
 
@@ -14,7 +15,7 @@ public class DangerBoard {
 
   private void PopulateDangerBoard()
   {
-    for (int i=0; i<dangerBoard.GetLength(0); i++)
+    for (int i = 0; i < dangerBoard.GetLength(0); i++)
     {
       for (int j = 0; j < dangerBoard.GetLength(1); j++)
       {
@@ -45,13 +46,19 @@ public class DangerBoard {
 
   public void AddDangerBoard(Vector2Int dangerPos, float dangerTimer)
   {
-    try { 
-    dangerBoard[dangerPos.x, dangerPos.y] = Mathf.Max(dangerTimer, dangerBoard[dangerPos.x, dangerPos.y]);
+    try
+    {
+      dangerBoard[dangerPos.x, dangerPos.y] = Mathf.Max(dangerTimer, dangerBoard[dangerPos.x, dangerPos.y]);
     }
     catch (System.IndexOutOfRangeException e)
     {
-      Debug.Log(e.Message);
-      Debug.Log("x: " + dangerPos.x + ", y: " + dangerPos.y);
+      Debug.LogError(e.Message);
+      Debug.LogError("Error in AddDangerBoard:\n\nx: " + dangerPos.x + ", y: " + dangerPos.y);
+    }
+    catch (System.Exception e)
+    {
+      Debug.LogError(e.Message);
+      Debug.LogError("Unhandled Exception in AddDangerBoard:\n\nx: " + dangerPos.x + ", y: " + dangerPos.y);
     }
   }
 
@@ -77,12 +84,12 @@ public class DangerBoard {
   public void Print()
   {
     Debug.Log("Printing Danger Board:");
-    for (int i=0; i < dangerBoard.GetLength(0); i++)
+    for (int i = 0; i < dangerBoard.GetLength(0); i++)
     {
       string row = "";
-      for (int j=0; j< dangerBoard.GetLength(1); j++)
+      for (int j = 0; j < dangerBoard.GetLength(1); j++)
       {
-        row += " " + (dangerBoard[i,j]>0);
+        row += " " + (dangerBoard[i, j] > 0);
       }
       Debug.Log("Row " + i + ": " + row);
     }
