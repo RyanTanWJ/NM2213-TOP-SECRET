@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4219026233506916}
   - component: {fileID: 212666138176936364}
   m_Layer: 0
-  m_Name: Tabled Floor
+  m_Name: Tabled Floor Alter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,7 +104,7 @@ SpriteRenderer:
   m_SortingLayerID: 1649482513
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 37b3c5228cf3f2142aa563b4728079cc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7bc9aec2adfbdc44a8027d98e16bbea9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

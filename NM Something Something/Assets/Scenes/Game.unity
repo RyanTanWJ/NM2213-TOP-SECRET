@@ -648,7 +648,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 463477562}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5142436, y: 16.948109, z: -0.37428224}
+  m_LocalPosition: {x: 100, y: 100, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 974969136}
@@ -668,7 +668,7 @@ GameObject:
   - component: {fileID: 797406649}
   - component: {fileID: 797406648}
   m_Layer: 0
-  m_Name: BoulderObjectPool
+  m_Name: SushiObjectPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -685,9 +685,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 512e9ee39a0d4d84ab306ca94fbe9a1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BoulderPrefab: {fileID: 1364048146301756, guid: fbeb5488ff7d39d47b67c94edf0db387,
-    type: 2}
-  bouldersInUse: []
+  SushiPrefabs:
+  - {fileID: 1364048146301756, guid: 44cf42890c6ce2b489aff24bb38785dc, type: 2}
+  - {fileID: 1364048146301756, guid: b07afd9dd1aecac4b8e147bd9c0b61e7, type: 2}
+  - {fileID: 1364048146301756, guid: 654a8cb8b3f7f184b81214c7dcb6f32e, type: 2}
+  - {fileID: 1364048146301756, guid: 13725a90b284bfa48b2fe3d94069ee44, type: 2}
+  - {fileID: 1364048146301756, guid: 4df4042a9979ee0498e488658700a6fb, type: 2}
+  - {fileID: 1364048146301756, guid: 2d4dc4ca57cf1844fb35d28bb8014d54, type: 2}
 --- !u!4 &797406649
 Transform:
   m_ObjectHideFlags: 0
@@ -695,7 +699,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 797406647}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 99.485756, y: 83.051895, z: 100.37428}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 463477563}
@@ -735,7 +739,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 974969134}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.5142436, y: -16.948109, z: 0.37428224}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 463477563}
@@ -1220,6 +1224,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1488796403
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1488796404}
+  m_Layer: 0
+  m_Name: BorderPlatforms
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1488796404
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1488796403}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1507082874}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1507082873
 GameObject:
   m_ObjectHideFlags: 0
@@ -1248,6 +1280,7 @@ Transform:
   m_Children:
   - {fileID: 2001267864}
   - {fileID: 41788005}
+  - {fileID: 1488796404}
   - {fileID: 1937392388}
   - {fileID: 1731254836}
   m_Father: {fileID: 1790523159}
@@ -1266,13 +1299,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: 5.4
   platforms: {fileID: 41788004}
+  borderPlatforms: {fileID: 1488796403}
   indicatorHandler: {fileID: 1731254837}
-  floor: {fileID: 1806305495807970, guid: 938889cab40edf345ba2542eb5d97a04, type: 2}
-  badFloor: {fileID: 1378249886032178, guid: 415e3db96de6c184abe3a53edbe03a23, type: 2}
+  tiledFloor: {fileID: 1806305495807970, guid: 938889cab40edf345ba2542eb5d97a04, type: 2}
+  tabledFloor: {fileID: 1378249886032178, guid: 415e3db96de6c184abe3a53edbe03a23,
+    type: 2}
+  tabledFloorAlter: {fileID: 1378249886032178, guid: d337f77bdec77b94f84c8fad0392c956,
+    type: 2}
   arrowIndicator: {fileID: 1337558284444882, guid: 56c05475ae55d1e42834c21498b48dd5,
     type: 2}
   player: {fileID: 2001267867}
-  boulderPool: {fileID: 797406648}
+  sushiPool: {fileID: 797406648}
   clawPool: {fileID: 292274779}
   pufferfishPool: {fileID: 2130500518}
   hazSpawner: {fileID: 1937392389}
@@ -1305,7 +1342,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1507082874}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1731254837
 MonoBehaviour:
@@ -1453,7 +1490,7 @@ Transform:
   m_Children:
   - {fileID: 354330285}
   m_Father: {fileID: 1507082874}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1937392389
 MonoBehaviour:

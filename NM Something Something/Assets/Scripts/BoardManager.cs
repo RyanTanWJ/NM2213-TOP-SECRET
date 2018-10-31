@@ -27,17 +27,21 @@ public class BoardManager : MonoBehaviour
   //Parent holder for platforms
   [SerializeField]
   GameObject platforms;
+  [SerializeField]
+  GameObject borderPlatforms;
 
   [SerializeField]
   IndicatorHandler indicatorHandler;
 
   //The Prefab used for the floor
   [SerializeField]
-  GameObject floor;
+  GameObject tiledFloor;
 
-  //The Prefab used to show the floor tiles the player cannot walk on
+  //The Prefabs used to show the floor tiles the player cannot walk on
   [SerializeField]
-  GameObject badFloor;
+  GameObject tabledFloor;
+  [SerializeField]
+  GameObject tabledFloorAlter;
 
   //The Prefab used for the arrow indicators
   [SerializeField]
@@ -47,7 +51,7 @@ public class BoardManager : MonoBehaviour
   Player player;
 
   [SerializeField]
-  BoulderPool boulderPool;
+  SushiPool sushiPool;
 
   [SerializeField]
   ClawPool clawPool;
@@ -125,13 +129,17 @@ public class BoardManager : MonoBehaviour
       for (int j = 0; j < maxCols; j++)
       {
         GameObject tile;
-        if (i == 0 || j == 0 || i == maxRows - 1 || j == maxCols - 1)
+        if (i == 0)
         {
-          tile = Instantiate(badFloor, platforms.transform);
+          tile = Instantiate(tabledFloorAlter, borderPlatforms.transform);
+        }
+        else if (j == 0 || i == maxRows - 1 || j == maxCols - 1)
+        {
+          tile = Instantiate(tabledFloor, borderPlatforms.transform);
         }
         else
         {
-          tile = Instantiate(floor, platforms.transform);
+          tile = Instantiate(tiledFloor, platforms.transform);
         }
         Vector3 tilePosition = GetGridPosition(i, j);
         tile.transform.position = tilePosition;
@@ -289,7 +297,7 @@ public class BoardManager : MonoBehaviour
     boulder.transform.rotation = Quaternion.identity;
   }
 
-  private void MoveBoulder(Boulder boulder)
+  private void MoveBoulder(Sushi boulder)
   {
     Vector3 direction = new Vector3();
 
@@ -346,7 +354,7 @@ public class BoardManager : MonoBehaviour
   }
 
   //Co-routine for moving units from one space to next, takes a parameter end to specify where to move to.
-  IEnumerator HazardSmoothMovement(Boulder boulder, Vector3 direction, float speed)
+  IEnumerator HazardSmoothMovement(Sushi boulder, Vector3 direction, float speed)
   {
     GameObject gameObj = boulder.gameObject;
     while (boulder.ShouldMove)
@@ -369,7 +377,7 @@ public class BoardManager : MonoBehaviour
 
   private void RemoveAllHazardsAndNuisances()
   {
-    boulderPool.ReturnAllBoulders();
+    sushiPool.ReturnAllSushi();
     //TODO: Remove Nuisances
   }
 
@@ -394,9 +402,9 @@ public class BoardManager : MonoBehaviour
 
   private void TriggerBoulderHazard(Direction direction, Vector2Int spawnPos)
   {
-    GameObject boulderObj = boulderPool.RetrieveBoulder();
-    Boulder boulder = boulderObj.GetComponent<Boulder>();
-    SetHazardPosition(boulderObj, spawnPos.x, spawnPos.y);
+    GameObject sushiObj = sushiPool.RetrieveSushi();
+    Sushi boulder = sushiObj.GetComponent<Sushi>();
+    SetHazardPosition(sushiObj, spawnPos.x, spawnPos.y);
     switch (direction)
     {
       case Direction.RIGHT:

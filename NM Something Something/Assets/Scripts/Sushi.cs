@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boulder : MonoBehaviour {
+public class Sushi : MonoBehaviour {
 
-  private BoardManager.Direction boulderDirection;
+  private BoardManager.Direction sushiDirection;
 
   [SerializeField]
   private Animator animator;
@@ -16,12 +16,12 @@ public class Boulder : MonoBehaviour {
   // Use this for initialization
   void Start()
   {
-    boulderDirection = BoardManager.Direction.RIGHT;
+    sushiDirection = BoardManager.Direction.RIGHT;
   }
 
   public void SetBoulderDirection(BoardManager.Direction direction)
   {
-    boulderDirection = direction;
+    sushiDirection = direction;
     if (direction == BoardManager.Direction.DOWN || direction == BoardManager.Direction.RIGHT)
     {
       animator.SetBool("RightDown", true);
@@ -32,7 +32,7 @@ public class Boulder : MonoBehaviour {
 
   public BoardManager.Direction GetDirection()
   {
-    return boulderDirection;
+    return sushiDirection;
   }
 
   public float Speed
