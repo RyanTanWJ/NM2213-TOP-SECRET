@@ -31,7 +31,7 @@ public class DangerBoard
     {
       for (int j = 0; j < dangerBoard.GetLength(1); j++)
       {
-        if (dangerBoard[i, j] > 0)
+        if (i == 0 || i == dangerBoard.GetLength(0) - 1 || j == 0 || j == dangerBoard.GetLength(1) - 1 || dangerBoard[i, j] > 0)
         {
           boolBoard[i, j] = true;
         }
@@ -89,7 +89,15 @@ public class DangerBoard
       string row = "";
       for (int j = 0; j < dangerBoard.GetLength(1); j++)
       {
-        row += " " + (dangerBoard[i, j] > 0);
+
+        if (i == 0 || i == dangerBoard.GetLength(0) - 1 || j == 0 || j == dangerBoard.GetLength(1) - 1 || dangerBoard[i, j] > 0)
+        {
+          row += " " + true;
+        }
+        else
+        {
+          row += " " + false;
+        }
       }
       Debug.Log("Row " + i + ": " + row);
     }
