@@ -24,6 +24,10 @@ public class DangerBoard
     }
   }
 
+  /// <summary>
+  /// Creates and returns a boolean version of the danger board, where true means the board currently has a hazard in it, and false otherwise.
+  /// </summary>
+  /// <returns>A boolean version of the danger board, where true marks a board position that's hazardous, and false otherwise.</returns>
   public bool[,] GetDangerBoard()
   {
     bool[,] boolBoard = new bool[dangerBoard.GetLength(0), dangerBoard.GetLength(1)];
