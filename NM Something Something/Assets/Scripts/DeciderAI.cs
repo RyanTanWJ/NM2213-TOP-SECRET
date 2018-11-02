@@ -13,11 +13,12 @@ public class DeciderAI : MonoBehaviour
     List<HazardContainer> retVal = new List<HazardContainer>();
 
     //Player cannot move
-    if (connectedComponent.Count == 0 || (rows.Count == 1 && cols.Count == 1))
+    if (connectedComponent.Count <= 1 || (rows.Count == 1 && cols.Count == 1))
     {
       return retVal;
     }
 
+    /*
     //Choose a Hazard
     BoardManager.Hazard hazardToSpawn = hazardTypes[UnityEngine.Random.Range(0, hazardTypes.Count)];
 
@@ -75,15 +76,23 @@ public class DeciderAI : MonoBehaviour
     retVal.Add(hazardContainer);
 
     int hazardsLeft = hazards - 1;//-1 for the first hazard
+    */
+
+    BoardManager.Hazard hazardToSpawn;
+    Vector2Int hazardSpawnPoint;
+    BoardManager.BorderSet borderSet;
+    float preIndicatorDelay;
+    HazardContainer hazardContainer;
+    bool playerTargetted = false;
 
     //Terminate if spawn enough hazards, no more space for player to move, 
-    while (hazardsLeft > 0 && connectedComponent.Count > 1 && rows.Count > 0 && cols.Count > 0)
+    while (hazards > 0 && connectedComponent.Count > 1 && (rows.Count > 0 || cols.Count > 0))
     {
       //Choose a Hazard
       hazardToSpawn = hazardTypes[UnityEngine.Random.Range(0, hazardTypes.Count)];
 
-      //Get the player's "best position"
-      hazardSpawnPoint = new Vector2Int(rows[UnityEngine.Random.Range(0, rows.Count)], cols[UnityEngine.Random.Range(0, cols.Count)]);
+      //Get the player's "best position" if player has not yet been targetted
+      hazardSpawnPoint = playerTargetted ? new Vector2Int(rows[UnityEngine.Random.Range(0, rows.Count)], cols[UnityEngine.Random.Range(0, cols.Count)]) : connectedComponent[0];
 
       //Fairness Check
       List<Vector2Int> testTheWater;
@@ -98,6 +107,7 @@ public class DeciderAI : MonoBehaviour
           continue;
         }
         connectedComponent = testTheWater;
+        playerTargetted = true;
       }
       else
       {
@@ -109,7 +119,7 @@ public class DeciderAI : MonoBehaviour
         }
         else if (cols.Count == 0)
         {
-          borderSet = borderSetList[UnityEngine.Random.Range(0, (borderSetList.Length/2))];
+          borderSet = borderSetList[UnityEngine.Random.Range(0, (borderSetList.Length / 2))];
         }
         else
         {
@@ -125,6 +135,7 @@ public class DeciderAI : MonoBehaviour
             continue;
           }
           connectedComponent = testTheWater;
+          playerTargetted = true;
         }
         else
         {
@@ -135,11 +146,12 @@ public class DeciderAI : MonoBehaviour
             continue;
           }
           connectedComponent = testTheWater;
+          playerTargetted = true;
         }
       }
 
       //Randomise Delay
-      preIndicatorDelay = UnityEngine.Random.Range(0,0.2f);
+      preIndicatorDelay = UnityEngine.Random.Range(0, 0.2f);
 
       hazardContainer =
         new HazardContainer(hazardSpawnPoint, hazardToSpawn,
@@ -147,7 +159,7 @@ public class DeciderAI : MonoBehaviour
 
       retVal.Add(hazardContainer);
 
-      hazardsLeft--;
+      hazards--;
     }
 
     return retVal;
