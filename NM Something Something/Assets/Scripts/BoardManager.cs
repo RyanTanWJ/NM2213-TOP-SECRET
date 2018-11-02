@@ -100,6 +100,7 @@ public class BoardManager : MonoBehaviour
   {
     if (currDelay >= spawnDelay)
     {
+      //dangerBoard.Print();
       List<HazardContainer> hazContainers = hazSpawner.GetHazards(player.BoardPosition, dangerBoard.GetDangerBoard());
       //Debug.Log("__________hazContainers.Count = " + hazContainers.Count);
       if (hazContainers.Count > 0)
