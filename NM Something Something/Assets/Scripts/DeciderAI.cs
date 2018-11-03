@@ -32,11 +32,9 @@ public class DeciderAI : MonoBehaviour
       while (hazards > 0 && connectedComponent.Count > 1 && (rows.Count > 0 || cols.Count > 0))
       {
         //Choose a Hazard
-        Debug.Log(n++);
         hazardToSpawn = hazardTypes[UnityEngine.Random.Range(0, hazardTypes.Count)];
 
         //Get the player's "best position" if player has not yet been targetted
-        Debug.Log(n++);
         hazardSpawnPoint = playerTargetted ? new Vector2Int(rows[UnityEngine.Random.Range(0, rows.Count)], cols[UnityEngine.Random.Range(0, cols.Count)]) : connectedComponent[0];
         
         //Fairness Check
@@ -60,17 +58,14 @@ public class DeciderAI : MonoBehaviour
           BoardManager.BorderSet[] borderSetList = { BoardManager.BorderSet.LEFT, BoardManager.BorderSet.RIGHT, BoardManager.BorderSet.TOP, BoardManager.BorderSet.BOT };
           if (rows.Count == 0)
           {
-            Debug.Log(n++);
             borderSet = borderSetList[UnityEngine.Random.Range(2, borderSetList.Length)];
           }
           else if (cols.Count == 0)
           {
-            Debug.Log(n++);
             borderSet = borderSetList[UnityEngine.Random.Range(0, (borderSetList.Length / 2))];
           }
           else
           {
-            Debug.Log(n++);
             borderSet = borderSetList[UnityEngine.Random.Range(0, borderSetList.Length)];
           }
 

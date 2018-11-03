@@ -15,6 +15,8 @@ public class PositioningAI : MonoBehaviour
 
   private bool[,] visited;
 
+  private readonly Vector2Int nullAlternative = new Vector2Int(int.MaxValue, int.MaxValue);
+
   public void Location(Vector2Int playerPos, bool[,] dangerBoard, out List<Vector2Int> connectedComponent, out List<int> rows, out List<int> cols)
   {
     UpdateRetRowsAndCols(playerPos, dangerBoard);
@@ -65,113 +67,60 @@ public class PositioningAI : MonoBehaviour
 
     List<Vector2Int> possiblePositions = new List<Vector2Int>();
 
-    if (recurPlayerPos.y < dangerBoard.GetLength(1) - 1 && !visited[recurPlayerPos.x, recurPlayerPos.y + 1])
+    Vector2Int closest;
+
+    // -2 to ignore board border
+    if (recurPlayerPos.y < dangerBoard.GetLength(1) - 2 && !visited[recurPlayerPos.x, recurPlayerPos.y + 1])
     {
-      FindPossiblePositionsUp(recurPlayerPos, dangerBoard, visited, refPlayerPos, possiblePositions);
+      closest = FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x, recurPlayerPos.y + 1), dangerBoard, visited, refPlayerPos);
+      if (closest != nullAlternative)
+      {
+        possiblePositions.Add(closest);
+      }
     }
+
+    // 1 to ignore board border
     if (recurPlayerPos.y > 1 && !visited[recurPlayerPos.x, recurPlayerPos.y - 1])
     {
-      FindPossiblePositionsDown(recurPlayerPos, dangerBoard, visited, refPlayerPos, possiblePositions);
+      closest = FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x, recurPlayerPos.y - 1), dangerBoard, visited, refPlayerPos);
+      if (closest != nullAlternative)
+      {
+        possiblePositions.Add(closest);
+      }
     }
-    if (recurPlayerPos.x < dangerBoard.GetLength(0) - 1 && !visited[recurPlayerPos.x + 1, recurPlayerPos.y])
+
+    if (recurPlayerPos.x < dangerBoard.GetLength(0) - 2 && !visited[recurPlayerPos.x + 1, recurPlayerPos.y])
     {
-      FindPossiblePositionsRight(recurPlayerPos, dangerBoard, visited, refPlayerPos, possiblePositions);
+      closest = FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x + 1, recurPlayerPos.y), dangerBoard, visited, refPlayerPos);
+      if (closest != nullAlternative)
+      {
+        possiblePositions.Add(closest);
+      }
     }
+
     if (recurPlayerPos.x > 1 && !visited[recurPlayerPos.x - 1, recurPlayerPos.y])
     {
-      FindPossiblePositionsLeft(recurPlayerPos, dangerBoard, visited, refPlayerPos, possiblePositions);
+      closest = FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x - 1, recurPlayerPos.y), dangerBoard, visited, refPlayerPos);
+      if (closest != nullAlternative)
+      {
+        possiblePositions.Add(closest);
+      }
     }
-    return possiblePositions[UnityEngine.Random.Range(0, possiblePositions.Count)];
-  }
 
-  private void FindPossiblePositionsUp(Vector2Int recurPlayerPos, bool[,] dangerBoard, bool[,] visited, Vector2Int refPlayerPos, List<Vector2Int> possiblePositions)
-  {
     if (possiblePositions.Count > 0)
     {
-      if (NewPosLessThanCurrPos(recurPlayerPos, refPlayerPos, possiblePositions))
-      {
-        possiblePositions.Clear();
-        possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x, recurPlayerPos.y + 1), dangerBoard, visited, refPlayerPos));
-      }
-      else if (NewPosEqualToCurrPos(recurPlayerPos, refPlayerPos, possiblePositions))
-      {
-        possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x, recurPlayerPos.y + 1), dangerBoard, visited, refPlayerPos));
-      }
+      //Debug.Log("______Printing Possible Positions:______");
+      //foreach (Vector2Int v in possiblePositions)
+      //{
+      //  Debug.Log("Current player position is: " + refPlayerPos.ToString() + ". Comparing to position: " + v.ToString() + ". sqrMagnitude = " + (refPlayerPos - v).sqrMagnitude);
+      //}
+      return possiblePositions[UnityEngine.Random.Range(0, possiblePositions.Count)];
     }
     else
     {
-      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x, recurPlayerPos.y + 1), dangerBoard, visited, refPlayerPos));
+      //Debug.Log("_________Possible Positions is EMPTY._________");
+      return nullAlternative;
     }
-  }
-
-  private void FindPossiblePositionsDown(Vector2Int recurPlayerPos, bool[,] dangerBoard, bool[,] visited, Vector2Int refPlayerPos, List<Vector2Int> possiblePositions)
-  {
-    if (possiblePositions.Count > 0)
-    {
-      if (NewPosLessThanCurrPos(recurPlayerPos, refPlayerPos, possiblePositions))
-      {
-        possiblePositions.Clear();
-        possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x, recurPlayerPos.y - 1), dangerBoard, visited, refPlayerPos));
-      }
-      else if (NewPosEqualToCurrPos(recurPlayerPos, refPlayerPos, possiblePositions))
-      {
-        possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x, recurPlayerPos.y - 1), dangerBoard, visited, refPlayerPos));
-      }
-    }
-    else
-    {
-      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x, recurPlayerPos.y - 1), dangerBoard, visited, refPlayerPos));
-    }
-  }
-
-  private void FindPossiblePositionsRight(Vector2Int recurPlayerPos, bool[,] dangerBoard, bool[,] visited, Vector2Int refPlayerPos, List<Vector2Int> possiblePositions)
-  {
-    if (possiblePositions.Count > 0)
-    {
-      if (NewPosLessThanCurrPos(recurPlayerPos, refPlayerPos, possiblePositions))
-      {
-        possiblePositions.Clear();
-        possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x + 1, recurPlayerPos.y), dangerBoard, visited, refPlayerPos));
-      }
-      else if (NewPosEqualToCurrPos(recurPlayerPos, refPlayerPos, possiblePositions))
-      {
-        possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x + 1, recurPlayerPos.y), dangerBoard, visited, refPlayerPos));
-      }
-    }
-    else
-    {
-      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x + 1, recurPlayerPos.y), dangerBoard, visited, refPlayerPos));
-    }
-  }
-
-  private void FindPossiblePositionsLeft(Vector2Int recurPlayerPos, bool[,] dangerBoard, bool[,] visited, Vector2Int refPlayerPos, List<Vector2Int> possiblePositions)
-  {
-    if (possiblePositions.Count > 0)
-    {
-      if (NewPosLessThanCurrPos(recurPlayerPos, refPlayerPos, possiblePositions))
-      {
-        possiblePositions.Clear();
-        possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x - 1, recurPlayerPos.y), dangerBoard, visited, refPlayerPos));
-      }
-      else if (NewPosEqualToCurrPos(recurPlayerPos, refPlayerPos, possiblePositions))
-      {
-        possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x - 1, recurPlayerPos.y), dangerBoard, visited, refPlayerPos));
-      }
-    }
-    else
-    {
-      possiblePositions.Add(FindClosestEmptySpace(new Vector2Int(recurPlayerPos.x - 1, recurPlayerPos.y), dangerBoard, visited, refPlayerPos));
-    }
-  }
-
-  private static bool NewPosLessThanCurrPos(Vector2Int recurPlayerPos, Vector2Int refPlayerPos, List<Vector2Int> possiblePositions)
-  {
-    return (recurPlayerPos - refPlayerPos).sqrMagnitude < (possiblePositions[0] - refPlayerPos).sqrMagnitude;
-  }
-
-  private static bool NewPosEqualToCurrPos(Vector2Int recurPlayerPos, Vector2Int refPlayerPos, List<Vector2Int> possiblePositions)
-  {
-    return (recurPlayerPos - refPlayerPos).sqrMagnitude == (possiblePositions[0] - refPlayerPos).sqrMagnitude;
   }
 
   private List<Vector2Int> FindConnectedComponent(Vector2Int closestEmptySpace, bool[,] dangerBoard)
