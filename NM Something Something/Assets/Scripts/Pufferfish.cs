@@ -39,14 +39,10 @@ public class Pufferfish : MonoBehaviour {
   {
     yield return new WaitForSeconds(indicatorTime);
     animator.SetBool("IndicatorOff", true);
-    Debug.Log("Indicator On");
     yield return new WaitForSeconds(hardCodedAnimationTime);
     animator.SetBool("IndicatorOff", false);
-    Debug.Log("Indicator Off");
     MakeGameHarderEvent();
-    Debug.Log("Game is Harder");
     ResetShards();
-    Debug.Log("Reset Shards");
     DeactivatePufferfishEvent(gameObject);
   }
 
