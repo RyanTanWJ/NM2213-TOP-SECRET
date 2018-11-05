@@ -12,6 +12,12 @@ public class Pufferfish : MonoBehaviour {
   [SerializeField]
   List<GameObject> shards;
 
+  [SerializeField]
+  AudioSource blinking;
+
+  [SerializeField]
+  AudioSource splat;
+
   public delegate void MakeGameHarder();
   public static event MakeGameHarder MakeGameHarderEvent;
 
@@ -53,5 +59,15 @@ public class Pufferfish : MonoBehaviour {
       shard.gameObject.transform.localPosition = new Vector3(0, 0, 0);
       shard.gameObject.SetActive(false);
     }
+  }
+
+  public void Blink()
+  {
+    blinking.Play();
+  }
+
+  public void Splat()
+  {
+    splat.Play();
   }
 }
