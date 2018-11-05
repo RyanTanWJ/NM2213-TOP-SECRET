@@ -31,11 +31,21 @@ public class DeciderAI : MonoBehaviour
       while (hazards > 0 && connectedComponent.Count > 1 && (rows.Count > 0 || cols.Count > 0))
       {
         //Choose a Hazard
-        hazardToSpawn = hazardTypes[UnityEngine.Random.Range(0, hazardTypes.Count)];
+        Debug.Log(hazardTypes);
+        Debug.Log(hazardTypes.Count);
+        int test = UnityEngine.Random.Range(0, hazardTypes.Count);
+        Debug.Log(test);
+        hazardToSpawn = hazardTypes[test];
 
         //Get the player's "best position" if player has not yet been targetted
-        hazardSpawnPoint = playerTargetted ? new Vector2Int(rows[UnityEngine.Random.Range(0, rows.Count)], cols[UnityEngine.Random.Range(0, cols.Count)]) : connectedComponent[0];
-        
+        Debug.Log(connectedComponent);
+        int test2 = UnityEngine.Random.Range(0, rows.Count);
+        int test3 = UnityEngine.Random.Range(0, cols.Count);
+        Debug.Log(test2);
+        Debug.Log(test3);
+        hazardSpawnPoint = playerTargetted ? new Vector2Int(rows[test2], cols[test3]) : connectedComponent[0];
+        Debug.Log(hazardSpawnPoint);
+
         //Fairness Check
         List<Vector2Int> testTheWater;
 
@@ -55,19 +65,24 @@ public class DeciderAI : MonoBehaviour
         {
           //Choose a random border set to spawn from
           BoardManager.BorderSet[] borderSetList = { BoardManager.BorderSet.LEFT, BoardManager.BorderSet.RIGHT, BoardManager.BorderSet.TOP, BoardManager.BorderSet.BOT };
-          if (rows.Count == 0)
+          int test4;
+          if (rows.Count <= 1)
           {
-            borderSet = borderSetList[UnityEngine.Random.Range(2, borderSetList.Length)];
+            test4 = UnityEngine.Random.Range((borderSetList.Length / 2), borderSetList.Length); //Was it this line? Can't be, border set doesn't matter.
+            borderSet = borderSetList[test4];
           }
-          else if (cols.Count == 0)
+          else if (cols.Count <= 1)
           {
-            borderSet = borderSetList[UnityEngine.Random.Range(0, (borderSetList.Length / 2))];
+            test4 = UnityEngine.Random.Range(0, (borderSetList.Length / 2));
+            borderSet = borderSetList[test4];
           }
           else
           {
-            borderSet = borderSetList[UnityEngine.Random.Range(0, borderSetList.Length)];
+            test4 = UnityEngine.Random.Range(0, borderSetList.Length);
+            borderSet = borderSetList[test4];
           }
-
+          Debug.Log("Test4: " + test4);
+          Debug.Log(borderSet);
           //Test to see if the selected spawn point works
           if (borderSet == BoardManager.BorderSet.TOP || borderSet == BoardManager.BorderSet.BOT)
           {
@@ -110,7 +125,8 @@ public class DeciderAI : MonoBehaviour
     catch (ArgumentOutOfRangeException e)
     {
       Debug.LogError(e.StackTrace.ToString());
-      return null;
+      // Hot fix
+      return new List<HazardContainer>();
     }
   }
 
