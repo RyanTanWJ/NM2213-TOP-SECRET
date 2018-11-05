@@ -119,7 +119,10 @@ public class BoardManager : MonoBehaviour
     {
       currDelay += Time.deltaTime;
     }
+  }
 
+  private void LateUpdate()
+  {
     dangerBoard.UpdateDangerBoard(Time.deltaTime);
   }
 
