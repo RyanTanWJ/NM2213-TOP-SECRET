@@ -1330,14 +1330,22 @@ MonoBehaviour:
   tiledFloor: {fileID: 1806305495807970, guid: 938889cab40edf345ba2542eb5d97a04, type: 2}
   tabledFloor: {fileID: 1378249886032178, guid: 415e3db96de6c184abe3a53edbe03a23,
     type: 2}
-  tabledFloorAlter:
-  - {fileID: 1378249886032178, guid: d337f77bdec77b94f84c8fad0392c956, type: 2}
+  tabledFloorAlter: {fileID: 1378249886032178, guid: d337f77bdec77b94f84c8fad0392c956,
+    type: 2}
+  tabledFloorAlterTop:
   - {fileID: 1378249886032178, guid: 4e1a1dac2aec36346be254e6e352a2ce, type: 2}
   - {fileID: 1378249886032178, guid: ec15f63e1d2214f4fb6825552e1ffc36, type: 2}
   - {fileID: 1378249886032178, guid: fe7c0bf613cad82438d57b17c45a67e4, type: 2}
   - {fileID: 1378249886032178, guid: 95a44e28723cecb4d8e8093d6f69f666, type: 2}
   - {fileID: 1378249886032178, guid: 0e4a6c08dda4d2e469927c68c0c2edfc, type: 2}
   - {fileID: 1378249886032178, guid: 19b52c3f3bff31b47b3fcd8d324145a8, type: 2}
+  tabledFloorAlterBot:
+  - {fileID: 1378249886032178, guid: b7594490dc4907f41be3ae8415432545, type: 2}
+  - {fileID: 1378249886032178, guid: 4bd583a5f0eb97548b39804250f0ebfd, type: 2}
+  - {fileID: 1378249886032178, guid: e065b35a3561141499c81c4f3bf429c0, type: 2}
+  - {fileID: 1378249886032178, guid: b10408d75f6e9eb4fb04514b5662258c, type: 2}
+  - {fileID: 1378249886032178, guid: f2013164587a8c7449be2e0b392ca7e2, type: 2}
+  - {fileID: 1378249886032178, guid: 84dd82d26da051d4d89249511b41a926, type: 2}
   WarningBubbleIndicator: {fileID: 1611589908252152, guid: 39d7c9b51c4da0441911a8a29e86a6a0,
     type: 2}
   player: {fileID: 2001267867}
@@ -1599,7 +1607,7 @@ Transform:
   m_GameObject: {fileID: 1834199358}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 18, y: 17, z: 0}
-  m_LocalScale: {x: 6.5, y: 6.5, z: 1}
+  m_LocalScale: {x: 8, y: 8, z: 1}
   m_Children: []
   m_Father: {fileID: 1790523159}
   m_RootOrder: 0

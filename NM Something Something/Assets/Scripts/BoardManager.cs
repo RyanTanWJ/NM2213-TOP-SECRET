@@ -41,7 +41,11 @@ public class BoardManager : MonoBehaviour
   [SerializeField]
   GameObject tabledFloor;
   [SerializeField]
-  List<GameObject> tabledFloorAlter;
+  GameObject tabledFloorAlter;
+  [SerializeField]
+  List<GameObject> tabledFloorAlterTop;
+  [SerializeField]
+  List<GameObject> tabledFloorAlterBot;
 
   //The Prefab used for the arrow indicators
   [SerializeField]
@@ -128,14 +132,20 @@ public class BoardManager : MonoBehaviour
 
   void GeneratePlatforms()
   {
+    bool bottomOffset = false;
     for (int i = 0; i < maxRows; i++)
     {
       for (int j = 0; j < maxCols; j++)
       {
         GameObject tile;
-        if (i == 0)
+        if (i == 0 && (j == 0 || j == maxCols - 1))
         {
-          tile = Instantiate(tabledFloorAlter[0], borderPlatforms.transform);
+          tile = Instantiate(tabledFloorAlter, borderPlatforms.transform);
+        }
+        else if (i == 0)
+        {
+          bottomOffset = true;
+          tile = Instantiate(tabledFloorAlterBot[UnityEngine.Random.Range(0, tabledFloorAlterBot.Count)], borderPlatforms.transform);
         }
         else if (j == 0 || j == maxCols - 1)
         {
@@ -143,13 +153,18 @@ public class BoardManager : MonoBehaviour
         }
         else if (i == maxRows - 1)
         {
-          tile = Instantiate(tabledFloorAlter[UnityEngine.Random.Range(1, tabledFloorAlter.Count)], borderPlatforms.transform);
+          tile = Instantiate(tabledFloorAlterTop[UnityEngine.Random.Range(0, tabledFloorAlterTop.Count)], borderPlatforms.transform);
         }
         else
         {
           tile = Instantiate(tiledFloor, platforms.transform);
         }
         Vector3 tilePosition = GetGridPosition(i, j);
+        if (bottomOffset)
+        {
+          tilePosition.y -= offset / 2;
+          bottomOffset = false;
+        }
         tile.transform.position = tilePosition;
       }
     }
@@ -179,8 +194,8 @@ public class BoardManager : MonoBehaviour
     for (int j = 0; j < maxCols - 1; j++)
     {
       indicatorObj = Instantiate(WarningBubbleIndicator, indicatorHandler.transform);
-      tilePosition = GetGridPosition(-1, j);
-      tilePosition.y = tilePosition.y - offset / 2;
+      tilePosition = GetGridPosition(0, j);
+      tilePosition.y = tilePosition.y - offset / 3 *2;
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
       indicatorHandler.AddIndicatorToSet(BorderSet.BOT, indicator);
