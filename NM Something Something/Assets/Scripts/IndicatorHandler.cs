@@ -30,21 +30,21 @@ public class IndicatorHandler : MonoBehaviour{
       case BoardManager.BorderSet.LEFT:
         indicator.BorderSet = BoardManager.BorderSet.LEFT;
         LeftIndicators.Add(indicator);
+        indicator.transform.eulerAngles = new Vector3(0, 0, 90);
         break;
       case BoardManager.BorderSet.RIGHT:
         indicator.BorderSet = BoardManager.BorderSet.RIGHT;
         RightIndicators.Add(indicator);
-        indicator.transform.eulerAngles = new Vector3(0, 0, 180);
+        indicator.transform.eulerAngles = new Vector3(0, 0, -90);
         break;
       case BoardManager.BorderSet.BOT:
         indicator.BorderSet = BoardManager.BorderSet.BOT;
         BotIndicators.Add(indicator);
-        indicator.transform.eulerAngles = new Vector3(0, 0, 90);
+        indicator.transform.eulerAngles = new Vector3(0, 0, 180);
         break;
       case BoardManager.BorderSet.TOP:
         indicator.BorderSet = BoardManager.BorderSet.TOP;
         TopIndicators.Add(indicator);
-        indicator.transform.eulerAngles = new Vector3(0, 0, -90);
         break;
       default:
         Debug.LogError("The specified IndicatorSet does not exist!");
