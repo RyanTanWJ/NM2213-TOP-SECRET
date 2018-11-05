@@ -10,6 +10,7 @@ public class DeciderAI : MonoBehaviour
 {
   public List<HazardContainer> Decide(List<BoardManager.Hazard> hazardTypes, int hazards, float indicatorDelay, List<Vector2Int> connectedComponent, List<int> rows, List<int> cols)
   {
+    Debug.Log("I stopped in DecideAI.");
     try
     {
       List<HazardContainer> retVal = new List<HazardContainer>();

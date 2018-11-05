@@ -15,6 +15,7 @@ public class PositioningAI : MonoBehaviour
 
   public void Location(Vector2Int playerPos, bool[,] dangerBoard, out List<Vector2Int> connectedComponent, out List<int> rows, out List<int> cols)
   {
+    Debug.Log("I stopped in PositioningAI.");
     UpdateRetRowsAndCols(playerPos, dangerBoard);
 
     retRows.Sort();
