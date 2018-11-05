@@ -15,6 +15,9 @@ public class Indicator : MonoBehaviour{
   [SerializeField]
   private SpriteRenderer warningSymbol;
 
+  [SerializeField]
+  private AudioSource blinkingSound;
+
   private List<IndicatorInfoContainer> FlashTimers = new List<IndicatorInfoContainer>();
 
 	// Update is called once per frame
@@ -55,6 +58,12 @@ public class Indicator : MonoBehaviour{
         Debug.LogError("FAILURE");
         break;
     }
+  }
+
+  public void PlayBlinkingSound()
+  {
+    blinkingSound.volume = 0.0f;
+    blinkingSound.Play();
   }
 
   public void AddTimer(IndicatorInfoContainer time)
