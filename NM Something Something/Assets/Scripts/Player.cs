@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
     switch (collision.gameObject.tag)
     {
       case "Hazard":
+        Debug.Log(collision.gameObject.name + " killed you.");
         GameOverEvent();
         break;
       case "Nuisance":
