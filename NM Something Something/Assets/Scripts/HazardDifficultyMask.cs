@@ -21,7 +21,7 @@ public class HazardDifficultyMask {
   /// <summary>
   /// Introduce new Obstacle only after this many dodged obstacles
   /// </summary>
-  private const int collisionCountMax = 3;
+  private const int collisionCountMax = 1;
 
   public void IncreaseDifficulty()
   {

@@ -6,7 +6,7 @@ public class Claw : MonoBehaviour {
 
   private BoardManager.Direction clawDirection;
 
-  private float speed = 250.0f;
+  private float speed = 750.0f;
 
   public bool ShouldMove = false;
 

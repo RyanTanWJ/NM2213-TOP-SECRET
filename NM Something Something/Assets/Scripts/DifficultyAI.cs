@@ -12,7 +12,7 @@ public class DifficultyAI : MonoBehaviour {
   private const int OGHazards = 1;
 
   //Lower limit for the delay before indicator switches off and hazard spawns, currently set to average human reaction time
-  private const float minIndicatorDelay = 0.4f;
+  private const float minIndicatorDelay = 0.5f;
 
   //Original delay before indicator switches off and hazard spawns
   private const float OGIndicatorDelay = 1.5f;
