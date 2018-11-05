@@ -41,7 +41,7 @@ public class BoardManager : MonoBehaviour
   [SerializeField]
   GameObject tabledFloor;
   [SerializeField]
-  GameObject tabledFloorAlter;
+  List<GameObject> tabledFloorAlter;
 
   //The Prefab used for the arrow indicators
   [SerializeField]
@@ -135,7 +135,7 @@ public class BoardManager : MonoBehaviour
         GameObject tile;
         if (i == 0)
         {
-          tile = Instantiate(tabledFloorAlter, borderPlatforms.transform);
+          tile = Instantiate(tabledFloorAlter[0], borderPlatforms.transform);
         }
         else if (j == 0 || j == maxCols - 1)
         {
@@ -143,7 +143,7 @@ public class BoardManager : MonoBehaviour
         }
         else if (i == maxRows - 1)
         {
-          tile = Instantiate(tabledFloorAlter, borderPlatforms.transform);
+          tile = Instantiate(tabledFloorAlter[UnityEngine.Random.Range(1,tabledFloorAlter.Count)], borderPlatforms.transform);
         }
         else
         {

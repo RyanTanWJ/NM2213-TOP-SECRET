@@ -1515,7 +1515,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1471211568}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18, y: 17, z: -50}
+  m_LocalPosition: {x: 18, y: 18, z: -53}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1601,8 +1601,14 @@ MonoBehaviour:
   tiledFloor: {fileID: 1806305495807970, guid: 938889cab40edf345ba2542eb5d97a04, type: 2}
   tabledFloor: {fileID: 1378249886032178, guid: 415e3db96de6c184abe3a53edbe03a23,
     type: 2}
-  tabledFloorAlter: {fileID: 1378249886032178, guid: d337f77bdec77b94f84c8fad0392c956,
-    type: 2}
+  tabledFloorAlter:
+  - {fileID: 1378249886032178, guid: d337f77bdec77b94f84c8fad0392c956, type: 2}
+  - {fileID: 1378249886032178, guid: 4e1a1dac2aec36346be254e6e352a2ce, type: 2}
+  - {fileID: 1378249886032178, guid: ec15f63e1d2214f4fb6825552e1ffc36, type: 2}
+  - {fileID: 1378249886032178, guid: fe7c0bf613cad82438d57b17c45a67e4, type: 2}
+  - {fileID: 1378249886032178, guid: 95a44e28723cecb4d8e8093d6f69f666, type: 2}
+  - {fileID: 1378249886032178, guid: 0e4a6c08dda4d2e469927c68c0c2edfc, type: 2}
+  - {fileID: 1378249886032178, guid: 19b52c3f3bff31b47b3fcd8d324145a8, type: 2}
   arrowIndicator: {fileID: 1337558284444882, guid: 56c05475ae55d1e42834c21498b48dd5,
     type: 2}
   player: {fileID: 2001267867}
@@ -2177,7 +2183,7 @@ Transform:
   m_GameObject: {fileID: 1897848041}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 1}
+  m_LocalScale: {x: 0.45, y: 0.45, z: 1}
   m_Children:
   - {fileID: 365923078}
   m_Father: {fileID: 1507082874}
