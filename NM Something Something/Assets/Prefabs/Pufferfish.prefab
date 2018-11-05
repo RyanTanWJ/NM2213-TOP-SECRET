@@ -158,7 +158,7 @@ GameObject:
   - component: {fileID: 95424251802428680}
   - component: {fileID: 114055218044002664}
   m_Layer: 0
-  m_Name: Pufferfish 1
+  m_Name: Pufferfish
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -245,7 +245,7 @@ Transform:
   m_GameObject: {fileID: 1552875341455312}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.35, y: 0.35, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_Children:
   - {fileID: 4856970726996052}
   - {fileID: 4169094180487742}
@@ -524,6 +524,7 @@ MonoBehaviour:
   - {fileID: 1583409950972200}
   - {fileID: 1220225998742148}
   - {fileID: 1093136449541948}
+  - {fileID: 1546085556586380}
 --- !u!212 &212022791295871280
 SpriteRenderer:
   m_ObjectHideFlags: 1
