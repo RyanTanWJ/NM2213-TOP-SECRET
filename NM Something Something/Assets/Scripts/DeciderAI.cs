@@ -26,7 +26,6 @@ public class DeciderAI : MonoBehaviour
       float preIndicatorDelay;
       HazardContainer hazardContainer;
       bool playerTargetted = false;
-      int n = 1;
 
       //Terminate if spawn enough hazards, no more space for player to move, 
       while (hazards > 0 && connectedComponent.Count > 1 && (rows.Count > 0 || cols.Count > 0))
