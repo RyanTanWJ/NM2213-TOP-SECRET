@@ -10,7 +10,7 @@ public class BoardManager : MonoBehaviour
   /// </summary>
   public enum Direction { UP, DOWN, LEFT, RIGHT };
 
-  public enum Hazard { BOULDER, LASER, CLAW, PUFFERFISH };
+  public enum Hazard { SUSHI, WASABI, CLAW, PUFFERFISH };
 
   /// <summary>
   /// Represents the border on which certain objects such as Laser and Indicators are located.
@@ -45,7 +45,7 @@ public class BoardManager : MonoBehaviour
 
   //The Prefab used for the arrow indicators
   [SerializeField]
-  GameObject arrowIndicator;
+  GameObject WarningBubbleIndicator;
 
   [SerializeField]
   Player player;
@@ -143,7 +143,7 @@ public class BoardManager : MonoBehaviour
         }
         else if (i == maxRows - 1)
         {
-          tile = Instantiate(tabledFloorAlter[UnityEngine.Random.Range(1,tabledFloorAlter.Count)], borderPlatforms.transform);
+          tile = Instantiate(tabledFloorAlter[UnityEngine.Random.Range(1, tabledFloorAlter.Count)], borderPlatforms.transform);
         }
         else
         {
@@ -162,28 +162,32 @@ public class BoardManager : MonoBehaviour
     Vector3 tilePosition;
     for (int i = 0; i < maxRows - 1; i++)
     {
-      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
-      tilePosition = GetGridPosition(i, 0);
+      indicatorObj = Instantiate(WarningBubbleIndicator, indicatorHandler.transform);
+      tilePosition = GetGridPosition(i, -1);
+      tilePosition.x = tilePosition.x - offset / 2;
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
       indicatorHandler.AddIndicatorToSet(BorderSet.LEFT, indicator);
 
-      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
-      tilePosition = GetGridPosition(i, maxCols - 1);
+      indicatorObj = Instantiate(WarningBubbleIndicator, indicatorHandler.transform);
+      tilePosition = GetGridPosition(i, maxCols);
+      tilePosition.x = tilePosition.x + offset / 2;
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
       indicatorHandler.AddIndicatorToSet(BorderSet.RIGHT, indicator);
     }
     for (int j = 0; j < maxCols - 1; j++)
     {
-      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
-      tilePosition = GetGridPosition(0, j);
+      indicatorObj = Instantiate(WarningBubbleIndicator, indicatorHandler.transform);
+      tilePosition = GetGridPosition(-1, j);
+      tilePosition.y = tilePosition.y - offset / 2;
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
       indicatorHandler.AddIndicatorToSet(BorderSet.BOT, indicator);
 
-      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
-      tilePosition = GetGridPosition(maxRows - 1, j);
+      indicatorObj = Instantiate(WarningBubbleIndicator, indicatorHandler.transform);
+      tilePosition = GetGridPosition(maxRows, j);
+      tilePosition.y = tilePosition.y + offset / 2;
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
       indicatorHandler.AddIndicatorToSet(BorderSet.TOP, indicator);
@@ -393,10 +397,10 @@ public class BoardManager : MonoBehaviour
   {
     switch (hazardType)
     {
-      case Hazard.BOULDER:
+      case Hazard.SUSHI:
         TriggerBoulderHazard(direction, spawnPos);
         break;
-      case Hazard.LASER:
+      case Hazard.WASABI:
         TriggerLaserHazard(direction, spawnPos);
         break;
       case Hazard.CLAW:
@@ -473,7 +477,6 @@ public class BoardManager : MonoBehaviour
         MoveClaw(claw);
         break;
       default:
-        for (int i = 0; i < maxRows; i++)
         claw.SetClawDirection(Direction.DOWN);
         MoveClaw(claw);
         break;
@@ -546,13 +549,13 @@ public class BoardManager : MonoBehaviour
       {
         switch (hazardContainer.HazardToSpawn)
         {
-          case Hazard.BOULDER:
+          case Hazard.SUSHI:
             AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + boulderTime);
             break;
           case Hazard.CLAW:
             AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + clawTime);
             break;
-          case Hazard.LASER:
+          case Hazard.WASABI:
             AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + laserTime);
             break;
         }
@@ -561,13 +564,13 @@ public class BoardManager : MonoBehaviour
       {
         switch (hazardContainer.HazardToSpawn)
         {
-          case Hazard.BOULDER:
+          case Hazard.SUSHI:
             AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + boulderTime);
             break;
           case Hazard.CLAW:
             AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + clawTime);
             break;
-          case Hazard.LASER:
+          case Hazard.WASABI:
             AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + laserTime);
             break;
         }
