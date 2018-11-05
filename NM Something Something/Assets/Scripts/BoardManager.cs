@@ -134,9 +134,13 @@ public class BoardManager : MonoBehaviour
         {
           tile = Instantiate(tabledFloorAlter, borderPlatforms.transform);
         }
-        else if (j == 0 || i == maxRows - 1 || j == maxCols - 1)
+        else if (j == 0 || j == maxCols - 1)
         {
           tile = Instantiate(tabledFloor, borderPlatforms.transform);
+        }
+        else if (i == maxRows - 1)
+        {
+          tile = Instantiate(tabledFloorAlter, borderPlatforms.transform);
         }
         else
         {
