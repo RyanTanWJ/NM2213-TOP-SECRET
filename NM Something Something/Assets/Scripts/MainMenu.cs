@@ -44,14 +44,7 @@ public class MainMenu : MonoBehaviour {
   private void UpdateMainMenu(bool up)
   {
     MenuOptions[selectedOption].SwitchTextHighlight(false);
-    if (up)
-    {
-      selectedOption = ((selectedOption - 1) + MenuOptions.Count) % MenuOptions.Count;
-    }
-    else
-    {
-      selectedOption = (selectedOption + 1) % MenuOptions.Count;
-    }
+    selectedOption = (up ? selectedOption + (MenuOptions.Count - 1) : selectedOption + 1) % MenuOptions.Count;
     MenuOptions[selectedOption].SwitchTextHighlight(true);
   }
 
