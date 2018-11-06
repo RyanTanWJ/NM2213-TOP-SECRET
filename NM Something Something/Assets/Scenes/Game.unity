@@ -1346,6 +1346,20 @@ MonoBehaviour:
   - {fileID: 1378249886032178, guid: b10408d75f6e9eb4fb04514b5662258c, type: 2}
   - {fileID: 1378249886032178, guid: f2013164587a8c7449be2e0b392ca7e2, type: 2}
   - {fileID: 1378249886032178, guid: 84dd82d26da051d4d89249511b41a926, type: 2}
+  tabledFloorAlterLeft:
+  - {fileID: 1378249886032178, guid: 5dfb8d013eeb5af4ba399c5c36452245, type: 2}
+  - {fileID: 1378249886032178, guid: f7623b2bb5d61544c8b412e544a75d05, type: 2}
+  - {fileID: 1378249886032178, guid: 46df437678afef54f9e8a1ad1cc34831, type: 2}
+  - {fileID: 1378249886032178, guid: 352c8e081a9c3034ab051d91e8ad94b1, type: 2}
+  - {fileID: 1378249886032178, guid: 6a7dfdcf7032b3745b33f15466199d61, type: 2}
+  - {fileID: 1378249886032178, guid: 84bf5d1815b121e43bd0c36c1f474c74, type: 2}
+  tabledFloorAlterRight:
+  - {fileID: 1378249886032178, guid: dab52035c501d3749872c3c5274e0935, type: 2}
+  - {fileID: 1378249886032178, guid: 4d8664015bbb15c45b1a67530f41fdc4, type: 2}
+  - {fileID: 1378249886032178, guid: 55cf12853acf04c4ea56a04176002b28, type: 2}
+  - {fileID: 1378249886032178, guid: 1b3825fcf084fa74eb7982849b7c6ede, type: 2}
+  - {fileID: 1378249886032178, guid: 62e54e2d135fa4d4ba3b651c16555dce, type: 2}
+  - {fileID: 1378249886032178, guid: b57646b88bedb9e4b8ce74a4042ee426, type: 2}
   WarningBubbleIndicator: {fileID: 1611589908252152, guid: 39d7c9b51c4da0441911a8a29e86a6a0,
     type: 2}
   player: {fileID: 2001267867}

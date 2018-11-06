@@ -46,6 +46,10 @@ public class BoardManager : MonoBehaviour
   List<GameObject> tabledFloorAlterTop;
   [SerializeField]
   List<GameObject> tabledFloorAlterBot;
+  [SerializeField]
+  List<GameObject> tabledFloorAlterLeft;
+  [SerializeField]
+  List<GameObject> tabledFloorAlterRight;
 
   //The Prefab used for the arrow indicators
   [SerializeField]
@@ -132,38 +136,63 @@ public class BoardManager : MonoBehaviour
 
   void GeneratePlatforms()
   {
-    bool bottomOffset = false;
     for (int i = 0; i < maxRows; i++)
     {
       for (int j = 0; j < maxCols; j++)
       {
+        int randomiser;
+        GameObject tablePrefab;
         GameObject tile;
+        Vector3 tilePosition = GetGridPosition(i, j);
+        //Bottom Corners
         if (i == 0 && (j == 0 || j == maxCols - 1))
         {
           tile = Instantiate(tabledFloorAlter, borderPlatforms.transform);
         }
-        else if (i == 0)
-        {
-          bottomOffset = true;
-          tile = Instantiate(tabledFloorAlterBot[UnityEngine.Random.Range(0, tabledFloorAlterBot.Count)], borderPlatforms.transform);
-        }
-        else if (j == 0 || j == maxCols - 1)
+        //Top Corners
+        else if (i == maxRows - 1 && (j == 0 || j == maxCols - 1))
         {
           tile = Instantiate(tabledFloor, borderPlatforms.transform);
         }
+        //Bottom Row
+        else if (i == 0)
+        {
+          randomiser = UnityEngine.Random.Range(0, tabledFloorAlterBot.Count);
+          tablePrefab = tabledFloorAlterBot[randomiser];
+          tile = Instantiate(tablePrefab, borderPlatforms.transform);
+          tabledFloorAlterBot.RemoveAt(randomiser);
+          tilePosition.y -= offset / 4;
+        }
+        //Top Row
         else if (i == maxRows - 1)
         {
-          tile = Instantiate(tabledFloorAlterTop[UnityEngine.Random.Range(0, tabledFloorAlterTop.Count)], borderPlatforms.transform);
+          randomiser = UnityEngine.Random.Range(0, tabledFloorAlterTop.Count);
+          tablePrefab = tabledFloorAlterTop[randomiser];
+          tile = Instantiate(tablePrefab, borderPlatforms.transform);
+          tabledFloorAlterTop.RemoveAt(randomiser);
+          tilePosition.y += offset / 4;
+        }
+        //Left Edge
+        else if (j == 0)
+        {
+          randomiser = UnityEngine.Random.Range(0, tabledFloorAlterLeft.Count);
+          tablePrefab = tabledFloorAlterLeft[randomiser];
+          tile = Instantiate(tablePrefab, borderPlatforms.transform);
+          tabledFloorAlterLeft.RemoveAt(randomiser);
+          tilePosition.x -= offset / 4;
+        }
+        //Right Edge
+        else if (j == maxCols - 1)
+        {
+          randomiser = UnityEngine.Random.Range(0, tabledFloorAlterRight.Count);
+          tablePrefab = tabledFloorAlterRight[randomiser];
+          tile = Instantiate(tablePrefab, borderPlatforms.transform);
+          tabledFloorAlterRight.RemoveAt(randomiser);
+          tilePosition.x += offset / 4;
         }
         else
         {
           tile = Instantiate(tiledFloor, platforms.transform);
-        }
-        Vector3 tilePosition = GetGridPosition(i, j);
-        if (bottomOffset)
-        {
-          tilePosition.y -= offset / 2;
-          bottomOffset = false;
         }
         tile.transform.position = tilePosition;
       }
@@ -189,13 +218,14 @@ public class BoardManager : MonoBehaviour
       tilePosition.x = tilePosition.x + offset / 2;
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
+      indicator.SetAngrySymbolPositionForRightIndicators();
       indicatorHandler.AddIndicatorToSet(BorderSet.RIGHT, indicator);
     }
     for (int j = 0; j < maxCols - 1; j++)
     {
       indicatorObj = Instantiate(WarningBubbleIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(0, j);
-      tilePosition.y = tilePosition.y - offset / 3 *2;
+      tilePosition.y = tilePosition.y - offset / 3 * 2;
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
       indicatorHandler.AddIndicatorToSet(BorderSet.BOT, indicator);

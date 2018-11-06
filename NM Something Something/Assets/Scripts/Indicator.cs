@@ -21,6 +21,9 @@ public class Indicator : MonoBehaviour{
   [SerializeField]
   private AudioSource blinkingSound;
 
+  [SerializeField]
+  private GameObject angrySymbol;
+
   private List<IndicatorInfoContainer> FlashTimers = new List<IndicatorInfoContainer>();
 
 	// Update is called once per frame
@@ -77,5 +80,10 @@ public class Indicator : MonoBehaviour{
   public void SetWarningSymbolOrientation(Vector3 eulerAngles)
   {
     warningHazardsTransform.eulerAngles = eulerAngles;
+  }
+
+  public void SetAngrySymbolPositionForRightIndicators()
+  {
+    angrySymbol.transform.localPosition = new Vector3(-angrySymbol.transform.localPosition.x, angrySymbol.transform.localPosition.y, angrySymbol.transform.localPosition.z);
   }
 }

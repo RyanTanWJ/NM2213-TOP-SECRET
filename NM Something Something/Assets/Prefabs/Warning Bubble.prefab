@@ -293,13 +293,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BorderSet: 0
-  warningSymbols:
+  warningHazards:
   - {fileID: 21300000, guid: 2cb1041e76ea5824a87544d8ce347a81, type: 3}
   - {fileID: 21300000, guid: 8a226844d9ad5d9439b7e78108de5ddd, type: 3}
   - {fileID: 21300000, guid: 554df84ae380d3d4693d17c8a1dd901b, type: 3}
   - {fileID: 21300000, guid: 7cedfa3b2021b714ebf6bbd1b80f2663, type: 3}
-  warningSymbol: {fileID: 212077368958867264}
+  warningHazard: {fileID: 212077368958867264}
+  warningHazardsTransform: {fileID: 4388321510473668}
   blinkingSound: {fileID: 82815865908412448}
+  angrySymbol: {fileID: 1793108854934348}
 --- !u!212 &212077368958867264
 SpriteRenderer:
   m_ObjectHideFlags: 1
