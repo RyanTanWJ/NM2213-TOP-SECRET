@@ -111,4 +111,9 @@ public class PauseMenu : MonoBehaviour {
     pauseMenuUI.SetActive(true);
     Resume();
   }
+
+  public bool IsPaused
+  {
+    get { return GameIsPaused; }
+  }
 }
