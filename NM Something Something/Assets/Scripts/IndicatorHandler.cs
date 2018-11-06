@@ -50,6 +50,7 @@ public class IndicatorHandler : MonoBehaviour{
         Debug.LogError("The specified IndicatorSet does not exist!");
         break;
     }
+    indicator.SetWarningSymbolOrientation(new Vector3(0, 0, 0));
   }
 
   public void AcitvateIndicator(BoardManager.Hazard hazard, BoardManager.BorderSet indicatorSet, int index, float time)

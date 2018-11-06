@@ -10,10 +10,13 @@ public class Indicator : MonoBehaviour{
   public BoardManager.BorderSet BorderSet;
 
   [SerializeField]
-  private List<Sprite> warningSymbols;
+  private List<Sprite> warningHazards;
 
   [SerializeField]
-  private SpriteRenderer warningSymbol;
+  private SpriteRenderer warningHazard;
+
+  [SerializeField]
+  private Transform warningHazardsTransform;
 
   [SerializeField]
   private AudioSource blinkingSound;
@@ -43,16 +46,16 @@ public class Indicator : MonoBehaviour{
     switch (hazard)
     {
       case BoardManager.Hazard.SUSHI:
-        warningSymbol.sprite = warningSymbols[1];
+        warningHazard.sprite = warningHazards[1];
         break;
       case BoardManager.Hazard.CLAW:
-        warningSymbol.sprite = warningSymbols[2];
+        warningHazard.sprite = warningHazards[2];
         break;
       case BoardManager.Hazard.WASABI:
-        warningSymbol.sprite = warningSymbols[3];
+        warningHazard.sprite = warningHazards[3];
         break;
       case BoardManager.Hazard.PUFFERFISH:
-        warningSymbol.sprite = warningSymbols[0];
+        warningHazard.sprite = warningHazards[0];
         break;
       default:
         Debug.LogError("FAILURE");
@@ -69,5 +72,10 @@ public class Indicator : MonoBehaviour{
   public void AddTimer(IndicatorInfoContainer time)
   {
     FlashTimers.Add(time);
+  }
+
+  public void SetWarningSymbolOrientation(Vector3 eulerAngles)
+  {
+    warningHazardsTransform.eulerAngles = eulerAngles;
   }
 }
