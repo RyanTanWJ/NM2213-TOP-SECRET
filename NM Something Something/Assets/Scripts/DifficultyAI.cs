@@ -47,7 +47,7 @@ public class DifficultyAI : MonoBehaviour {
     List<BoardManager.Hazard> retList = new List<BoardManager.Hazard>();
     if (hazardDifficulty.ContainsBoulder())
     {
-      retList.Add(BoardManager.Hazard.BOULDER);
+      retList.Add(BoardManager.Hazard.SUSHI);
     }
     if (hazardDifficulty.ContainsClaw())
     {
@@ -55,7 +55,7 @@ public class DifficultyAI : MonoBehaviour {
     }
     if (hazardDifficulty.ContainsLaser())
     {
-      retList.Add(BoardManager.Hazard.LASER);
+      retList.Add(BoardManager.Hazard.WASABI);
     }
     if (hazardDifficulty.ContainsPufferfish())
     {

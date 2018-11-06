@@ -6,19 +6,10 @@ public class ClawDebuff : MonoBehaviour {
 
   private bool isActive = false;
 
-  private BoardManager.Direction breakDirection;
+  private int breakDirection = 0;
 
   [SerializeField]
-  GameObject ClawDebuffSprite;
-
-  [SerializeField]
-  GameObject DirectionIndicator;
-
-  private void Start()
-  {
-    ClawDebuffSprite.SetActive(false);
-    DirectionIndicator.SetActive(false);
-  }
+  List<GameObject> ClawDebuffSprites;
 
   public bool DebuffActive
   {
@@ -28,35 +19,17 @@ public class ClawDebuff : MonoBehaviour {
   public void NewClawDebuff()
   {
     isActive = true;
-    switch (Random.Range(0, 4))
-    {
-      case 0:
-        breakDirection = BoardManager.Direction.RIGHT;
-        break;
-      case 1:
-        breakDirection = BoardManager.Direction.LEFT;
-        DirectionIndicator.transform.eulerAngles = new Vector3(0, 0, 180);
-        break;
-      case 2:
-        breakDirection = BoardManager.Direction.UP;
-        DirectionIndicator.transform.eulerAngles = new Vector3(0, 0, 90);
-        break;
-      default:
-        breakDirection = BoardManager.Direction.DOWN;
-        DirectionIndicator.transform.eulerAngles = new Vector3(0, 0, -90);
-        break;
-    }
-    ClawDebuffSprite.SetActive(true);
-    DirectionIndicator.SetActive(true);
+    ClawDebuffSprites[breakDirection].SetActive(false);
+    breakDirection = Random.Range(0, 4);
+    ClawDebuffSprites[breakDirection].SetActive(true);
   }
 
-  public void AttemptBreakOut(BoardManager.Direction direction)
+  public void AttemptBreakOut(int direction)
   {
     if (direction == breakDirection)
     {
       isActive = false;
-      ClawDebuffSprite.SetActive(false);
-      DirectionIndicator.SetActive(false);
+      ClawDebuffSprites[direction].SetActive(false);
     }
   }
 }

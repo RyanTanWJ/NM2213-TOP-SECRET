@@ -10,7 +10,7 @@ public class BoardManager : MonoBehaviour
   /// </summary>
   public enum Direction { UP, DOWN, LEFT, RIGHT };
 
-  public enum Hazard { BOULDER, LASER, CLAW, PUFFERFISH };
+  public enum Hazard { SUSHI, WASABI, CLAW, PUFFERFISH };
 
   /// <summary>
   /// Represents the border on which certain objects such as Laser and Indicators are located.
@@ -42,10 +42,18 @@ public class BoardManager : MonoBehaviour
   GameObject tabledFloor;
   [SerializeField]
   GameObject tabledFloorAlter;
+  [SerializeField]
+  List<GameObject> tabledFloorAlterTop;
+  [SerializeField]
+  List<GameObject> tabledFloorAlterBot;
+  [SerializeField]
+  List<GameObject> tabledFloorAlterLeft;
+  [SerializeField]
+  List<GameObject> tabledFloorAlterRight;
 
   //The Prefab used for the arrow indicators
   [SerializeField]
-  GameObject arrowIndicator;
+  GameObject WarningBubbleIndicator;
 
   [SerializeField]
   Player player;
@@ -119,7 +127,10 @@ public class BoardManager : MonoBehaviour
     {
       currDelay += Time.deltaTime;
     }
+  }
 
+  private void LateUpdate()
+  {
     dangerBoard.UpdateDangerBoard(Time.deltaTime);
   }
 
@@ -129,24 +140,60 @@ public class BoardManager : MonoBehaviour
     {
       for (int j = 0; j < maxCols; j++)
       {
+        int randomiser;
+        GameObject tablePrefab;
         GameObject tile;
-        if (i == 0)
+        Vector3 tilePosition = GetGridPosition(i, j);
+        //Bottom Corners
+        if (i == 0 && (j == 0 || j == maxCols - 1))
         {
           tile = Instantiate(tabledFloorAlter, borderPlatforms.transform);
         }
-        else if (j == 0 || j == maxCols - 1)
+        //Top Corners
+        else if (i == maxRows - 1 && (j == 0 || j == maxCols - 1))
         {
           tile = Instantiate(tabledFloor, borderPlatforms.transform);
         }
+        //Bottom Row
+        else if (i == 0)
+        {
+          randomiser = UnityEngine.Random.Range(0, tabledFloorAlterBot.Count);
+          tablePrefab = tabledFloorAlterBot[randomiser];
+          tile = Instantiate(tablePrefab, borderPlatforms.transform);
+          tabledFloorAlterBot.RemoveAt(randomiser);
+          tilePosition.y -= offset / 4;
+        }
+        //Top Row
         else if (i == maxRows - 1)
         {
-          tile = Instantiate(tabledFloorAlter, borderPlatforms.transform);
+          randomiser = UnityEngine.Random.Range(0, tabledFloorAlterTop.Count);
+          tablePrefab = tabledFloorAlterTop[randomiser];
+          tile = Instantiate(tablePrefab, borderPlatforms.transform);
+          tabledFloorAlterTop.RemoveAt(randomiser);
+          tilePosition.y += offset / 4;
+        }
+        //Left Edge
+        else if (j == 0)
+        {
+          randomiser = UnityEngine.Random.Range(0, tabledFloorAlterLeft.Count);
+          tablePrefab = tabledFloorAlterLeft[randomiser];
+          tile = Instantiate(tablePrefab, borderPlatforms.transform);
+          tabledFloorAlterLeft.RemoveAt(randomiser);
+          tilePosition.x -= offset / 4;
+        }
+        //Right Edge
+        else if (j == maxCols - 1)
+        {
+          randomiser = UnityEngine.Random.Range(0, tabledFloorAlterRight.Count);
+          tablePrefab = tabledFloorAlterRight[randomiser];
+          tile = Instantiate(tablePrefab, borderPlatforms.transform);
+          tabledFloorAlterRight.RemoveAt(randomiser);
+          tilePosition.x += offset / 4;
         }
         else
         {
           tile = Instantiate(tiledFloor, platforms.transform);
         }
-        Vector3 tilePosition = GetGridPosition(i, j);
         tile.transform.position = tilePosition;
       }
     }
@@ -159,28 +206,33 @@ public class BoardManager : MonoBehaviour
     Vector3 tilePosition;
     for (int i = 0; i < maxRows - 1; i++)
     {
-      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
-      tilePosition = GetGridPosition(i, 0);
+      indicatorObj = Instantiate(WarningBubbleIndicator, indicatorHandler.transform);
+      tilePosition = GetGridPosition(i, -1);
+      tilePosition.x = tilePosition.x - offset / 2;
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
       indicatorHandler.AddIndicatorToSet(BorderSet.LEFT, indicator);
 
-      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
-      tilePosition = GetGridPosition(i, maxCols - 1);
+      indicatorObj = Instantiate(WarningBubbleIndicator, indicatorHandler.transform);
+      tilePosition = GetGridPosition(i, maxCols);
+      tilePosition.x = tilePosition.x + offset / 2;
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
+      indicator.SetAngrySymbolPositionForRightIndicators();
       indicatorHandler.AddIndicatorToSet(BorderSet.RIGHT, indicator);
     }
     for (int j = 0; j < maxCols - 1; j++)
     {
-      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
+      indicatorObj = Instantiate(WarningBubbleIndicator, indicatorHandler.transform);
       tilePosition = GetGridPosition(0, j);
+      tilePosition.y = tilePosition.y - offset / 3 * 2;
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
       indicatorHandler.AddIndicatorToSet(BorderSet.BOT, indicator);
 
-      indicatorObj = Instantiate(arrowIndicator, indicatorHandler.transform);
-      tilePosition = GetGridPosition(maxRows - 1, j);
+      indicatorObj = Instantiate(WarningBubbleIndicator, indicatorHandler.transform);
+      tilePosition = GetGridPosition(maxRows, j);
+      tilePosition.y = tilePosition.y + offset / 2;
       indicatorObj.transform.position = tilePosition;
       indicator = indicatorObj.GetComponent<Indicator>();
       indicatorHandler.AddIndicatorToSet(BorderSet.TOP, indicator);
@@ -390,10 +442,10 @@ public class BoardManager : MonoBehaviour
   {
     switch (hazardType)
     {
-      case Hazard.BOULDER:
+      case Hazard.SUSHI:
         TriggerBoulderHazard(direction, spawnPos);
         break;
-      case Hazard.LASER:
+      case Hazard.WASABI:
         TriggerLaserHazard(direction, spawnPos);
         break;
       case Hazard.CLAW:
@@ -470,7 +522,6 @@ public class BoardManager : MonoBehaviour
         MoveClaw(claw);
         break;
       default:
-        for (int i = 0; i < maxRows; i++)
         claw.SetClawDirection(Direction.DOWN);
         MoveClaw(claw);
         break;
@@ -543,13 +594,13 @@ public class BoardManager : MonoBehaviour
       {
         switch (hazardContainer.HazardToSpawn)
         {
-          case Hazard.BOULDER:
+          case Hazard.SUSHI:
             AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + boulderTime);
             break;
           case Hazard.CLAW:
             AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + clawTime);
             break;
-          case Hazard.LASER:
+          case Hazard.WASABI:
             AddVerticalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + laserTime);
             break;
         }
@@ -558,13 +609,13 @@ public class BoardManager : MonoBehaviour
       {
         switch (hazardContainer.HazardToSpawn)
         {
-          case Hazard.BOULDER:
+          case Hazard.SUSHI:
             AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + boulderTime);
             break;
           case Hazard.CLAW:
             AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + clawTime);
             break;
-          case Hazard.LASER:
+          case Hazard.WASABI:
             AddHorizontalDangerBoard(hazardContainer.HazardSpawnPoint, hazardContainer.CombinedDelay + laserTime);
             break;
         }

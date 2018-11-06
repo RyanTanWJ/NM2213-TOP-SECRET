@@ -9,16 +9,13 @@ using UnityEngine;
 /// </summary>
 public class PositioningAI : MonoBehaviour
 {
-  private List<int> retRows = new List<int>();
-  private List<int> retCols = new List<int>();
-  List<Vector2Int> retConnectedComponent = new List<Vector2Int>();
-
-  private bool[,] visited;
-
-  private readonly Vector2Int nullAlternative = new Vector2Int(int.MaxValue, int.MaxValue);
+  private List<int> retRows;
+  private List<int> retCols;
+  List<Vector2Int> retConnectedComponent;
 
   public void Location(Vector2Int playerPos, bool[,] dangerBoard, out List<Vector2Int> connectedComponent, out List<int> rows, out List<int> cols)
   {
+    Debug.Log("I stopped in PositioningAI.");
     UpdateRetRowsAndCols(playerPos, dangerBoard);
 
     retRows.Sort();
@@ -34,9 +31,7 @@ public class PositioningAI : MonoBehaviour
     retRows = new List<int>();
     retCols = new List<int>();
 
-    visited = new bool[dangerBoard.GetLength(0), dangerBoard.GetLength(1)];
-
-    Vector2Int playerClosestEmptySpace = FindClosestEmptySpace(playerPos, dangerBoard, visited, playerPos);
+    Vector2Int playerClosestEmptySpace = FindClosestEmptySpace(playerPos, dangerBoard);
 
     retConnectedComponent = FindConnectedComponent(playerClosestEmptySpace, dangerBoard);
 
@@ -56,8 +51,45 @@ public class PositioningAI : MonoBehaviour
   //___NEEDS___
   //________SANITY________
   //______________CHECK______________
-  private Vector2Int FindClosestEmptySpace(Vector2Int recurPlayerPos, bool[,] dangerBoard, bool[,] visited, Vector2Int refPlayerPos)
+  private Vector2Int FindClosestEmptySpace(Vector2Int recurPlayerPos, bool[,] dangerBoard)
   {
+    if (!dangerBoard[recurPlayerPos.x, recurPlayerPos.y])
+    {
+      return recurPlayerPos;
+    }
+
+    List<Vector2Int> closestTiles = new List<Vector2Int>();
+    for (int i=0; i < dangerBoard.GetLength(0); i++)
+    {
+      for (int j=0; j<dangerBoard.GetLength(1); j++)
+      {
+        //Only check if not a danger zone
+        if (!dangerBoard[i, j])
+        {
+          Vector2Int tileInQuestion = new Vector2Int(i,j);
+          if (closestTiles.Count > 0)
+          {
+            //if result is closer then replace
+            if ((closestTiles[0] - recurPlayerPos).sqrMagnitude > (tileInQuestion - recurPlayerPos).sqrMagnitude)
+            {
+              closestTiles.Clear();
+              closestTiles.Add(tileInQuestion);
+            }
+            //if result is equal then add to
+            else if ((closestTiles[0] - recurPlayerPos).sqrMagnitude == (tileInQuestion - recurPlayerPos).sqrMagnitude)
+            {
+              closestTiles.Add(tileInQuestion);
+            }
+          }
+          else
+          {
+            closestTiles.Add(tileInQuestion);
+          }
+        }
+      }
+    }
+    return closestTiles[UnityEngine.Random.Range(0, closestTiles.Count)];
+    /*
     if (!dangerBoard[recurPlayerPos.x, recurPlayerPos.y])
     {
       return recurPlayerPos;
@@ -121,6 +153,7 @@ public class PositioningAI : MonoBehaviour
       //Debug.Log("_________Possible Positions is EMPTY._________");
       return nullAlternative;
     }
+    */
   }
 
   private List<Vector2Int> FindConnectedComponent(Vector2Int closestEmptySpace, bool[,] dangerBoard)

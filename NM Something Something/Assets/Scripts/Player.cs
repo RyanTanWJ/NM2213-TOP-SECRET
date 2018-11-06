@@ -17,7 +17,9 @@ public class Player : MonoBehaviour
 
   [SerializeField]
   private ClawDebuff clawDebuff;
-  
+  [SerializeField]
+  private SpriteRenderer self;
+
   // Update is called once per frame
   void Update ()
   {
@@ -29,11 +31,13 @@ public class Player : MonoBehaviour
     switch (collision.gameObject.tag)
     {
       case "Hazard":
+        Debug.Log(collision.gameObject.name + " killed you.");
         GameOverEvent();
         break;
       case "Nuisance":
         DebuffEvent(collision.gameObject);
         clawDebuff.NewClawDebuff();
+        self.enabled = false;
         break;
       default:
         break;
@@ -46,7 +50,8 @@ public class Player : MonoBehaviour
     {
       if (clawDebuff.DebuffActive)
       {
-        clawDebuff.AttemptBreakOut(BoardManager.Direction.UP);
+        clawDebuff.AttemptBreakOut(0);
+        ReEnablePlayerSprite();
         return;
       }
       PlayerMoveEvent(BoardManager.Direction.UP);
@@ -55,7 +60,8 @@ public class Player : MonoBehaviour
     {
       if (clawDebuff.DebuffActive)
       {
-        clawDebuff.AttemptBreakOut(BoardManager.Direction.DOWN);
+        clawDebuff.AttemptBreakOut(1);
+        ReEnablePlayerSprite();
         return;
       }
       PlayerMoveEvent(BoardManager.Direction.DOWN);
@@ -64,7 +70,8 @@ public class Player : MonoBehaviour
     {
       if (clawDebuff.DebuffActive)
       {
-        clawDebuff.AttemptBreakOut(BoardManager.Direction.LEFT);
+        clawDebuff.AttemptBreakOut(2);
+        ReEnablePlayerSprite();
         return;
       }
       PlayerMoveEvent(BoardManager.Direction.LEFT);
@@ -73,10 +80,19 @@ public class Player : MonoBehaviour
     {
       if (clawDebuff.DebuffActive)
       {
-        clawDebuff.AttemptBreakOut(BoardManager.Direction.RIGHT);
+        clawDebuff.AttemptBreakOut(3);
+        ReEnablePlayerSprite();
         return;
       }
       PlayerMoveEvent(BoardManager.Direction.RIGHT);
+    }
+  }
+
+  private void ReEnablePlayerSprite()
+  {
+    if (!clawDebuff.DebuffActive)
+    {
+      self.enabled = true;
     }
   }
 }
