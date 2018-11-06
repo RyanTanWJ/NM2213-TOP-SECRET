@@ -9,8 +9,10 @@ public class MainMenu : MonoBehaviour {
   public static event MenuSelect MenuSelectEvent;
   
   [SerializeField]
-  List<MenuItem> MenuOptions;
-  
+  private List<MenuItem> MenuOptions;
+  [SerializeField]
+  private AudioSource StartGameJingle;
+
   int selectedOption;
 
   // Use this for initialization
@@ -37,6 +39,7 @@ public class MainMenu : MonoBehaviour {
     }
     else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
     {
+      StartGameJingle.Play();
       MenuSelectEvent(selectedOption);
     }
   }
@@ -44,14 +47,7 @@ public class MainMenu : MonoBehaviour {
   private void UpdateMainMenu(bool up)
   {
     MenuOptions[selectedOption].SwitchTextHighlight(false);
-    if (up)
-    {
-      selectedOption = ((selectedOption - 1) + MenuOptions.Count) % MenuOptions.Count;
-    }
-    else
-    {
-      selectedOption = (selectedOption + 1) % MenuOptions.Count;
-    }
+    selectedOption = (up ? selectedOption + (MenuOptions.Count - 1) : selectedOption + 1) % MenuOptions.Count;
     MenuOptions[selectedOption].SwitchTextHighlight(true);
   }
 

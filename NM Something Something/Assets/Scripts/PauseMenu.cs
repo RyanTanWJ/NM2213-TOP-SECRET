@@ -12,18 +12,26 @@ public class PauseMenu : MonoBehaviour {
   private GameObject pauseMenuUI;
 
   [SerializeField]
-  private TMPro.TextMeshProUGUI displayText;
+  List<MenuItem> MenuOptions;
 
-  [SerializeField]
-  private Image background;
-
+  int selectedOption = 0;
   private const float countdown = 3.1f;
+  
+  [SerializeField]
+  private Image countdownImage;
+  [SerializeField]
+  private List<Sprite> cdSprites;
 
   //Ensure that the player doesn't break the game by start and stopping during countdown
   private bool disableInput = false;
-	
-	// Update is called once per frame
-	void Update () {
+
+  private void Start()
+  {
+    MenuOptions[selectedOption].SwitchTextHighlight(true);
+  }
+
+  // Update is called once per frame
+  void Update () {
     if (!disableInput)
     {
       if (Input.GetKeyDown(KeyCode.Escape))
@@ -36,9 +44,42 @@ public class PauseMenu : MonoBehaviour {
         {
           Pause();
         }
+      }else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+      {
+        UpdatePauseMenu(true);
+      }
+      else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+      {
+        UpdatePauseMenu(false);
+      }
+      else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
+      {
+        ProcessSelection(selectedOption);
       }
     }
 	}
+
+  private void ProcessSelection(int selectedOption)
+  {
+    switch (selectedOption)
+    {
+      case 0:
+        StartCoroutine(CountdownToResume(countdown));
+        break;
+      default:
+        Application.Quit();
+        break;
+    }
+  }
+
+  
+
+  private void UpdatePauseMenu(bool up)
+  {
+    MenuOptions[selectedOption].SwitchTextHighlight(false);
+    selectedOption = (up ? selectedOption + (MenuOptions.Count - 1) : selectedOption + 1) % MenuOptions.Count;
+    MenuOptions[selectedOption].SwitchTextHighlight(true);
+  }
 
   private void Resume()
   {
@@ -57,12 +98,22 @@ public class PauseMenu : MonoBehaviour {
 
   private IEnumerator CountdownToResume(float cd)
   {
+    pauseMenuUI.SetActive(false);
+    disableInput = true;
+    countdownImage.enabled = true;
     while (cd > 0)
     {
-      displayText.text = Mathf.CeilToInt(cd-0.2f).ToString();
+      countdownImage.sprite = cdSprites[Mathf.CeilToInt(cd-0.2f)];
       yield return new WaitForEndOfFrame();
       cd -= Time.unscaledDeltaTime;
     }
+    countdownImage.enabled = false;
+    pauseMenuUI.SetActive(true);
     Resume();
+  }
+
+  public bool IsPaused
+  {
+    get { return GameIsPaused; }
   }
 }

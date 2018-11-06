@@ -19,6 +19,8 @@ public class Player : MonoBehaviour
   private ClawDebuff clawDebuff;
   [SerializeField]
   private SpriteRenderer self;
+  [SerializeField]
+  private PauseMenu pause;
 
   // Update is called once per frame
   void Update ()
@@ -46,6 +48,10 @@ public class Player : MonoBehaviour
 
   private void CheckForPlayerInput()
   {
+    if (pause.IsPaused)
+    {
+      return;
+    }
     if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
     {
       if (clawDebuff.DebuffActive)
