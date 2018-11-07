@@ -27,6 +27,11 @@ public class Player : MonoBehaviour
 
   private bool gameOver = false;
 
+  private void OnEnable()
+  {
+    pause.OffMenu();
+  }
+
   // Update is called once per frame
   void Update ()
   {

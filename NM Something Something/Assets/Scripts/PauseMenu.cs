@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PauseMenu : MonoBehaviour {
+public class PauseMenu : MonoBehaviour
+{
+  public delegate void BackToMainMenu();
+  public static event BackToMainMenu BackToMainMenuEvent;
 
   public static bool GameIsPaused = false;
 
@@ -67,7 +70,8 @@ public class PauseMenu : MonoBehaviour {
         StartCoroutine(CountdownToResume(countdown));
         break;
       default:
-        Application.Quit();
+        ResumeAlt();
+        BackToMainMenuEvent();
         break;
     }
   }
@@ -86,6 +90,12 @@ public class PauseMenu : MonoBehaviour {
     disableInput = false;
     GameIsPaused = false;
     pauseMenuUI.SetActive(GameIsPaused);
+    Time.timeScale = 1.0f;
+  }
+  private void ResumeAlt()
+  {
+    disableInput = false;
+    GameIsPaused = false;
     Time.timeScale = 1.0f;
   }
 
@@ -115,5 +125,10 @@ public class PauseMenu : MonoBehaviour {
   public bool IsPaused
   {
     get { return GameIsPaused; }
+  }
+
+  public void OffMenu()
+  {
+    pauseMenuUI.SetActive(false);
   }
 }

@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 
   void OnEnable()
   {
+    PauseMenu.BackToMainMenuEvent += RestartGame;
     MainMenu.MenuSelectEvent += OnMenuSelect;
     GoBack.GoBackEvent += GoBackToMainMenu;
     Player.GameOverEvent += OnGameOver;
@@ -16,6 +17,7 @@ public class GameManager : MonoBehaviour {
 
   void OnDisable()
   {
+    PauseMenu.BackToMainMenuEvent -= RestartGame;
     MainMenu.MenuSelectEvent -= OnMenuSelect;
     GoBack.GoBackEvent -= GoBackToMainMenu;
     Player.GameOverEvent -= OnGameOver;

@@ -709,7 +709,7 @@ GameObject:
   - component: {fileID: 516604906}
   - component: {fileID: 516604905}
   m_Layer: 0
-  m_Name: Quit Game
+  m_Name: Return to Main Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -727,8 +727,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sprites:
-  - {fileID: 21300000, guid: 7c178345e5501f04f8b0ba48a31f22e0, type: 3}
-  - {fileID: 21300000, guid: 64feda410edcff349acaf927cc82481a, type: 3}
+  - {fileID: 21300000, guid: c0e00f070b0e23749b50e25011b70110, type: 3}
+  - {fileID: 21300000, guid: 97dd6a2aa85d3f648af4ae27529af00e, type: 3}
   image: {fileID: 516604906}
 --- !u!114 &516604906
 MonoBehaviour:
@@ -749,7 +749,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 7c178345e5501f04f8b0ba48a31f22e0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c0e00f070b0e23749b50e25011b70110, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -779,7 +779,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 193.82004, y: -122.66005}
-  m_SizeDelta: {x: 32, y: 7}
+  m_SizeDelta: {x: 45, y: 7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &749483572
 GameObject:
