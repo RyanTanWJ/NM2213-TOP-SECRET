@@ -150,6 +150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 70418628}
   - component: {fileID: 70418627}
+  - component: {fileID: 70418629}
   m_Layer: 0
   m_Name: Main Gameplay Music
   m_TagString: Untagged
@@ -250,6 +251,18 @@ Transform:
   m_Father: {fileID: 1471211572}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &70418629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 70418626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 786317b684332ea4bbae25be851e9a9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BGM: {fileID: 70418627}
 --- !u!1 &117250363
 GameObject:
   m_ObjectHideFlags: 0
@@ -2077,6 +2090,11 @@ Prefab:
       propertyPath: pause
       value: 
       objectReference: {fileID: 2084535878}
+    - target: {fileID: 82487151304581604, guid: 33d0e7b1d34dedc42b099677f7c8dc5c,
+        type: 2}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: e3d30655e21a9604db134084b60fcc7f, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 33d0e7b1d34dedc42b099677f7c8dc5c, type: 2}
   m_IsPrefabParent: 0

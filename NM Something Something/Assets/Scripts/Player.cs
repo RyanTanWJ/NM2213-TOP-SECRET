@@ -22,6 +22,11 @@ public class Player : MonoBehaviour
   [SerializeField]
   private PauseMenu pause;
 
+  [SerializeField]
+  private AudioSource deathCry;
+
+  private bool gameOver = false;
+
   // Update is called once per frame
   void Update ()
   {
@@ -33,8 +38,9 @@ public class Player : MonoBehaviour
     switch (collision.gameObject.tag)
     {
       case "Hazard":
-        Debug.Log(collision.gameObject.name + " killed you.");
-        GameOverEvent();
+        //Debug.Log(collision.gameObject.name + " killed you.");
+        gameOver = true;
+        StartCoroutine(OnDeath());
         break;
       case "Nuisance":
         DebuffEvent(collision.gameObject);
@@ -48,7 +54,7 @@ public class Player : MonoBehaviour
 
   private void CheckForPlayerInput()
   {
-    if (pause.IsPaused)
+    if (pause.IsPaused || gameOver)
     {
       return;
     }
@@ -100,5 +106,19 @@ public class Player : MonoBehaviour
     {
       self.enabled = true;
     }
+  }
+
+  IEnumerator OnDeath()
+  {
+    float delay = deathCry.clip.length;
+    deathCry.Play();
+    Time.timeScale = 0;
+    while (delay>0)
+    {
+      yield return new WaitForEndOfFrame();
+      delay -= Time.unscaledDeltaTime;
+    }
+    Time.timeScale = 1.0f;
+    GameOverEvent();
   }
 }
