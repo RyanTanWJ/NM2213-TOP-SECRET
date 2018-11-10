@@ -14,7 +14,7 @@ public class PauseMenu : MonoBehaviour
   [SerializeField]
   List<Sprite> pauseReturnSprites;
   [SerializeField]
-  private Image pauseReturnButton;
+  private Button pauseReturnButton;
 
   [SerializeField]
   private GameObject pauseMenuUI;
@@ -33,8 +33,19 @@ public class PauseMenu : MonoBehaviour
   //Ensure that the player doesn't break the game by start and stopping during countdown
   private bool disableInput = false;
 
+  private void OnEnable()
+  {
+    MenuItem.MenuItemButtonClickedEvent += MenuItemButtonClicked;
+  }
+
+  private void OnDisable()
+  {
+    MenuItem.MenuItemButtonClickedEvent -= MenuItemButtonClicked;
+  }
+
   private void Start()
   {
+    pauseReturnButton.onClick.AddListener(pauseResumeButtonClicked);
     MenuOptions[selectedOption].SwitchTextHighlight(true);
   }
 
@@ -50,7 +61,6 @@ public class PauseMenu : MonoBehaviour
         }
         else
         {
-          pauseReturnButton.sprite = pauseReturnSprites[1];
           Pause();
         }
       }else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
@@ -96,7 +106,7 @@ public class PauseMenu : MonoBehaviour
     disableInput = false;
     GameIsPaused = false;
     pauseMenuUI.SetActive(GameIsPaused);
-    pauseReturnButton.sprite = pauseReturnSprites[0];
+    pauseReturnButton.image.sprite = pauseReturnSprites[0];
     Time.timeScale = 1.0f;
   }
   private void ResumeAlt()
@@ -108,6 +118,7 @@ public class PauseMenu : MonoBehaviour
 
   private void Pause()
   {
+    pauseReturnButton.image.sprite = pauseReturnSprites[1];
     GameIsPaused = true;
     pauseMenuUI.SetActive(GameIsPaused);
     Time.timeScale = 0;
@@ -115,7 +126,7 @@ public class PauseMenu : MonoBehaviour
 
   private IEnumerator CountdownToResume(float cd)
   {
-    pauseReturnButton.enabled = false;
+    pauseReturnButton.gameObject.SetActive(false);
     pauseMenuUI.SetActive(false);
     disableInput = true;
     countdownImage.enabled = true;
@@ -127,7 +138,7 @@ public class PauseMenu : MonoBehaviour
     }
     countdownImage.enabled = false;
     pauseMenuUI.SetActive(true);
-    pauseReturnButton.enabled = true;
+    pauseReturnButton.gameObject.SetActive(true);
     Resume();
   }
 
@@ -139,5 +150,29 @@ public class PauseMenu : MonoBehaviour
   public void OffMenu()
   {
     pauseMenuUI.SetActive(false);
+  }
+
+  private void UpdateMainMenu(int newIdx)
+  {
+    MenuOptions[selectedOption].SwitchTextHighlight(false);
+    selectedOption = newIdx;
+    MenuOptions[selectedOption].SwitchTextHighlight(true);
+  }
+
+  private void MenuItemButtonClicked(MenuItem menuItem)
+  {
+    int newIdx = MenuOptions.IndexOf(menuItem);
+    UpdateMainMenu(newIdx);
+    ProcessSelection(selectedOption);
+  }
+
+  private void pauseResumeButtonClicked()
+  {
+    if (GameIsPaused)
+    {
+      StartCoroutine(CountdownToResume(countdown));
+      return;
+    }
+    Pause();
   }
 }

@@ -15,6 +15,16 @@ public class MainMenu : MonoBehaviour {
 
   int selectedOption;
 
+  private void OnEnable()
+  {
+    MenuItem.MenuItemButtonClickedEvent += MenuItemButtonClicked;
+  }
+
+  private void OnDisable()
+  {
+    MenuItem.MenuItemButtonClickedEvent -= MenuItemButtonClicked;
+  }
+
   // Use this for initialization
   void Start () {
     selectedOption = 1;
@@ -51,4 +61,17 @@ public class MainMenu : MonoBehaviour {
     MenuOptions[selectedOption].SwitchTextHighlight(true);
   }
 
+  private void UpdateMainMenu(int newIdx)
+  {
+    MenuOptions[selectedOption].SwitchTextHighlight(false);
+    selectedOption = newIdx;
+    MenuOptions[selectedOption].SwitchTextHighlight(true);
+  }
+
+  private void MenuItemButtonClicked(MenuItem menuItem)
+  {
+    int newIdx = MenuOptions.IndexOf(menuItem);
+    UpdateMainMenu(newIdx);
+    MenuSelectEvent(selectedOption);
+  }
 }
