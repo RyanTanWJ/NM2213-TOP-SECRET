@@ -12,6 +12,11 @@ public class PauseMenu : MonoBehaviour
   public static bool GameIsPaused = false;
 
   [SerializeField]
+  List<Sprite> pauseReturnSprites;
+  [SerializeField]
+  private Image pauseReturnButton;
+
+  [SerializeField]
   private GameObject pauseMenuUI;
 
   [SerializeField]
@@ -45,6 +50,7 @@ public class PauseMenu : MonoBehaviour
         }
         else
         {
+          pauseReturnButton.sprite = pauseReturnSprites[1];
           Pause();
         }
       }else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
@@ -90,6 +96,7 @@ public class PauseMenu : MonoBehaviour
     disableInput = false;
     GameIsPaused = false;
     pauseMenuUI.SetActive(GameIsPaused);
+    pauseReturnButton.sprite = pauseReturnSprites[0];
     Time.timeScale = 1.0f;
   }
   private void ResumeAlt()
@@ -108,6 +115,7 @@ public class PauseMenu : MonoBehaviour
 
   private IEnumerator CountdownToResume(float cd)
   {
+    pauseReturnButton.enabled = false;
     pauseMenuUI.SetActive(false);
     disableInput = true;
     countdownImage.enabled = true;
@@ -119,6 +127,7 @@ public class PauseMenu : MonoBehaviour
     }
     countdownImage.enabled = false;
     pauseMenuUI.SetActive(true);
+    pauseReturnButton.enabled = true;
     Resume();
   }
 
