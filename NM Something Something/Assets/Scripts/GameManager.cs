@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour {
 
   [SerializeField]
   private AudioSource MainMenuMusic;
+  [SerializeField]
+  private AudioSource StartGameJingle;
 
   void OnEnable()
   {
@@ -91,7 +93,8 @@ public class GameManager : MonoBehaviour {
   private IEnumerator StartGameCoroutine()
   {
     MainMenuMusic.Stop();
-    yield return new WaitForSeconds(2.8f);
+    StartGameJingle.Play();
+    yield return new WaitForSeconds(StartGameJingle.clip.length-3.8f);
     StartGame();
   }
 }

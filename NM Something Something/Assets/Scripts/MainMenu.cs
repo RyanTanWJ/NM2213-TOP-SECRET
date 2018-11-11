@@ -10,8 +10,6 @@ public class MainMenu : MonoBehaviour {
   
   [SerializeField]
   private List<MenuItem> MenuOptions;
-  [SerializeField]
-  private AudioSource StartGameJingle;
 
   int selectedOption;
 
@@ -49,7 +47,6 @@ public class MainMenu : MonoBehaviour {
     }
     else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
     {
-      StartGameJingle.Play();
       MenuSelectEvent(selectedOption);
     }
   }
