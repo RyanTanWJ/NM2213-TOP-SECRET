@@ -1137,6 +1137,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a391852d40ad7ea439517e82216dc1d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MainMenuMusic: {fileID: 0}
+  StartGameJingle: {fileID: 0}
 --- !u!4 &1021914814
 Transform:
   m_ObjectHideFlags: 0
@@ -2290,7 +2292,12 @@ Prefab:
         type: 2}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: e3d30655e21a9604db134084b60fcc7f, type: 3}
+      objectReference: {fileID: 8300000, guid: c2b356d487c6f78488f0a2601246b052, type: 3}
+    - target: {fileID: 114371183706457556, guid: 33d0e7b1d34dedc42b099677f7c8dc5c,
+        type: 2}
+      propertyPath: gameplayMusic
+      value: 
+      objectReference: {fileID: 70418627}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 33d0e7b1d34dedc42b099677f7c8dc5c, type: 2}
   m_IsPrefabParent: 0

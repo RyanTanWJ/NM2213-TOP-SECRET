@@ -24,6 +24,8 @@ public class Player : MonoBehaviour
 
   [SerializeField]
   private AudioSource deathCry;
+  [SerializeField]
+  private AudioSource gameplayMusic;
 
   private bool gameOver = false;
 
@@ -115,6 +117,7 @@ public class Player : MonoBehaviour
 
   IEnumerator OnDeath()
   {
+    gameplayMusic.Stop();
     float delay = deathCry.clip.length;
     deathCry.Play();
     Time.timeScale = 0;
