@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
+  [SerializeField]
+  private AudioSource MainMenuMusic;
+
   void OnEnable()
   {
     PauseMenu.BackToMainMenuEvent += RestartGame;
@@ -24,22 +27,12 @@ public class GameManager : MonoBehaviour {
     GameOverMenu.RestartGameEvent -= RestartGame;
   }
 
-  // Use this for initialization
-  void Start () {
-    
-  }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
   private void OnMenuSelect(int option)
   {
     switch (option)
     {
       case 0:
-        StartGame();
+        StartCoroutine(StartGameCoroutine());
         break;
       case 1:
         Instructions();
@@ -93,5 +86,12 @@ public class GameManager : MonoBehaviour {
   private void RestartGame()
   {
     SceneManager.LoadScene(0);
+  }
+
+  private IEnumerator StartGameCoroutine()
+  {
+    MainMenuMusic.Stop();
+    yield return new WaitForSeconds(2.8f);
+    StartGame();
   }
 }
